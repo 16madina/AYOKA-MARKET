@@ -3,16 +3,26 @@ import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Package, Star, Shield, TrendingUp, Clock } from "lucide-react";
+import { MapPin, Package, Star, Shield, TrendingUp, Clock, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
+import { FollowButton } from "@/components/profile/FollowButton";
+import { useState, useEffect } from "react";
 
 interface SellerProfileProps {
   userId: string;
 }
 
 export const SellerProfile = ({ userId }: SellerProfileProps) => {
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setCurrentUser(user);
+    });
+  }, []);
+
   const { data: profile } = useQuery({
     queryKey: ["profile", userId],
     queryFn: async () => {
@@ -85,12 +95,20 @@ export const SellerProfile = ({ userId }: SellerProfileProps) => {
         </div>
 
         {/* Statistics */}
-        <div className="grid grid-cols-2 gap-4 p-4 bg-muted/50 rounded-lg">
+        <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 rounded-lg">
           <div className="flex items-start gap-2">
             <TrendingUp className="h-4 w-4 text-muted-foreground mt-0.5" />
             <div>
               <p className="text-xs text-muted-foreground">Ventes</p>
               <p className="font-semibold">{profile.total_sales || 0}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-start gap-2">
+            <Users className="h-4 w-4 text-muted-foreground mt-0.5" />
+            <div>
+              <p className="text-xs text-muted-foreground">Abonnés</p>
+              <p className="font-semibold">{profile.followers_count || 0}</p>
             </div>
           </div>
           
@@ -106,6 +124,13 @@ export const SellerProfile = ({ userId }: SellerProfileProps) => {
             </div>
           </div>
         </div>
+
+        {/* Follow Button */}
+        {currentUser && currentUser.id !== userId && (
+          <div className="pt-2">
+            <FollowButton userId={userId} currentUserId={currentUser?.id} />
+          </div>
+        )}
 
         {listings && listings.length > 0 && (
           <div className="space-y-3">

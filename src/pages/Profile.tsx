@@ -4,11 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BottomNav from "@/components/BottomNav";
 import { UserListingCard } from "@/components/profile/UserListingCard";
 import { ReviewCard } from "@/components/profile/ReviewCard";
 import { toast } from "sonner";
-import { LogOut, Edit, Settings, Shield, Bell, Share2, ArrowLeft } from "lucide-react";
+import { LogOut, Edit, Settings, Shield, Bell, Share2, ArrowLeft, Users, Star } from "lucide-react";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -99,6 +101,31 @@ const Profile = () => {
         ...review,
         reviewer: profilesMap.get(review.reviewer_id) || { full_name: null, avatar_url: null }
       }));
+    },
+    enabled: !!user,
+  });
+
+  const { data: following } = useQuery({
+    queryKey: ["user-following", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      
+      const { data: followersData, error: followersError } = await supabase
+        .from("followers")
+        .select("followed_id")
+        .eq("follower_id", user.id);
+      
+      if (followersError) throw followersError;
+      if (!followersData || followersData.length === 0) return [];
+
+      const followedIds = followersData.map(f => f.followed_id);
+      const { data: profilesData, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id, full_name, avatar_url, rating_average, rating_count, total_sales")
+        .in("id", followedIds);
+      
+      if (profilesError) throw profilesError;
+      return profilesData || [];
     },
     enabled: !!user,
   });
@@ -202,18 +229,24 @@ const Profile = () => {
       {/* Tabs */}
       <div className="px-4">
         <Tabs defaultValue="listings" className="w-full">
-          <TabsList className="w-full grid grid-cols-2 mb-4 bg-muted/50 p-1 h-12">
+          <TabsList className="w-full grid grid-cols-3 mb-4 bg-muted/50 p-1 h-12">
             <TabsTrigger 
               value="listings"
-              className="data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:font-semibold"
+              className="data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:font-semibold text-xs"
             >
-              Mes annonces ({(activeListings.length + soldListings.length) || 0})
+              Annonces ({(activeListings.length + soldListings.length) || 0})
             </TabsTrigger>
             <TabsTrigger 
               value="reviews"
-              className="data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:font-semibold"
+              className="data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:font-semibold text-xs"
             >
-              Mes avis ({reviews?.length || 0})
+              Avis ({reviews?.length || 0})
+            </TabsTrigger>
+            <TabsTrigger 
+              value="following"
+              className="data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:font-semibold text-xs"
+            >
+              Abonnés ({following?.length || 0})
             </TabsTrigger>
           </TabsList>
 
@@ -258,6 +291,57 @@ const Profile = () => {
             ) : (
               reviews.map((review) => (
                 <ReviewCard key={review.id} review={review} />
+              ))
+            )}
+          </TabsContent>
+
+          <TabsContent value="following" className="space-y-4">
+            {!following || following.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                <p className="text-lg">Aucun abonnement</p>
+                <p className="text-sm mt-2">Suivez vos vendeurs préférés pour voir leurs nouvelles annonces</p>
+              </div>
+            ) : (
+              following.map((seller: any) => (
+                <Card 
+                  key={seller.id} 
+                  className="cursor-pointer hover:shadow-md transition-shadow"
+                  onClick={() => {
+                    // Navigate to seller's listings or profile
+                    navigate(`/search?seller=${seller.id}`);
+                  }}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-14 w-14">
+                        <AvatarImage src={seller.avatar_url || ""} />
+                        <AvatarFallback className="bg-primary text-primary-foreground">
+                          {seller.full_name?.charAt(0).toUpperCase() || "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                      
+                      <div className="flex-1">
+                        <h3 className="font-semibold">{seller.full_name || "Utilisateur"}</h3>
+                        
+                        <div className="flex items-center gap-4 mt-1">
+                          {seller.rating_average > 0 && (
+                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                              <span>{seller.rating_average.toFixed(1)}</span>
+                              <span className="text-xs">({seller.rating_count})</span>
+                            </div>
+                          )}
+                          
+                          {seller.total_sales > 0 && (
+                            <div className="text-sm text-muted-foreground">
+                              {seller.total_sales} vente{seller.total_sales > 1 ? 's' : ''}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               ))
             )}
           </TabsContent>

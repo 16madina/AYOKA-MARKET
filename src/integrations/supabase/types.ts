@@ -159,6 +159,42 @@ export type Database = {
           },
         ]
       }
+      followers: {
+        Row: {
+          created_at: string
+          followed_id: string
+          follower_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          followed_id: string
+          follower_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          followed_id?: string
+          follower_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "followers_followed_id_fkey"
+            columns: ["followed_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "followers_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listings: {
         Row: {
           category_id: string
@@ -382,6 +418,7 @@ export type Database = {
           country: string | null
           created_at: string
           first_name: string | null
+          followers_count: number | null
           full_name: string | null
           id: string
           is_online: boolean | null
@@ -404,6 +441,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           first_name?: string | null
+          followers_count?: number | null
           full_name?: string | null
           id: string
           is_online?: boolean | null
@@ -426,6 +464,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           first_name?: string | null
+          followers_count?: number | null
           full_name?: string | null
           id?: string
           is_online?: boolean | null
