@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import HeroSection from "@/components/home/HeroSection";
 import CategoryGrid from "@/components/home/CategoryGrid";
 import RecentListings from "@/components/home/RecentListings";
+import RecentlyViewed from "@/components/home/RecentlyViewed";
 import BottomNav from "@/components/BottomNav";
 import { Button } from "@/components/ui/button";
 
@@ -41,6 +42,7 @@ const Index = () => {
       )}
       
       <HeroSection />
+      <RecentlyViewed />
       <CategoryGrid />
       <RecentListings />
       <BottomNav />

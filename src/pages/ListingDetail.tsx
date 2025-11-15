@@ -12,6 +12,8 @@ import { ArrowLeft, MapPin, Eye, MessageCircle, Share2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import BottomNav from "@/components/BottomNav";
+import { addToRecentlyViewed } from "@/utils/recentlyViewed";
+import { useEffect } from "react";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,6 +54,12 @@ const ListingDetail = () => {
       return data;
     },
   });
+
+  useEffect(() => {
+    if (listing?.id) {
+      addToRecentlyViewed(listing.id);
+    }
+  }, [listing?.id]);
 
   const handleContact = () => {
     if (!user) {
