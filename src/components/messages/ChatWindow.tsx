@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Send, MapPin, MoreVertical, AlertCircle } from "lucide-react";
@@ -405,7 +405,7 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       </Card>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {isLoading ? (
           <div className="text-center text-muted-foreground">Chargement...</div>
         ) : (
@@ -512,31 +512,41 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       <QuickReplies userId={userId} onSelect={(msg) => setMessage(msg)} />
 
       {/* Input */}
-      <Card className="p-4 border-t">
-        <form onSubmit={handleSend} className="flex gap-2">
-          <MediaUpload onUpload={(url) => sendImageMessage.mutate(url)} userId={userId} />
-          <LocationPicker onSelectLocation={(loc) => sendLocationMessage.mutate(loc)} />
-          {conversation?.listing?.price !== undefined && conversation.listing.price > 0 && (
-            <PriceOfferDialog
-              conversationId={conversationId}
-              listingId={conversation.listing_id}
-              listingPrice={conversation.listing.price}
-              senderId={userId}
-              receiverId={conversation.buyer_id === userId ? conversation.seller_id : conversation.buyer_id}
+      <Card className="p-6 border-t">
+        <form onSubmit={handleSend} className="space-y-3">
+          <div className="flex gap-2">
+            <MediaUpload onUpload={(url) => sendImageMessage.mutate(url)} userId={userId} />
+            <LocationPicker onSelectLocation={(loc) => sendLocationMessage.mutate(loc)} />
+            {conversation?.listing?.price !== undefined && conversation.listing.price > 0 && (
+              <PriceOfferDialog
+                conversationId={conversationId}
+                listingId={conversation.listing_id}
+                listingPrice={conversation.listing.price}
+                senderId={userId}
+                receiverId={conversation.buyer_id === userId ? conversation.seller_id : conversation.buyer_id}
+              />
+            )}
+          </div>
+          <div className="flex gap-3">
+            <Textarea
+              value={message}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                handleTyping();
+              }}
+              placeholder="Écrire un message..."
+              className="flex-1 min-h-[100px] resize-none"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend(e as any);
+                }
+              }}
             />
-          )}
-          <Input
-            value={message}
-            onChange={(e) => {
-              setMessage(e.target.value);
-              handleTyping();
-            }}
-            placeholder="Écrire un message..."
-            className="flex-1"
-          />
-          <Button type="submit" size="icon" disabled={!message.trim()}>
-            <Send className="h-5 w-5" />
-          </Button>
+            <Button type="submit" size="icon" disabled={!message.trim()} className="h-10 w-10">
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
         </form>
       </Card>
 
