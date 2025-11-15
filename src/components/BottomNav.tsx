@@ -19,13 +19,13 @@ const BottomNav = () => {
             <NavLink
               key={to}
               to={to}
-              className="flex flex-col items-center justify-center flex-1 h-full transition-colors"
+              className="flex flex-col items-center justify-center flex-1 h-full transition-all duration-300 hover:bg-muted/50"
               activeClassName="text-primary"
             >
               {({ isActive }) => (
                 <>
                   <Icon className={cn(
-                    "h-6 w-6 transition-all",
+                    "h-6 w-6 transition-all duration-300",
                     isActive && "scale-110"
                   )} />
                   <span className="text-xs mt-1">{label}</span>
