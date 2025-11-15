@@ -1,9 +1,27 @@
+import { westAfricanCountries } from '@/data/westAfricaData';
+
 export interface LocationPriority {
   city: string;
   country: string;
   priority: 'same-city' | 'same-country' | 'neighboring-country' | 'other';
   distance?: string;
 }
+
+// Fonction pour déduire le pays depuis le nom de la ville
+const getCountryFromCity = (cityName: string): string | null => {
+  const normalizedCity = cityName.toLowerCase().trim();
+  
+  for (const country of westAfricanCountries) {
+    const hasCity = country.cities.some(city => 
+      city.toLowerCase() === normalizedCity
+    );
+    if (hasCity) {
+      return country.name;
+    }
+  }
+  
+  return null;
+};
 
 // Pays voisins pour chaque pays d'Afrique de l'Ouest
 const neighboringCountries: Record<string, string[]> = {
@@ -31,7 +49,12 @@ export const getLocationPriority = (
   userCountry: string | null
 ): LocationPriority => {
   // Parse location (format attendu: "Ville, Pays" ou "Ville")
-  const [city, country] = listingLocation.split(',').map(s => s.trim());
+  let [city, country] = listingLocation.split(',').map(s => s.trim());
+  
+  // Si le pays n'est pas fourni, essayer de le déduire depuis la ville
+  if (!country && city) {
+    country = getCountryFromCity(city) || '';
+  }
   
   // Même ville
   if (userCity && city && city.toLowerCase() === userCity.toLowerCase()) {

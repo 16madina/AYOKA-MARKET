@@ -55,15 +55,18 @@ const RecentListings = () => {
   });
 
   // Afficher UNIQUEMENT les annonces du même pays (ou ville)
-  const localListings = listings?.filter(listing => {
-    const locationInfo = getLocationPriority(
-      listing.location,
-      userProfile?.city || null,
-      userProfile?.country || null
-    );
-    console.log('🏠 Listing:', listing.title, '| Location:', listing.location, '| User:', userProfile?.city, userProfile?.country, '| Priority:', locationInfo.priority);
-    return locationInfo.priority === 'same-city' || locationInfo.priority === 'same-country';
-  }) || [];
+  // Si l'utilisateur n'a pas de profil configuré, afficher toutes les annonces
+  const localListings = !userProfile?.country && !userProfile?.city 
+    ? (listings || [])
+    : (listings?.filter(listing => {
+        const locationInfo = getLocationPriority(
+          listing.location,
+          userProfile?.city || null,
+          userProfile?.country || null
+        );
+        console.log('🏠 Listing:', listing.title, '| Location:', listing.location, '| User:', userProfile?.city, userProfile?.country, '| Priority:', locationInfo.priority);
+        return locationInfo.priority === 'same-city' || locationInfo.priority === 'same-country';
+      }) || []);
 
   console.log('📊 Total listings:', listings?.length, '| Local listings:', localListings.length, '| User location:', userProfile?.city, userProfile?.country);
 
