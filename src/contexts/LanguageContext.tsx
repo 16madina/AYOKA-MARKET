@@ -109,6 +109,8 @@ const translations: Record<Language, Record<string, string>> = {
     "listings.no_image": "Pas d'image",
     "listings.views": "vues",
     "listings.free": "Gratuit",
+    "listings.no_local": "Aucune annonce autour de vous pour l'instant",
+    "listings.nearby_countries": "Annonces des pays voisins",
     
     // Conditions
     "condition.new": "Neuf",
@@ -257,6 +259,8 @@ const translations: Record<Language, Record<string, string>> = {
     "listings.no_image": "No image",
     "listings.views": "views",
     "listings.free": "Free",
+    "listings.no_local": "No listings around you at the moment",
+    "listings.nearby_countries": "Listings from nearby countries",
     
     // Conditions
     "condition.new": "New",

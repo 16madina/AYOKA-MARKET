@@ -53,6 +53,91 @@ const RecentListings = () => {
     },
   });
 
+  // Séparer les annonces locales des annonces distantes
+  const localListings = listings?.filter(listing => {
+    const locationInfo = getLocationPriority(
+      listing.location,
+      userProfile?.city || null,
+      userProfile?.country || null
+    );
+    return locationInfo.priority === 'same-city' || locationInfo.priority === 'same-country';
+  }) || [];
+
+  const distantListings = listings?.filter(listing => {
+    const locationInfo = getLocationPriority(
+      listing.location,
+      userProfile?.city || null,
+      userProfile?.country || null
+    );
+    return locationInfo.priority === 'neighboring-country' || locationInfo.priority === 'other';
+  }) || [];
+
+  const hasLocalListings = localListings.length > 0;
+  const hasDistantListings = distantListings.length > 0;
+
+  // Fonction de rendu pour une carte d'annonce
+  const renderListingCard = (listing: any, index: number) => (
+    <Card 
+      key={listing.id} 
+      className="overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer animate-fade-in group border-0 shadow-sm"
+      style={{ animationDelay: `${index * 0.05}s` }}
+      onClick={() => window.location.href = `/listing/${listing.id}`}
+    >
+      <div className="aspect-square bg-muted relative overflow-hidden">
+        {listing.images?.[0] ? (
+          <img
+            src={listing.images[0]}
+            alt={listing.title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+            {t('listings.no_image')}
+          </div>
+        )}
+        <div className="absolute top-2 left-2 flex flex-col gap-1.5 items-start">
+          <Badge className="bg-accent/90 text-accent-foreground backdrop-blur-sm text-xs">
+            {translateCondition(listing.condition, language)}
+          </Badge>
+          {(() => {
+            const locationInfo = getLocationPriority(
+              listing.location,
+              userProfile?.city || null,
+              userProfile?.country || null
+            );
+            if (locationInfo.priority !== 'other') {
+              return (
+                <Badge className={`${getLocationBadgeColor(locationInfo.priority)} backdrop-blur-sm text-xs flex items-center gap-1`}>
+                  <MapPin className="h-3 w-3" />
+                  {locationInfo.distance}
+                </Badge>
+              );
+            }
+            return null;
+          })()}
+        </div>
+      </div>
+      <CardContent className="p-3">
+        <h3 className="font-semibold text-sm mb-1 line-clamp-2">
+          {listing.title}
+        </h3>
+        <p className="font-bold text-primary text-base mb-1">
+          {listing.price === 0 ? (
+            <span className="text-green-600">
+              {formatPrice(0, userProfile?.currency || "FCFA")}
+            </span>
+          ) : (
+            formatPrice(listing.price, userProfile?.currency || "FCFA")
+          )}
+        </p>
+        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <MapPin className="h-3 w-3" />
+          <span className="line-clamp-1">{listing.location}</span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <section className="py-8 px-4">
       <div className="max-w-screen-xl mx-auto">
@@ -63,68 +148,36 @@ const RecentListings = () => {
             <p className="text-sm mt-2">{t('listings.be_first')}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {listings.map((listing, index) => (
-              <Card 
-                key={listing.id} 
-                className="overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer animate-fade-in group border-0 shadow-sm"
-                style={{ animationDelay: `${index * 0.05}s` }}
-                onClick={() => window.location.href = `/listing/${listing.id}`}
-              >
-                <div className="aspect-square bg-muted relative overflow-hidden">
-                  {listing.images?.[0] ? (
-                    <img
-                      src={listing.images[0]}
-                      alt={listing.title}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                      {t('listings.no_image')}
-                    </div>
-                  )}
-                  <div className="absolute top-2 left-2 flex flex-col gap-1.5 items-start">
-                    <Badge className="bg-accent/90 text-accent-foreground backdrop-blur-sm text-xs">
-                      {translateCondition(listing.condition, language)}
-                    </Badge>
-                    {(() => {
-                      const locationInfo = getLocationPriority(
-                        listing.location,
-                        userProfile?.city || null,
-                        userProfile?.country || null
-                      );
-                      if (locationInfo.priority !== 'other') {
-                        return (
-                          <Badge className={`${getLocationBadgeColor(locationInfo.priority)} backdrop-blur-sm text-xs flex items-center gap-1`}>
-                            <MapPin className="h-3 w-3" />
-                            {locationInfo.distance}
-                          </Badge>
-                        );
-                      }
-                      return null;
-                    })()}
-                  </div>
+          <div className="space-y-8">
+            {/* Annonces locales */}
+            {hasLocalListings && (
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {localListings.map((listing, index) => renderListingCard(listing, index))}
+              </div>
+            )}
+
+            {/* Message et annonces distantes quand il n'y a pas d'annonces locales */}
+            {!hasLocalListings && hasDistantListings && (
+              <div className="space-y-4">
+                <div className="text-center py-6 bg-muted/30 rounded-lg border border-border/50">
+                  <p className="text-muted-foreground font-medium">{t('listings.no_local')}</p>
                 </div>
-                <CardContent className="p-3">
-                  <h3 className="font-semibold text-sm mb-1 line-clamp-2">
-                    {listing.title}
-                  </h3>
-                  <p className="font-bold text-primary text-base mb-1">
-                    {listing.price === 0 ? (
-                      <span className="text-green-600">
-                        {formatPrice(0, userProfile?.currency || "FCFA")}
-                      </span>
-                    ) : (
-                      formatPrice(listing.price, userProfile?.currency || "FCFA")
-                    )}
-                  </p>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <MapPin className="h-3 w-3" />
-                    <span className="line-clamp-1">{listing.location}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                <h3 className="text-lg font-semibold">{t('listings.nearby_countries')}</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {distantListings.map((listing, index) => renderListingCard(listing, index))}
+                </div>
+              </div>
+            )}
+
+            {/* Annonces distantes quand il y a déjà des annonces locales */}
+            {hasLocalListings && hasDistantListings && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">{t('listings.nearby_countries')}</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {distantListings.map((listing, index) => renderListingCard(listing, index))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
