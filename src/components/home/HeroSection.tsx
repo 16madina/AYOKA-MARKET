@@ -7,8 +7,12 @@ const HeroSection = () => {
   return (
     <div className="relative h-[400px] md:h-[500px] overflow-hidden">
       <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroImage})` }}
+        className="absolute inset-0 bg-cover bg-center md:bg-cover"
+        style={{ 
+          backgroundImage: `url(${heroImage})`,
+          backgroundPosition: 'center center',
+          backgroundSize: 'cover'
+        }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
       </div>
