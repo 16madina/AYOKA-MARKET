@@ -33,8 +33,12 @@ const ListingDetail = () => {
 
       if (error) throw error;
 
-      // Increment views
-      await supabase.rpc("increment_listing_views" as any, { listing_id: id });
+      // Increment views - Function exists but types not yet regenerated
+      try {
+        await supabase.rpc("increment_listing_views" as any, { listing_id: id });
+      } catch (viewError) {
+        console.log("Could not increment views:", viewError);
+      }
 
       return data;
     },
