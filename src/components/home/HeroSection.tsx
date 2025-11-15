@@ -27,9 +27,24 @@ const HeroSection = () => {
             <Input
               placeholder="Rechercher des articles..."
               className="pl-10 h-12 bg-white text-foreground"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const query = (e.target as HTMLInputElement).value;
+                  window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                }
+              }}
             />
           </div>
-          <Button className="h-12 px-8 transition-all duration-300 hover:scale-105">Rechercher</Button>
+          <Button 
+            className="h-12 px-8 transition-all duration-300 hover:scale-105"
+            onClick={() => {
+              const input = document.querySelector('input[placeholder="Rechercher des articles..."]') as HTMLInputElement;
+              const query = input?.value || "";
+              window.location.href = `/search?q=${encodeURIComponent(query)}`;
+            }}
+          >
+            Rechercher
+          </Button>
         </div>
       </div>
     </div>

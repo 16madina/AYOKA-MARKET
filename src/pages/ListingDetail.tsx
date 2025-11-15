@@ -16,6 +16,14 @@ const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      return user;
+    },
+  });
+
   const { data: listing, isLoading } = useQuery({
     queryKey: ["listing", id],
     queryFn: async () => {
@@ -45,8 +53,49 @@ const ListingDetail = () => {
   });
 
   const handleContact = () => {
-    // TODO: Implémenter la messagerie
-    navigate("/messages");
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
+    // Create or get conversation
+    const createConversation = async () => {
+      try {
+        // Check if conversation exists
+        const { data: existing } = await supabase
+          .from("conversations")
+          .select("id")
+          .eq("listing_id", id)
+          .eq("buyer_id", user.id)
+          .eq("seller_id", listing.user_id)
+          .maybeSingle();
+
+        if (existing) {
+          navigate(`/messages?conversation=${existing.id}`);
+          return;
+        }
+
+        // Create new conversation
+        const { data: newConv, error } = await supabase
+          .from("conversations")
+          .insert({
+            listing_id: id,
+            buyer_id: user.id,
+            seller_id: listing.user_id,
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        navigate(`/messages?conversation=${newConv.id}`);
+      } catch (error) {
+        console.error("Error creating conversation:", error);
+        navigate("/messages");
+      }
+    };
+
+    createConversation();
   };
 
   const handleShare = async () => {

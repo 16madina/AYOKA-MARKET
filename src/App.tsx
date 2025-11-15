@@ -10,6 +10,7 @@ import Publish from "./pages/Publish";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 import ListingDetail from "./pages/ListingDetail";
+import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/listing/:id" element={<ListingDetail />} />
           <Route path="/publish" element={<Publish />} />
