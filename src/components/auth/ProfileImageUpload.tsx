@@ -29,16 +29,6 @@ export const ProfileImageUpload = ({ value, onChange, disabled }: ProfileImageUp
       return;
     }
 
-    // Validate file size (max 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      toast({
-        title: "Erreur",
-        description: "L'image ne doit pas dépasser 2MB",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setUploading(true);
 
     try {
@@ -78,7 +68,7 @@ export const ProfileImageUpload = ({ value, onChange, disabled }: ProfileImageUp
     <div className="flex flex-col items-center gap-4">
       <div className="relative">
         <Avatar className="h-24 w-24">
-          <AvatarImage src={value || ""} />
+          <AvatarImage src={value || ""} className="object-cover" />
           <AvatarFallback className="bg-muted text-2xl">
             <Camera className="h-8 w-8 text-muted-foreground" />
           </AvatarFallback>
@@ -115,8 +105,6 @@ export const ProfileImageUpload = ({ value, onChange, disabled }: ProfileImageUp
       </div>
       <p className="text-xs text-muted-foreground text-center">
         Cliquez sur l'icône pour ajouter une photo
-        <br />
-        (Max 2MB)
       </p>
     </div>
   );
