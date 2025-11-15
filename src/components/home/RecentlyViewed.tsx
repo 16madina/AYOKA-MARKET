@@ -51,11 +51,11 @@ const RecentlyViewed = () => {
   }
 
   return (
-    <section className="py-8 px-4">
+    <section className="py-4 px-4">
       <div className="max-w-screen-xl mx-auto">
-        <div className="flex items-center gap-2 mb-6">
-          <Clock className="h-6 w-6 text-primary" />
-          <h2 className="text-2xl font-bold">Récemment vus</h2>
+        <div className="flex items-center gap-2 mb-3">
+          <Clock className="h-5 w-5 text-primary" />
+          <h2 className="text-lg font-bold">Récemment vus</h2>
         </div>
         
         <Carousel
@@ -67,12 +67,12 @@ const RecentlyViewed = () => {
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             {listings.map((listing) => (
-              <CarouselItem key={listing.id} className="pl-2 md:pl-4 basis-[35%] sm:basis-[25%] md:basis-[18%] lg:basis-[15%]">
+              <CarouselItem key={listing.id} className="pl-2 md:pl-4 basis-[30%] sm:basis-[22%] md:basis-[16%] lg:basis-[13%]">
                 <div
                   className="cursor-pointer group"
                   onClick={() => window.location.href = `/listing/${listing.id}`}
                 >
-                  <div className="aspect-square rounded-2xl overflow-hidden mb-3 bg-muted">
+                  <div className="aspect-square rounded-lg overflow-hidden mb-1.5 bg-muted">
                     {listing.images?.[0] ? (
                       <img
                         src={listing.images[0]}
@@ -85,10 +85,10 @@ const RecentlyViewed = () => {
                       </div>
                     )}
                   </div>
-                  <h3 className="font-semibold text-sm mb-1 line-clamp-1">
+                  <h3 className="font-medium text-xs mb-0.5 line-clamp-1">
                     {listing.title}
                   </h3>
-                  <p className="font-bold text-primary text-base">
+                  <p className="font-semibold text-primary text-xs">
                     {listing.price === 0 ? (
                       <span className="text-green-600">0 FCFA</span>
                     ) : (

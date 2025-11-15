@@ -7,6 +7,7 @@ import CategoryGrid from "@/components/home/CategoryGrid";
 import RecentListings from "@/components/home/RecentListings";
 import RecentlyViewed from "@/components/home/RecentlyViewed";
 import RecommendedListings from "@/components/home/RecommendedListings";
+import FilterSheet from "@/components/home/FilterSheet";
 import BottomNav from "@/components/BottomNav";
 
 const Index = () => {
@@ -31,11 +32,14 @@ const Index = () => {
     <div className="min-h-screen pb-20">
       <Header isAuthenticated={isAuthenticated} />
       <HeroSection />
+      <div className="px-4 py-4 flex justify-start">
+        <FilterSheet />
+      </div>
+      <CategoryGrid />
+      <RecentlyViewed />
       <div className="container mx-auto px-4">
         <RecommendedListings />
       </div>
-      <RecentlyViewed />
-      <CategoryGrid />
       <RecentListings />
       <BottomNav />
     </div>
