@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from "react-router-dom";
-import { Sparkles } from "lucide-react";
+import { Sparkles, MapPin } from "lucide-react";
+import { getLocationPriority, getLocationBadgeColor } from "@/utils/geographicFiltering";
 
 const RecommendedListings = () => {
   const navigate = useNavigate();
@@ -13,6 +15,22 @@ const RecommendedListings = () => {
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       return user;
+    },
+  });
+
+  const { data: userProfile } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      
+      const { data } = await supabase
+        .from("profiles")
+        .select("city, country")
+        .eq("id", user.id)
+        .single();
+      
+      return data;
     },
   });
 
@@ -81,9 +99,24 @@ const RecommendedListings = () => {
                     Pas d'image
                   </div>
                 )}
-                <div className="absolute top-2 right-2 bg-primary/90 backdrop-blur-sm text-primary-foreground px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                  <Sparkles className="h-3 w-3" />
-                  Recommandé
+                <div className="absolute top-2 right-2 flex flex-col gap-2 items-end">
+                  <Badge className="bg-primary/90 backdrop-blur-sm flex items-center gap-1">
+                    <Sparkles className="h-3 w-3" />
+                    Recommandé
+                  </Badge>
+                  {(() => {
+                    const locationInfo = getLocationPriority(
+                      listing.location,
+                      userProfile?.city || null,
+                      userProfile?.country || null
+                    );
+                    return (
+                      <Badge className={`${getLocationBadgeColor(locationInfo.priority)} backdrop-blur-sm flex items-center gap-1`}>
+                        <MapPin className="h-3 w-3" />
+                        {locationInfo.distance}
+                      </Badge>
+                    );
+                  })()}
                 </div>
               </div>
               <CardContent className="p-4">

@@ -7,12 +7,29 @@ import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { translateCondition } from "@/utils/translations";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { sortListingsByLocation, getLocationPriority, getLocationBadgeColor } from "@/utils/geographicFiltering";
 
 const RecentListings = () => {
   const { t, language } = useLanguage();
   
+  const { data: userProfile } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      
+      const { data } = await supabase
+        .from("profiles")
+        .select("city, country")
+        .eq("id", user.id)
+        .maybeSingle();
+      
+      return data;
+    },
+  });
+  
   const { data: listings } = useQuery({
-    queryKey: ["recent-listings"],
+    queryKey: ["recent-listings", userProfile?.city, userProfile?.country],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("listings")
@@ -25,6 +42,12 @@ const RecentListings = () => {
         .order("created_at", { ascending: false })
         .limit(20);
       if (error) throw error;
+      
+      // Trier par priorité géographique si l'utilisateur a un profil
+      if (userProfile?.city || userProfile?.country) {
+        return sortListingsByLocation(data, userProfile.city, userProfile.country);
+      }
+      
       return data;
     },
   });
@@ -59,9 +82,27 @@ const RecentListings = () => {
                       {t('listings.no_image')}
                     </div>
                   )}
-                  <Badge className="absolute top-2 left-2 bg-accent/90 text-accent-foreground backdrop-blur-sm text-xs">
-                    {translateCondition(listing.condition, language)}
-                  </Badge>
+                  <div className="absolute top-2 left-2 flex flex-col gap-1.5 items-start">
+                    <Badge className="bg-accent/90 text-accent-foreground backdrop-blur-sm text-xs">
+                      {translateCondition(listing.condition, language)}
+                    </Badge>
+                    {(() => {
+                      const locationInfo = getLocationPriority(
+                        listing.location,
+                        userProfile?.city || null,
+                        userProfile?.country || null
+                      );
+                      if (locationInfo.priority !== 'other') {
+                        return (
+                          <Badge className={`${getLocationBadgeColor(locationInfo.priority)} backdrop-blur-sm text-xs flex items-center gap-1`}>
+                            <MapPin className="h-3 w-3" />
+                            {locationInfo.distance}
+                          </Badge>
+                        );
+                      }
+                      return null;
+                    })()}
+                  </div>
                 </div>
                 <CardContent className="p-3">
                   <h3 className="font-semibold text-sm mb-1 line-clamp-2">
