@@ -11,7 +11,7 @@ interface LocationMapProps {
 const LocationMap = ({ location }: LocationMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const mapboxToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN;
+  const mapboxToken = 'pk.eyJ1IjoibWFkaW5hZGlhbGxvIiwiYSI6ImNtaHp6ZWJmcTBoOXQybHB3bnd2ZmcyM2wifQ.h0ayKla0WnwNaWsBvVybDg';
 
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) {
@@ -66,25 +66,7 @@ const LocationMap = ({ location }: LocationMapProps) => {
     return () => {
       map.current?.remove();
     };
-  }, [location, mapboxToken]);
-
-  if (!mapboxToken) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <MapPin className="h-5 w-5" />
-            Localisation
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-4">
-          <p className="text-sm text-muted-foreground">
-            La carte n'est pas disponible. Le token Mapbox n'est pas configuré.
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
+  }, [location]);
 
   return (
     <Card>
