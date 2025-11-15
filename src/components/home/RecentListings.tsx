@@ -74,6 +74,14 @@ const RecentListings = () => {
 
   const hasLocalListings = localListings.length > 0;
   const hasDistantListings = distantListings.length > 0;
+  const hasUserLocation = !!(userProfile?.city || userProfile?.country);
+
+  // Debug logs
+  console.log('User profile:', userProfile);
+  console.log('Has user location:', hasUserLocation);
+  console.log('Local listings:', localListings.length);
+  console.log('Distant listings:', distantListings.length);
+  console.log('Should show no local message:', !hasLocalListings && hasDistantListings && hasUserLocation);
 
   // Fonction de rendu pour une carte d'annonce
   const renderListingCard = (listing: any, index: number) => (
@@ -157,7 +165,7 @@ const RecentListings = () => {
             )}
 
             {/* Message et annonces distantes quand il n'y a pas d'annonces locales */}
-            {!hasLocalListings && hasDistantListings && (
+            {!hasLocalListings && hasDistantListings && hasUserLocation && (
               <div className="space-y-4">
                 <div className="text-center py-6 bg-muted/30 rounded-lg border border-border/50">
                   <p className="text-muted-foreground font-medium">{t('listings.no_local')}</p>
