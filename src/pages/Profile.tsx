@@ -73,16 +73,32 @@ const Profile = () => {
     queryKey: ["user-reviews", user?.id],
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase
+      
+      // Fetch reviews
+      const { data: reviewsData, error: reviewsError } = await supabase
         .from("reviews")
-        .select(`
-          *,
-          reviewer:profiles!reviewer_id(full_name, avatar_url)
-        `)
+        .select("*")
         .eq("reviewee_id", user.id)
         .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
+      
+      if (reviewsError) throw reviewsError;
+      if (!reviewsData || reviewsData.length === 0) return [];
+
+      // Fetch reviewer profiles
+      const reviewerIds = reviewsData.map(r => r.reviewer_id);
+      const { data: profilesData, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id, full_name, avatar_url")
+        .in("id", reviewerIds);
+      
+      if (profilesError) throw profilesError;
+
+      // Merge data
+      const profilesMap = new Map(profilesData?.map(p => [p.id, p]) || []);
+      return reviewsData.map(review => ({
+        ...review,
+        reviewer: profilesMap.get(review.reviewer_id) || { full_name: null, avatar_url: null }
+      }));
     },
     enabled: !!user,
   });
