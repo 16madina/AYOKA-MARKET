@@ -128,7 +128,11 @@ const Profile = () => {
                 <Edit className="h-4 w-4 mr-2" />
                 Modifier le profil
               </Button>
-              <Button variant="outline" className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => navigate("/settings")}
+              >
                 <Settings className="h-4 w-4 mr-2" />
                 Paramètres
               </Button>

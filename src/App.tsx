@@ -9,6 +9,7 @@ import Categories from "./pages/Categories";
 import Publish from "./pages/Publish";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import ListingDetail from "./pages/ListingDetail";
 import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/publish" element={<Publish />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
