@@ -35,7 +35,7 @@ const RecentListings = () => {
             <p className="text-sm mt-2">Soyez le premier à publier une annonce !</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {listings.map((listing, index) => (
               <Card 
                 key={listing.id} 
