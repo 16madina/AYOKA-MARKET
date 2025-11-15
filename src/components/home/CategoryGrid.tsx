@@ -18,22 +18,22 @@ const CategoryGrid = () => {
   });
 
   return (
-    <section className="py-12 px-4">
+    <section className="py-8 px-4">
       <div className="max-w-screen-xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8">Catégories populaires</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <h2 className="text-2xl font-bold mb-6">Catégories populaires</h2>
+        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
           {categories?.map((category) => {
             const IconComponent = Icons[category.icon as keyof typeof Icons] as any;
             return (
-              <Link key={category.id} to={`/categories/${category.slug}`}>
-                <Card className="p-6 hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer group">
-                  <div className="flex flex-col items-center text-center gap-3">
+              <Link key={category.id} to={`/categories/${category.slug}`} className="flex-shrink-0 snap-start">
+                <Card className="p-4 w-[140px] hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer group animate-fade-in">
+                  <div className="flex flex-col items-center text-center gap-2">
                     {IconComponent && (
-                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                        <IconComponent className="h-6 w-6 text-primary" />
+                      <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-all duration-300 group-hover:scale-110">
+                        <IconComponent className="h-7 w-7 text-primary" />
                       </div>
                     )}
-                    <span className="font-medium">{category.name}</span>
+                    <span className="font-medium text-sm">{category.name}</span>
                   </div>
                 </Card>
               </Link>

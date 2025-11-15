@@ -14,14 +14,14 @@ const HeroSection = () => {
       </div>
       
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in">
           Bienvenue sur Revivo
         </h1>
-        <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl">
+        <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
           Achetez et vendez en toute confiance
         </p>
         
-        <div className="w-full max-w-2xl flex gap-2">
+        <div className="w-full max-w-2xl flex gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
@@ -29,7 +29,7 @@ const HeroSection = () => {
               className="pl-10 h-12 bg-white text-foreground"
             />
           </div>
-          <Button className="h-12 px-8">Rechercher</Button>
+          <Button className="h-12 px-8 transition-all duration-300 hover:scale-105">Rechercher</Button>
         </div>
       </div>
     </div>
