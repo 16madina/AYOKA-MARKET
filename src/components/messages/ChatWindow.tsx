@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Send, MapPin, MoreVertical, AlertCircle } from "lucide-react";
@@ -516,9 +516,9 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       )}
 
       {/* Input */}
-      <Card className="p-6 border-t mb-16 md:mb-0">
-        <form onSubmit={handleSend} className="space-y-3">
-          <div className="flex gap-2">
+      <Card className="p-3 border-t mb-16 md:mb-0">
+        <form onSubmit={handleSend}>
+          <div className="flex items-center gap-2">
             <MediaUpload onUpload={(url) => sendImageMessage.mutate(url)} userId={userId} />
             <LocationPicker onSelectLocation={(loc) => sendLocationMessage.mutate(loc)} />
             {conversation?.listing?.price !== undefined && conversation.listing.price > 0 && (
@@ -530,25 +530,23 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
                 receiverId={conversation.buyer_id === userId ? conversation.seller_id : conversation.buyer_id}
               />
             )}
-          </div>
-          <div className="flex gap-3">
-            <Textarea
+            <Input
               value={message}
               onChange={(e) => {
                 setMessage(e.target.value);
                 handleTyping();
               }}
               placeholder="Écrire un message..."
-              className="flex-1 min-h-[100px] resize-none"
+              className="flex-1"
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
+                if (e.key === 'Enter') {
                   e.preventDefault();
                   handleSend(e as any);
                 }
               }}
             />
-            <Button type="submit" size="icon" disabled={!message.trim()} className="h-10 w-10">
-              <Send className="h-5 w-5" />
+            <Button type="submit" size="icon" disabled={!message.trim()} className="h-9 w-9 rounded-full">
+              <Send className="h-4 w-4" />
             </Button>
           </div>
         </form>
