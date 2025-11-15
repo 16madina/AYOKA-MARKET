@@ -61,8 +61,11 @@ const RecentListings = () => {
       userProfile?.city || null,
       userProfile?.country || null
     );
+    console.log('🏠 Listing:', listing.title, '| Location:', listing.location, '| User:', userProfile?.city, userProfile?.country, '| Priority:', locationInfo.priority);
     return locationInfo.priority === 'same-city' || locationInfo.priority === 'same-country';
   }) || [];
+
+  console.log('📊 Total listings:', listings?.length, '| Local listings:', localListings.length, '| User location:', userProfile?.city, userProfile?.country);
 
   // Ne pas afficher les annonces distantes (pays voisins ou autres)
   const distantListings: any[] = [];
