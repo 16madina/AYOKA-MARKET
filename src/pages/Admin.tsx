@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -10,8 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Users, FileText, ShieldAlert, Mail, MessageSquare, Ban, CheckCircle, XCircle, Eye, Phone } from "lucide-react";
+import { Users, FileText, ShieldAlert, Mail, MessageSquare, Ban, CheckCircle, XCircle, Eye, Phone, Search, Filter } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import BottomNav from "@/components/BottomNav";
 
@@ -23,6 +24,14 @@ const Admin = () => {
   const [selectedListing, setSelectedListing] = useState<any>(null);
   const [messageContent, setMessageContent] = useState("");
   const [banReason, setBanReason] = useState("");
+  
+  // Filter states
+  const [userSearch, setUserSearch] = useState("");
+  const [userStatusFilter, setUserStatusFilter] = useState<string>("all");
+  const [listingSearch, setListingSearch] = useState("");
+  const [listingStatusFilter, setListingStatusFilter] = useState<string>("all");
+  const [listingCategoryFilter, setListingCategoryFilter] = useState<string>("all");
+  const [reportStatusFilter, setReportStatusFilter] = useState<string>("all");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -84,6 +93,20 @@ const Admin = () => {
     enabled: isAdmin,
   });
 
+  // Fetch categories for filtering
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("*")
+        .order("name");
+      if (error) throw error;
+      return data;
+    },
+    enabled: isAdmin,
+  });
+
   // Fetch all reports
   const { data: reports, refetch: refetchReports } = useQuery({
     queryKey: ["admin-reports"],
@@ -118,6 +141,55 @@ const Admin = () => {
     },
     enabled: isAdmin,
   });
+
+  // Filtered data using useMemo for performance
+  const filteredUsers = useMemo(() => {
+    if (!users) return [];
+    
+    return users.filter(user => {
+      // Search filter
+      const matchesSearch = userSearch === "" || 
+        user.full_name?.toLowerCase().includes(userSearch.toLowerCase()) ||
+        user.phone?.includes(userSearch);
+      
+      // Status filter
+      const matchesStatus = userStatusFilter === "all" ||
+        (userStatusFilter === "banned" && user.is_banned) ||
+        (userStatusFilter === "active" && !user.is_banned) ||
+        (userStatusFilter === "verified" && user.verified_seller);
+      
+      return matchesSearch && matchesStatus;
+    });
+  }, [users, userSearch, userStatusFilter]);
+
+  const filteredListings = useMemo(() => {
+    if (!listings) return [];
+    
+    return listings.filter(listing => {
+      // Search filter
+      const matchesSearch = listingSearch === "" ||
+        listing.title?.toLowerCase().includes(listingSearch.toLowerCase()) ||
+        listing.description?.toLowerCase().includes(listingSearch.toLowerCase());
+      
+      // Status filter
+      const matchesStatus = listingStatusFilter === "all" ||
+        listing.moderation_status === listingStatusFilter;
+      
+      // Category filter
+      const matchesCategory = listingCategoryFilter === "all" ||
+        listing.category_id === listingCategoryFilter;
+      
+      return matchesSearch && matchesStatus && matchesCategory;
+    });
+  }, [listings, listingSearch, listingStatusFilter, listingCategoryFilter]);
+
+  const filteredReports = useMemo(() => {
+    if (!reports) return [];
+    
+    return reports.filter(report => {
+      return reportStatusFilter === "all" || report.status === reportStatusFilter;
+    });
+  }, [reports, reportStatusFilter]);
 
   const handleBanUser = async (userId: string) => {
     const { error } = await supabase
@@ -279,13 +351,44 @@ const Admin = () => {
 
           {/* Users Tab */}
           <TabsContent value="users" className="space-y-4">
+            {/* Filters */}
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex flex-col md:flex-row gap-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Rechercher par nom ou téléphone..."
+                      value={userSearch}
+                      onChange={(e) => setUserSearch(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  <Select value={userStatusFilter} onValueChange={setUserStatusFilter}>
+                    <SelectTrigger className="w-full md:w-48">
+                      <SelectValue placeholder="Statut" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Tous</SelectItem>
+                      <SelectItem value="active">Actifs</SelectItem>
+                      <SelectItem value="banned">Bannis</SelectItem>
+                      <SelectItem value="verified">Vérifiés</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
-                <CardTitle>Tous les utilisateurs ({users?.length || 0})</CardTitle>
+                <CardTitle>Tous les utilisateurs ({filteredUsers.length} / {users?.length || 0})</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {users?.map((profile) => (
-                  <Card key={profile.id} className="p-4">
+                {filteredUsers.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">Aucun utilisateur trouvé</p>
+                ) : (
+                  filteredUsers.map((profile) => (
+                    <Card key={profile.id} className="p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
@@ -395,20 +498,63 @@ const Admin = () => {
                       </div>
                     </div>
                   </Card>
-                ))}
+                  ))
+                )}
               </CardContent>
             </Card>
           </TabsContent>
 
           {/* Listings Tab */}
           <TabsContent value="listings" className="space-y-4">
+            {/* Filters */}
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex flex-col md:flex-row gap-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Rechercher par titre..."
+                      value={listingSearch}
+                      onChange={(e) => setListingSearch(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  <Select value={listingStatusFilter} onValueChange={setListingStatusFilter}>
+                    <SelectTrigger className="w-full md:w-48">
+                      <SelectValue placeholder="Statut" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Tous</SelectItem>
+                      <SelectItem value="pending">En attente</SelectItem>
+                      <SelectItem value="approved">Approuvés</SelectItem>
+                      <SelectItem value="rejected">Rejetés</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select value={listingCategoryFilter} onValueChange={setListingCategoryFilter}>
+                    <SelectTrigger className="w-full md:w-48">
+                      <SelectValue placeholder="Catégorie" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Toutes</SelectItem>
+                      {categories?.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
-                <CardTitle>Toutes les annonces ({listings?.length || 0})</CardTitle>
+                <CardTitle>Toutes les annonces ({filteredListings.length} / {listings?.length || 0})</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {listings?.map((listing) => (
-                  <Card key={listing.id} className="p-3">
+                {filteredListings.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">Aucune annonce trouvée</p>
+                ) : (
+                  filteredListings.map((listing) => (
+                    <Card key={listing.id} className="p-3">
                     <div className="flex gap-3">
                       <img
                         src={listing.images?.[0] || "/placeholder.svg"}
@@ -501,20 +647,43 @@ const Admin = () => {
                       </div>
                     </div>
                   </Card>
-                ))}
+                ))
+                )}
               </CardContent>
             </Card>
           </TabsContent>
 
           {/* Reports Tab */}
           <TabsContent value="reports" className="space-y-4">
+            {/* Filters */}
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex gap-3">
+                  <Select value={reportStatusFilter} onValueChange={setReportStatusFilter}>
+                    <SelectTrigger className="w-full md:w-64">
+                      <SelectValue placeholder="Statut" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Tous</SelectItem>
+                      <SelectItem value="pending">En attente</SelectItem>
+                      <SelectItem value="resolved">Résolus</SelectItem>
+                      <SelectItem value="dismissed">Rejetés</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
-                <CardTitle>Tous les signalements ({reports?.length || 0})</CardTitle>
+                <CardTitle>Tous les signalements ({filteredReports.length} / {reports?.length || 0})</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {reports?.map((report) => (
-                  <Card key={report.id} className="p-4">
+                {filteredReports.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">Aucun signalement trouvé</p>
+                ) : (
+                  filteredReports.map((report) => (
+                    <Card key={report.id} className="p-4">
                     <div className="flex gap-4">
                       <img
                         src={report.listings?.images?.[0] || "/placeholder.svg"}
@@ -616,8 +785,9 @@ const Admin = () => {
                         </div>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                    </Card>
+                  ))
+                )}
                 {(!reports || reports.length === 0) && (
                   <div className="text-center py-8 text-muted-foreground">
                     Aucun signalement pour le moment
