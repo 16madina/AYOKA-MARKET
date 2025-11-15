@@ -41,6 +41,7 @@ const RecentListings = () => {
                 key={listing.id} 
                 className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer animate-fade-in group"
                 style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => window.location.href = `/listing/${listing.id}`}
               >
                 <div className="aspect-square bg-muted relative overflow-hidden">
                   {listing.images?.[0] ? (
