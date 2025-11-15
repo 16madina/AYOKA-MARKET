@@ -26,11 +26,11 @@ const BottomNav = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 pb-safe">
+    <nav className="fixed bottom-0 left-0 right-0 z-50">
       {/* Glassmorphism background with gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/90 to-background/80 backdrop-blur-xl border-t border-border/50" />
       
-      <div className="relative max-w-screen-xl mx-auto px-3 py-2">
+      <div className="relative max-w-screen-xl mx-auto px-2 pt-1 pb-safe">
         <div className="flex items-center justify-around gap-1">
           {navItems.map(({ to, icon: Icon, label, badge }) => (
             <NavLink
@@ -42,24 +42,24 @@ const BottomNav = () => {
               {({ isActive }) => (
                 <div
                   className={cn(
-                    "flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-2xl transition-all duration-300",
-                    "hover:scale-105 active:scale-95",
+                    "flex flex-col items-center justify-center gap-0.5 py-1.5 px-2 rounded-2xl transition-all duration-200",
+                    "hover:scale-105 active:scale-90 active:bg-primary/20",
                     isActive
-                      ? "bg-primary text-primary-foreground shadow-warm scale-105"
+                      ? "bg-primary text-primary-foreground shadow-warm"
                       : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                   )}
                 >
                   <div className="relative">
                     <Icon
                       className={cn(
-                        "h-6 w-6 transition-all duration-300",
-                        isActive && "drop-shadow-sm"
+                        "h-6 w-6 transition-all duration-200",
+                        isActive && "drop-shadow-sm animate-scale-in"
                       )}
                       strokeWidth={isActive ? 2.5 : 2}
                     />
                     {badge !== undefined && badge > 0 && (
                       <Badge 
-                        className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs bg-destructive text-destructive-foreground border-2 border-background animate-scale-in shadow-lg"
+                        className="absolute -top-1.5 -right-1.5 h-4 w-4 flex items-center justify-center p-0 text-[10px] bg-destructive text-destructive-foreground border-2 border-background animate-scale-in shadow-lg"
                       >
                         {badge > 9 ? '9+' : badge}
                       </Badge>
@@ -67,8 +67,8 @@ const BottomNav = () => {
                   </div>
                   <span
                     className={cn(
-                      "text-[10px] font-medium transition-all duration-300",
-                      isActive ? "opacity-100 scale-100" : "opacity-70 scale-95"
+                      "text-[9px] font-medium transition-all duration-200",
+                      isActive ? "opacity-100" : "opacity-70"
                     )}
                   >
                     {label}
@@ -79,9 +79,6 @@ const BottomNav = () => {
           ))}
         </div>
       </div>
-      
-      {/* Bottom safe area padding indicator */}
-      <div className="h-[env(safe-area-inset-bottom)] bg-gradient-to-b from-background/80 to-background/95 backdrop-blur-xl" />
     </nav>
   );
 };
