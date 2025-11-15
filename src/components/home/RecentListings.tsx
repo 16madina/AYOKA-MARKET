@@ -8,7 +8,7 @@ import { fr } from "date-fns/locale";
 import { translateCondition } from "@/utils/translations";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { sortListingsByLocation, getLocationPriority, getLocationBadgeColor } from "@/utils/geographicFiltering";
-import { formatPrice } from "@/utils/currency";
+import { formatPriceWithConversion } from "@/utils/currency";
 
 const RecentListings = () => {
   const { t, language } = useLanguage();
@@ -76,12 +76,6 @@ const RecentListings = () => {
   const hasDistantListings = distantListings.length > 0;
   const hasUserLocation = !!(userProfile?.city || userProfile?.country);
 
-  // Debug logs
-  console.log('User profile:', userProfile);
-  console.log('Has user location:', hasUserLocation);
-  console.log('Local listings:', localListings.length);
-  console.log('Distant listings:', distantListings.length);
-  console.log('Should show no local message:', !hasLocalListings && hasDistantListings && hasUserLocation);
 
   // Fonction de rendu pour une carte d'annonce
   const renderListingCard = (listing: any, index: number) => (
@@ -132,10 +126,10 @@ const RecentListings = () => {
         <p className="font-bold text-primary text-base mb-1">
           {listing.price === 0 ? (
             <span className="text-green-600">
-              {formatPrice(0, userProfile?.currency || "FCFA")}
+              {formatPriceWithConversion(0, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
             </span>
           ) : (
-            formatPrice(listing.price, userProfile?.currency || "FCFA")
+            formatPriceWithConversion(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")
           )}
         </p>
         <div className="flex items-center gap-1 text-xs text-muted-foreground">
