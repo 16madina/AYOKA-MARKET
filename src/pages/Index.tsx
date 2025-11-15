@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/home/Header";
 import HeroSection from "@/components/home/HeroSection";
+import CategoryGrid from "@/components/home/CategoryGrid";
 import RecentListings from "@/components/home/RecentListings";
 import RecentlyViewed from "@/components/home/RecentlyViewed";
 import RecommendedListings from "@/components/home/RecommendedListings";
@@ -31,6 +32,7 @@ const Index = () => {
     <div className="min-h-screen pb-20">
       <Header isAuthenticated={isAuthenticated} />
       <HeroSection />
+      <CategoryGrid />
       <RecentlyViewed />
       <div className="px-4 py-4 flex justify-start">
         <FilterSheet />
