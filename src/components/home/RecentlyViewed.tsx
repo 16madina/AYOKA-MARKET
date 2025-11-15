@@ -67,7 +67,7 @@ const RecentlyViewed = () => {
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             {listings.map((listing) => (
-              <CarouselItem key={listing.id} className="pl-2 md:pl-4 basis-[45%] sm:basis-[30%] md:basis-[23%]">
+              <CarouselItem key={listing.id} className="pl-2 md:pl-4 basis-[35%] sm:basis-[25%] md:basis-[18%] lg:basis-[15%]">
                 <div
                   className="cursor-pointer group"
                   onClick={() => window.location.href = `/listing/${listing.id}`}
