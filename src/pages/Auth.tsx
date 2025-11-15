@@ -18,7 +18,7 @@ const Auth = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const [isLogin, setIsLogin] = useState(location.state?.mode === 'login');
+  const [isLogin, setIsLogin] = useState(location.state?.mode !== 'signup');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
