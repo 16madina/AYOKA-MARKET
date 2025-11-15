@@ -32,7 +32,6 @@ const RecentListings = () => {
   const { data: listings } = useQuery({
     queryKey: ["recent-listings", userProfile?.city, userProfile?.country],
     queryFn: async () => {
-      console.log('🔍 Fetching listings with userProfile:', userProfile);
       const { data, error } = await supabase
         .from("listings")
         .select(`
@@ -44,23 +43,18 @@ const RecentListings = () => {
         .order("created_at", { ascending: false })
         .limit(20);
       
-      console.log('📦 Raw listings data:', data);
-      console.log('❌ Error:', error);
-      
       if (error) throw error;
       
       // Trier par priorité géographique si l'utilisateur a un profil
       if (userProfile?.city || userProfile?.country) {
-        const sorted = sortListingsByLocation(data, userProfile.city, userProfile.country);
-        console.log('🗺️ Sorted listings:', sorted);
-        return sorted;
+        return sortListingsByLocation(data, userProfile.city, userProfile.country);
       }
       
       return data;
     },
   });
 
-  // Séparer les annonces locales des annonces distantes
+  // Afficher UNIQUEMENT les annonces du même pays (ou ville)
   const localListings = listings?.filter(listing => {
     const locationInfo = getLocationPriority(
       listing.location,
@@ -70,26 +64,11 @@ const RecentListings = () => {
     return locationInfo.priority === 'same-city' || locationInfo.priority === 'same-country';
   }) || [];
 
-  const distantListings = listings?.filter(listing => {
-    const locationInfo = getLocationPriority(
-      listing.location,
-      userProfile?.city || null,
-      userProfile?.country || null
-    );
-    return locationInfo.priority === 'neighboring-country' || locationInfo.priority === 'other';
-  }) || [];
+  // Ne pas afficher les annonces distantes (pays voisins ou autres)
+  const distantListings: any[] = [];
 
   const hasLocalListings = localListings.length > 0;
-  const hasDistantListings = distantListings.length > 0;
   const hasUserLocation = !!(userProfile?.city || userProfile?.country);
-
-  console.log('📊 Listings stats:', {
-    total: listings?.length,
-    local: localListings.length,
-    distant: distantListings.length,
-    hasUserLocation,
-    userProfile
-  });
 
 
   // Fonction de rendu pour une carte d'annonce
@@ -166,35 +145,16 @@ const RecentListings = () => {
           </div>
         ) : (
           <div className="space-y-8">
-            {/* Annonces locales */}
-            {hasLocalListings && (
+            {/* Afficher uniquement les annonces du même pays */}
+            {hasLocalListings ? (
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {localListings.map((listing, index) => renderListingCard(listing, index))}
               </div>
-            )}
-
-            {/* Message et annonces distantes quand il n'y a pas d'annonces locales */}
-            {!hasLocalListings && hasDistantListings && hasUserLocation && (
-              <div className="space-y-4">
-                <div className="text-center py-6 bg-muted/30 rounded-lg border border-border/50">
-                  <p className="text-muted-foreground font-medium">{t('listings.no_local')}</p>
-                </div>
-                <h3 className="text-lg font-semibold">{t('listings.nearby_countries')}</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {distantListings.map((listing, index) => renderListingCard(listing, index))}
-                </div>
+            ) : hasUserLocation ? (
+              <div className="text-center py-6 bg-muted/30 rounded-lg border border-border/50">
+                <p className="text-muted-foreground font-medium">{t('listings.no_local')}</p>
               </div>
-            )}
-
-            {/* Annonces distantes quand il y a déjà des annonces locales */}
-            {hasLocalListings && hasDistantListings && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">{t('listings.nearby_countries')}</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {distantListings.map((listing, index) => renderListingCard(listing, index))}
-                </div>
-              </div>
-            )}
+            ) : null}
           </div>
         )}
       </div>
