@@ -437,6 +437,7 @@ export type Database = {
           id: string
           is_banned: boolean | null
           is_online: boolean | null
+          language: string | null
           last_name: string | null
           last_seen: string | null
           location: string | null
@@ -463,6 +464,7 @@ export type Database = {
           id: string
           is_banned?: boolean | null
           is_online?: boolean | null
+          language?: string | null
           last_name?: string | null
           last_seen?: string | null
           location?: string | null
@@ -489,6 +491,7 @@ export type Database = {
           id?: string
           is_banned?: boolean | null
           is_online?: boolean | null
+          language?: string | null
           last_name?: string | null
           last_seen?: string | null
           location?: string | null

@@ -1,14 +1,15 @@
-export const translateCondition = (condition: string | null): string => {
-  if (!condition) return "Comme neuf";
+export const translateCondition = (condition: string | null, language: "fr" | "en" = "fr"): string => {
+  if (!condition) return language === "fr" ? "Comme neuf" : "Like New";
   
-  const translations: { [key: string]: string } = {
-    "new": "Neuf",
-    "like_new": "Comme neuf",
-    "likenew": "Comme neuf",
-    "good": "Bon état",
-    "fair": "État moyen",
-    "poor": "Mauvais état"
+  const translations: { [key: string]: { fr: string; en: string } } = {
+    "new": { fr: "Neuf", en: "New" },
+    "like_new": { fr: "Comme neuf", en: "Like New" },
+    "likenew": { fr: "Comme neuf", en: "Like New" },
+    "good": { fr: "Bon état", en: "Good" },
+    "fair": { fr: "État moyen", en: "Fair" },
+    "poor": { fr: "Mauvais état", en: "Poor" }
   };
   
-  return translations[condition.toLowerCase()] || condition;
+  const conditionKey = condition.toLowerCase();
+  return translations[conditionKey]?.[language] || condition;
 };

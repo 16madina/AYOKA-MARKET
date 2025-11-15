@@ -2,8 +2,11 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-marketplace.jpg";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const HeroSection = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="relative h-[400px] md:h-[500px] overflow-hidden">
       <div
@@ -19,17 +22,17 @@ const HeroSection = () => {
       
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in">
-          Bienvenue sur Revivo
+          {t('hero.title')}
         </h1>
         <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          Achetez et vendez en toute confiance
+          {t('hero.subtitle')}
         </p>
         
         <div className="w-full max-w-2xl flex gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
-              placeholder="Rechercher des articles..."
+              placeholder={t('hero.search_placeholder')}
               className="pl-10 h-12 bg-white text-foreground"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -47,7 +50,7 @@ const HeroSection = () => {
               window.location.href = `/search?q=${encodeURIComponent(query)}`;
             }}
           >
-            Rechercher
+            {t('hero.search_button')}
           </Button>
         </div>
       </div>

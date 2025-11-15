@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import BottomNav from "@/components/BottomNav";
 import { toast } from "sonner";
 import { useDarkMode } from "@/hooks/useDarkMode";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   User,
   Heart,
@@ -34,6 +35,7 @@ const Settings = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [notificationDialogOpen, setNotificationDialogOpen] = useState(false);
   const { darkMode, toggleDarkMode } = useDarkMode();
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -47,7 +49,12 @@ const Settings = () => {
 
   const handleToggleDarkMode = () => {
     toggleDarkMode();
-    toast.success(`Mode ${!darkMode ? 'sombre' : 'clair'} activé`);
+    toast.success(`${t('common.mode')} ${!darkMode ? t('common.dark') : t('common.light')} ${t('common.activated')}`);
+  };
+  
+  const handleLanguageChange = (lang: "fr" | "en") => {
+    setLanguage(lang);
+    toast.success(lang === "fr" ? "Langue changée en Français" : "Language changed to English");
   };
 
   const handleShare = async () => {
@@ -226,14 +233,15 @@ const Settings = () => {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Globe className="h-5 w-5 text-muted-foreground" />
-                <span className="font-medium">Langue</span>
+                <span className="font-medium">{t('settings.language')}</span>
               </div>
-              <Select defaultValue="fr">
+              <p className="text-sm text-muted-foreground">{t('settings.language_description')}</p>
+              <Select value={language} onValueChange={handleLanguageChange}>
                 <SelectTrigger>
                   <SelectValue>
                     <div className="flex items-center gap-2">
-                      <span>🇫🇷</span>
-                      <span>Français</span>
+                      <span>{language === 'fr' ? '🇫🇷' : '🇬🇧'}</span>
+                      <span>{language === 'fr' ? 'Français' : 'English'}</span>
                     </div>
                   </SelectValue>
                 </SelectTrigger>
