@@ -19,7 +19,7 @@ const RecentListings = () => {
         `)
         .eq("status", "active")
         .order("created_at", { ascending: false })
-        .limit(8);
+        .limit(20);
       if (error) throw error;
       return data;
     },
