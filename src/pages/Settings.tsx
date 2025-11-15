@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import BottomNav from "@/components/BottomNav";
 import { toast } from "sonner";
+import { useDarkMode } from "@/hooks/useDarkMode";
 import {
   User,
   Heart,
@@ -32,7 +33,7 @@ const Settings = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState<string | null>(null);
   const [notificationDialogOpen, setNotificationDialogOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -42,23 +43,11 @@ const Settings = () => {
       }
     };
     checkAuth();
-
-    // Check for dark mode preference
-    const isDark = document.documentElement.classList.contains('dark');
-    setDarkMode(isDark);
   }, []);
 
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-    toast.success(`Mode ${newMode ? 'sombre' : 'clair'} activé`);
+  const handleToggleDarkMode = () => {
+    toggleDarkMode();
+    toast.success(`Mode ${!darkMode ? 'sombre' : 'clair'} activé`);
   };
 
   const handleShare = async () => {
@@ -293,7 +282,7 @@ const Settings = () => {
                 <Palette className="h-5 w-5 text-muted-foreground" />
                 <span className="font-medium">Mode sombre</span>
               </div>
-              <Switch checked={darkMode} onCheckedChange={toggleDarkMode} />
+              <Switch checked={darkMode} onCheckedChange={handleToggleDarkMode} />
             </div>
           </Card>
         </div>

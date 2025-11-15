@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogIn, User } from "lucide-react";
+import { LogIn, User, Moon, Sun } from "lucide-react";
+import { useDarkMode } from "@/hooks/useDarkMode";
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -8,6 +9,7 @@ interface HeaderProps {
 
 const Header = ({ isAuthenticated }: HeaderProps) => {
   const navigate = useNavigate();
+  const { darkMode, toggleDarkMode } = useDarkMode();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -17,6 +19,19 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
         </div>
 
         <nav className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleDarkMode}
+            className="gap-2"
+            aria-label="Changer de thème"
+          >
+            {darkMode ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </Button>
           {isAuthenticated ? (
             <Button
               variant="ghost"
