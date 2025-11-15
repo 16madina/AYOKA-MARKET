@@ -19,12 +19,18 @@ const RecentListings = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
       
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("profiles")
         .select("city, country, currency")
         .eq("id", user.id)
-        .maybeSingle();
+        .single();
       
+      if (error) {
+        console.error("Error fetching user profile:", error);
+        return null;
+      }
+      
+      console.log("👤 User profile loaded:", data);
       return data;
     },
   });
@@ -54,19 +60,19 @@ const RecentListings = () => {
     },
   });
 
-  // Afficher UNIQUEMENT les annonces du même pays (ou ville)
-  // Si l'utilisateur n'a pas de profil configuré, afficher toutes les annonces
-  const localListings = !userProfile?.country && !userProfile?.city 
-    ? (listings || [])
-    : (listings?.filter(listing => {
-        const locationInfo = getLocationPriority(
-          listing.location,
-          userProfile?.city || null,
-          userProfile?.country || null
-        );
-        console.log('🏠 Listing:', listing.title, '| Location:', listing.location, '| User:', userProfile?.city, userProfile?.country, '| Priority:', locationInfo.priority);
-        return locationInfo.priority === 'same-city' || locationInfo.priority === 'same-country';
-      }) || []);
+  // RÈGLE STRICTE : Priorité géographique absolue
+  // 1. Même ville et même pays uniquement
+  // 2. Si aucune annonce locale, ne rien afficher (pas de pays voisins sur page d'accueil)
+  const localListings = listings?.filter(listing => {
+    const locationInfo = getLocationPriority(
+      listing.location,
+      userProfile?.city || null,
+      userProfile?.country || null
+    );
+    console.log('🏠 Listing:', listing.title, '| Location:', listing.location, '| User:', userProfile?.city, userProfile?.country, '| Priority:', locationInfo.priority);
+    // STRICTEMENT même ville ou même pays - AUCUNE exception
+    return locationInfo.priority === 'same-city' || locationInfo.priority === 'same-country';
+  }) || [];
 
   console.log('📊 Total listings:', listings?.length, '| Local listings:', localListings.length, '| User location:', userProfile?.city, userProfile?.country);
 
