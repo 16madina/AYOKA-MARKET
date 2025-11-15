@@ -200,6 +200,7 @@ export type Database = {
           category_id: string
           condition: string | null
           created_at: string
+          currency: string | null
           description: string
           id: string
           images: string[] | null
@@ -219,6 +220,7 @@ export type Database = {
           category_id: string
           condition?: string | null
           created_at?: string
+          currency?: string | null
           description: string
           id?: string
           images?: string[] | null
@@ -238,6 +240,7 @@ export type Database = {
           category_id?: string
           condition?: string | null
           created_at?: string
+          currency?: string | null
           description?: string
           id?: string
           images?: string[] | null

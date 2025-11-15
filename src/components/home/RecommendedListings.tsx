@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, MapPin } from "lucide-react";
 import { getLocationPriority, getLocationBadgeColor } from "@/utils/geographicFiltering";
-import { formatPrice } from "@/utils/currency";
+import { formatPriceWithConversion } from "@/utils/currency";
 
 const RecommendedListings = () => {
   const navigate = useNavigate();
@@ -128,7 +128,7 @@ const RecommendedListings = () => {
                   {listing.categories?.name}
                 </p>
                 <p className="text-xl font-bold text-primary">
-                  {formatPrice(listing.price, userProfile?.currency || "FCFA")}
+                  {formatPriceWithConversion(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   {listing.location}
