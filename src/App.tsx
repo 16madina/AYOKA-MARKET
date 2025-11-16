@@ -20,6 +20,11 @@ import SellerPublicProfile from "./pages/SellerPublicProfile";
 import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
+import FAQ from "./pages/settings/FAQ";
+import Support from "./pages/settings/Support";
+import Report from "./pages/settings/Report";
+import Terms from "./pages/settings/Terms";
+import Privacy from "./pages/settings/Privacy";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +51,11 @@ const App = () => (
           <Route path="/help" element={<Help />} />
           <Route path="/account-management" element={<AccountManagement />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/settings/faq" element={<FAQ />} />
+          <Route path="/settings/support" element={<Support />} />
+          <Route path="/settings/report" element={<Report />} />
+          <Route path="/settings/terms" element={<Terms />} />
+          <Route path="/settings/privacy" element={<Privacy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

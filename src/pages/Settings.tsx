@@ -470,7 +470,7 @@ const Settings = () => {
             <SettingItem 
               icon={HelpCircle} 
               label="FAQ" 
-              onClick={() => navigate("/help")}
+              onClick={() => navigate("/settings/faq")}
               iconColor="bg-indigo-500/10"
               iconTextColor="text-indigo-600"
             />
@@ -478,7 +478,7 @@ const Settings = () => {
             <SettingItem 
               icon={MessageCircle} 
               label="Contacter le support" 
-              onClick={() => navigate("/help")}
+              onClick={() => navigate("/settings/support")}
               iconColor="bg-green-500/10"
               iconTextColor="text-green-600"
             />
@@ -486,7 +486,7 @@ const Settings = () => {
             <SettingItem 
               icon={Shield} 
               label="Signaler un problème" 
-              onClick={() => navigate("/help")}
+              onClick={() => navigate("/settings/report")}
               iconColor="bg-orange-500/10"
               iconTextColor="text-orange-600"
             />
@@ -494,7 +494,7 @@ const Settings = () => {
             <SettingItem 
               icon={FileText} 
               label="Conditions générales" 
-              onClick={() => navigate("/help")}
+              onClick={() => navigate("/settings/terms")}
               iconColor="bg-gray-500/10"
               iconTextColor="text-gray-600"
             />
@@ -502,7 +502,7 @@ const Settings = () => {
             <SettingItem 
               icon={Lock} 
               label="Politique de confidentialité" 
-              onClick={() => navigate("/help")}
+              onClick={() => navigate("/settings/privacy")}
               iconColor="bg-gray-500/10"
               iconTextColor="text-gray-600"
             />
