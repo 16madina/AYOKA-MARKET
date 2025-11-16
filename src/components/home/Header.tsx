@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogIn, User, Moon, Sun } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { LogIn, User, Moon, Sun, Heart } from "lucide-react";
 import { useDarkMode } from "@/hooks/useDarkMode";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -10,6 +13,25 @@ interface HeaderProps {
 const Header = ({ isAuthenticated }: HeaderProps) => {
   const navigate = useNavigate();
   const { darkMode, toggleDarkMode } = useDarkMode();
+
+  // Compter les favoris si authentifié
+  const { data: favoritesCount } = useQuery({
+    queryKey: ["favoritesCount"],
+    queryFn: async () => {
+      if (!isAuthenticated) return 0;
+      
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return 0;
+      
+      const { count } = await supabase
+        .from("favorites")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      
+      return count || 0;
+    },
+    enabled: isAuthenticated,
+  });
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -32,6 +54,26 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
               <Moon className="h-4 w-4" />
             )}
           </Button>
+          {isAuthenticated && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/favorites")}
+              className="gap-2 relative"
+              aria-label="Mes favoris"
+            >
+              <Heart className="h-4 w-4" />
+              <span className="hidden sm:inline">Favoris</span>
+              {favoritesCount && favoritesCount > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                >
+                  {favoritesCount}
+                </Badge>
+              )}
+            </Button>
+          )}
           {isAuthenticated ? (
             <Button
               variant="ghost"

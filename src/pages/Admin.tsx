@@ -598,7 +598,7 @@ const Admin = () => {
                               Par: {listing.profiles?.full_name || "Utilisateur"}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              Vues: {listing.views || 0} | Créé: {new Date(listing.created_at).toLocaleDateString()}
+                              Vues: {listing.views === 1 ? "1 vue" : `${listing.views || 0} vues`} | Créé: {new Date(listing.created_at).toLocaleDateString()}
                             </p>
                           </div>
                           <div className="flex flex-col gap-1 shrink-0">

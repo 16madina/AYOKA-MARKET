@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SlidersHorizontal, Package, Smartphone, Sofa, Shirt, Car, Home, Briefcase, Dumbbell, Book, Gamepad2, Wrench } from "lucide-react";
+import { SlidersHorizontal, Package, Smartphone, Sofa, Shirt, Car, Home, Briefcase, Dumbbell, Book, Gamepad2, Wrench, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const categories = [
@@ -43,20 +44,76 @@ const FilterSheet = () => {
     setMaxPrice("");
   };
 
+  // Calculer le nombre de filtres actifs
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (selectedCategory) count++;
+    if (minPrice) count++;
+    if (maxPrice) count++;
+    return count;
+  }, [selectedCategory, minPrice, maxPrice]);
+
+  // Composant pour afficher les filtres actifs comme chips
+  const ActiveFilters = () => {
+    if (activeFiltersCount === 0) return null;
+    
+    return (
+      <div className="flex flex-wrap gap-2 mb-4">
+        {selectedCategory && (
+          <Badge variant="secondary" className="gap-1">
+            {categories.find(c => c.slug === selectedCategory)?.name}
+            <X 
+              className="h-3 w-3 cursor-pointer" 
+              onClick={() => setSelectedCategory("")}
+            />
+          </Badge>
+        )}
+        {minPrice && (
+          <Badge variant="secondary" className="gap-1">
+            Min: {minPrice} FCFA
+            <X 
+              className="h-3 w-3 cursor-pointer" 
+              onClick={() => setMinPrice("")}
+            />
+          </Badge>
+        )}
+        {maxPrice && (
+          <Badge variant="secondary" className="gap-1">
+            Max: {maxPrice} FCFA
+            <X 
+              className="h-3 w-3 cursor-pointer" 
+              onClick={() => setMaxPrice("")}
+            />
+          </Badge>
+        )}
+      </div>
+    );
+  };
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="sm" className="gap-2 relative">
           <SlidersHorizontal className="h-4 w-4" />
           Filtres
+          {activeFiltersCount > 0 && (
+            <Badge 
+              variant="destructive" 
+              className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
+            >
+              {activeFiltersCount}
+            </Badge>
+          )}
         </Button>
       </SheetTrigger>
       <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl">
         <SheetHeader>
-          <SheetTitle>Filtres</SheetTitle>
+          <SheetTitle>Filtres de recherche</SheetTitle>
         </SheetHeader>
         
         <div className="mt-6 space-y-6 pb-20">
+          <ActiveFilters />
+          
           <div>
             <h3 className="text-lg font-semibold mb-4">Catégories</h3>
             <div className="flex flex-wrap gap-2">
@@ -107,11 +164,16 @@ const FilterSheet = () => {
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-background border-t flex gap-2">
-          <Button variant="outline" className="flex-1" onClick={handleReset}>
+          <Button 
+            variant="outline" 
+            className="flex-1" 
+            onClick={handleReset}
+            disabled={activeFiltersCount === 0}
+          >
             Réinitialiser
           </Button>
           <Button className="flex-1" onClick={handleApplyFilters}>
-            Appliquer
+            Appliquer {activeFiltersCount > 0 && `(${activeFiltersCount})`}
           </Button>
         </div>
       </SheetContent>

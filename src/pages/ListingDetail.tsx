@@ -203,7 +203,7 @@ const ListingDetail = () => {
                       </div>
                       <div className="flex items-center gap-1">
                         <Eye className="h-4 w-4" />
-                        <span>{listing.views || 0} vues</span>
+                        <span>{listing.views === 1 ? "1 vue" : `${listing.views || 0} vues`}</span>
                       </div>
                       <span>
                         {formatDistanceToNow(new Date(listing.created_at), {

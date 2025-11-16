@@ -85,7 +85,7 @@ export const UserListingCard = ({ listing, onUpdate }: UserListingCardProps) => 
             <Badge variant="secondary" className="text-xs py-0">
               {listing.categories?.name}
             </Badge>
-            <span>{listing.views || 0} vues</span>
+            <span>{listing.views === 1 ? "1 vue" : `${listing.views || 0} vues`}</span>
           </div>
         </div>
 
