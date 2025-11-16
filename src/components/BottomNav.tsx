@@ -1,4 +1,4 @@
-import { House, LayoutGrid, CirclePlus, MessagesSquare, CircleUserRound } from "lucide-react";
+import { Home, Grid3x3, PlusCircle, MessageCircle, User } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -18,11 +18,11 @@ const BottomNav = () => {
   const { unreadCount } = useUnreadMessages(user?.id);
 
   const navItems = [
-    { to: "/", icon: House, label: "Accueil" },
-    { to: "/categories", icon: LayoutGrid, label: "Catégories" },
-    { to: "/publish", icon: CirclePlus, label: "Publier" },
-    { to: "/messages", icon: MessagesSquare, label: "Messages", badge: unreadCount },
-    { to: "/profile", icon: CircleUserRound, label: "Profil" },
+    { to: "/", icon: Home, label: "Accueil" },
+    { to: "/categories", icon: Grid3x3, label: "Catégories" },
+    { to: "/publish", icon: PlusCircle, label: "Publier" },
+    { to: "/messages", icon: MessageCircle, label: "Messages", badge: unreadCount },
+    { to: "/profile", icon: User, label: "Profil" },
   ];
 
   return (
@@ -52,7 +52,7 @@ const BottomNav = () => {
                   <div className="relative">
                     <Icon
                       className={cn(
-                        "h-5 w-5 transition-all duration-200",
+                        "h-6 w-6 transition-all duration-200",
                         isActive && "drop-shadow-sm animate-scale-in"
                       )}
                       strokeWidth={isActive ? 2.5 : 2}
