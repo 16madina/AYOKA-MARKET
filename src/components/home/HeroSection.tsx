@@ -21,8 +21,9 @@ const HeroSection = () => {
       </div>
       
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in">
-          {t('hero.title')}
+        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in flex items-baseline justify-center gap-2">
+          <span>DJASSA</span>
+          <span className="text-3xl md:text-5xl font-normal italic text-primary/90" style={{ fontFamily: 'cursive' }}>Market</span>
         </h1>
         <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
           {t('hero.subtitle')}
