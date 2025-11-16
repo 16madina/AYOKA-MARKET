@@ -92,57 +92,91 @@ npx cap open android
 
 ## Envoyer des notifications depuis le backend
 
-Pour envoyer des notifications push, vous devrez créer une edge function Supabase qui utilise l'API Firebase Cloud Messaging.
+Une edge function `send-push-notification` est déjà configurée et prête à l'emploi. Elle utilise Firebase Admin SDK pour envoyer des notifications.
 
-### Exemple de code pour edge function
+### Utilisation de l'edge function
+
+L'edge function accepte les paramètres suivants:
 
 ```typescript
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+{
+  userId: string;      // ID de l'utilisateur à notifier
+  title: string;       // Titre de la notification
+  body: string;        // Corps de la notification
+  data?: {             // Données supplémentaires (optionnel)
+    [key: string]: string;
+  }
+}
+```
 
-const FIREBASE_SERVER_KEY = Deno.env.get('FIREBASE_SERVER_KEY');
+### Exemple d'utilisation depuis votre code
 
-serve(async (req) => {
-  try {
-    const { userId, title, body, data } = await req.json();
+```typescript
+import { supabase } from "@/integrations/supabase/client";
 
-    // Récupérer le push_token de l'utilisateur depuis la base de données
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('push_token')
-      .eq('id', userId)
-      .single();
-
-    if (!profile?.push_token) {
-      return new Response(
-        JSON.stringify({ error: 'No push token found' }),
-        { status: 404 }
-      );
+// Envoyer une notification à un utilisateur
+const { data, error } = await supabase.functions.invoke('send-push-notification', {
+  body: {
+    userId: 'user-uuid-here',
+    title: 'Nouveau message',
+    body: 'Vous avez reçu un nouveau message de Jean',
+    data: {
+      type: 'message',
+      conversationId: 'conversation-uuid',
     }
+  }
+});
 
-    // Envoyer la notification via FCM
-    const response = await fetch('https://fcm.googleapis.com/fcm/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `key=${FIREBASE_SERVER_KEY}`,
-      },
-      body: JSON.stringify({
-        to: profile.push_token,
-        notification: {
-          title,
-          body,
-        },
-        data,
-      }),
-    });
+if (error) {
+  console.error('Erreur envoi notification:', error);
+} else {
+  console.log('Notification envoyée:', data);
+}
+```
 
-    const result = await response.json();
-    return new Response(JSON.stringify(result), { status: 200 });
-  } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500 }
-    );
+### Exemples de cas d'usage
+
+**1. Notification de nouveau message:**
+```typescript
+await supabase.functions.invoke('send-push-notification', {
+  body: {
+    userId: receiverId,
+    title: 'Nouveau message',
+    body: `${senderName} vous a envoyé un message`,
+    data: {
+      type: 'message',
+      conversationId: conversationId,
+    }
+  }
+});
+```
+
+**2. Notification d'offre acceptée:**
+```typescript
+await supabase.functions.invoke('send-push-notification', {
+  body: {
+    userId: buyerId,
+    title: 'Offre acceptée',
+    body: 'Votre offre a été acceptée par le vendeur',
+    data: {
+      type: 'offer_accepted',
+      listingId: listingId,
+    }
+  }
+});
+```
+
+**3. Notification de nouvelle annonce favorite:**
+```typescript
+await supabase.functions.invoke('send-push-notification', {
+  body: {
+    userId: followerId,
+    title: 'Nouvelle annonce',
+    body: `${sellerName} a publié une nouvelle annonce`,
+    data: {
+      type: 'new_listing',
+      listingId: listingId,
+    }
   }
 });
 ```
