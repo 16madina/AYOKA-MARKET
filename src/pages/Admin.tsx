@@ -12,9 +12,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Users, FileText, ShieldAlert, Mail, MessageSquare, Ban, CheckCircle, XCircle, Eye, Phone, Search, Filter } from "lucide-react";
+import { Users, FileText, ShieldAlert, Mail, MessageSquare, Ban, CheckCircle, XCircle, Eye, Phone, Search, Filter, Bell } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import BottomNav from "@/components/BottomNav";
+import { InactiveListingsReminder } from "@/components/admin/InactiveListingsReminder";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -348,7 +349,7 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="users" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="users" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               Utilisateurs
@@ -360,6 +361,10 @@ const Admin = () => {
             <TabsTrigger value="reports" className="flex items-center gap-2">
               <ShieldAlert className="h-4 w-4" />
               Signalements
+            </TabsTrigger>
+            <TabsTrigger value="reminders" className="flex items-center gap-2">
+              <Bell className="h-4 w-4" />
+              Rappels
             </TabsTrigger>
           </TabsList>
 
@@ -834,6 +839,11 @@ const Admin = () => {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Reminders Tab */}
+          <TabsContent value="reminders">
+            <InactiveListingsReminder />
           </TabsContent>
         </Tabs>
       </div>
