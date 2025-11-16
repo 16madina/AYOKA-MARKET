@@ -22,10 +22,10 @@ const HeroSection = () => {
       
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
         <div className="flex flex-col items-center animate-fade-in mb-4">
-          <h1 className="text-4xl md:text-6xl font-bold text-white text-center">
+          <h1 className="text-3xl md:text-5xl font-bold text-white text-center">
             {t('hero.title')}
           </h1>
-          <span className="text-2xl md:text-4xl font-pacifico text-primary/90 self-end mr-8 md:mr-16">Market</span>
+          <span className="text-xl md:text-3xl font-pacifico text-primary/90 self-end mr-6 md:mr-12">Market</span>
         </div>
         <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
           {t('hero.subtitle')}
