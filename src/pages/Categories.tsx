@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, Search, ArrowLeft } from "lucide-react";
+import { MessageCircle, Search, ArrowLeft, Grid3x3, List } from "lucide-react";
 import * as Icons from "lucide-react";
 import { useState } from "react";
 
@@ -34,6 +34,7 @@ const categoryImages: Record<string, string> = {
 const Categories = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const { data: categoriesWithCount, isLoading } = useQuery({
     queryKey: ["categories-with-count"],
@@ -95,14 +96,23 @@ const Categories = () => {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <h1 className="text-2xl font-bold">Catégories</h1>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="relative"
-            onClick={() => navigate("/messages")}
-          >
-            <MessageCircle className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
+            >
+              {viewMode === "grid" ? <List className="h-5 w-5" /> : <Grid3x3 className="h-5 w-5" />}
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="relative"
+              onClick={() => navigate("/messages")}
+            >
+              <MessageCircle className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
 
         {/* Search Bar */}
@@ -136,37 +146,73 @@ const Categories = () => {
             ))}
           </div>
         ) : filteredCategories && filteredCategories.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4">
-            {filteredCategories.map((category) => {
-              const IconComponent = Icons[category.icon as keyof typeof Icons] as any;
-              const fallbackImage = categoryImages[category.slug] || autresImg;
-              
-              return (
-                <Card
-                  key={category.id}
-                  className="relative overflow-hidden cursor-pointer group hover:scale-105 transition-transform duration-200 shadow-md"
-                  onClick={() => navigate(`/categories/${category.slug}`)}
-                >
-                  <div className="h-32 relative overflow-hidden">
-                    <img 
-                      src={fallbackImage} 
-                      alt={category.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  </div>
-                  <div className="p-3 bg-background">
-                    <p className="text-sm font-medium text-center line-clamp-2">
-                      {category.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground text-center mt-1">
-                      {category.count} {category.count === 1 ? 'annonce' : 'annonces'}
-                    </p>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
+          viewMode === "grid" ? (
+            <div className="grid grid-cols-2 gap-4">
+              {filteredCategories.map((category) => {
+                const fallbackImage = categoryImages[category.slug] || autresImg;
+                
+                return (
+                  <Card
+                    key={category.id}
+                    className="relative overflow-hidden cursor-pointer group hover:scale-105 transition-transform duration-200 shadow-md"
+                    onClick={() => navigate(`/categories/${category.slug}`)}
+                  >
+                    <div className="h-32 relative overflow-hidden">
+                      <img 
+                        src={fallbackImage} 
+                        alt={category.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    </div>
+                    <div className="p-3 bg-background">
+                      <p className="text-sm font-medium text-center line-clamp-2">
+                        {category.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground text-center mt-1">
+                        {category.count} {category.count === 1 ? 'annonce' : 'annonces'}
+                      </p>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filteredCategories.map((category) => {
+                const fallbackImage = categoryImages[category.slug] || autresImg;
+                
+                return (
+                  <Card
+                    key={category.id}
+                    className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                    onClick={() => navigate(`/categories/${category.slug}`)}
+                  >
+                    <div className="flex gap-4 p-4">
+                      <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
+                        <img 
+                          src={fallbackImage} 
+                          alt={category.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-lg mb-1">{category.name}</h3>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          Explorez les meilleures offres de {category.name.toLowerCase()}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                            {category.count} {category.count === 1 ? 'annonce' : 'annonces'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          )
         ) : (
           <div className="text-center py-8 text-muted-foreground">
             Aucune catégorie trouvée
