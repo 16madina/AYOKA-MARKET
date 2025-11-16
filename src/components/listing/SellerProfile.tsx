@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Package, Star, Shield, TrendingUp, Clock, Users } from "lucide-react";
+import { MapPin, Package, Star, Shield, TrendingUp, Clock, Users, MessageCircle, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -113,6 +113,35 @@ export const SellerProfile = ({ userId }: SellerProfileProps) => {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Online status & Response rate */}
+        <div className="flex flex-col gap-2">
+          {profile.is_online ? (
+            <div className="flex items-center gap-2 text-sm">
+              <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-green-600 font-medium">En ligne maintenant</span>
+            </div>
+          ) : profile.last_seen && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Clock className="h-3 w-3" />
+              <span>
+                Vu {formatDistanceToNow(new Date(profile.last_seen), {
+                  addSuffix: true,
+                  locale: fr,
+                })}
+              </span>
+            </div>
+          )}
+          
+          {profile.response_rate !== null && profile.response_rate > 0 && (
+            <div className="flex items-center gap-2 text-sm">
+              <MessageCircle className="h-3 w-3 text-primary" />
+              <span className="text-muted-foreground">
+                Répond à <span className="font-semibold text-foreground">{Math.round(profile.response_rate)}%</span> des messages
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Statistics */}

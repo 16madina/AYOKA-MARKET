@@ -305,7 +305,7 @@ const ListingDetail = () => {
                     onClick={handleContact}
                   >
                     <MessageCircle className="h-5 w-5 mr-2" />
-                    Contacter le vendeur
+                    Envoyer un message
                   </Button>
                 </div>
 

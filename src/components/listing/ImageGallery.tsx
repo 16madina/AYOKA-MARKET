@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import useEmblaCarousel from "embla-carousel-react";
 
 interface ImageGalleryProps {
   images: string[];
@@ -11,6 +12,29 @@ interface ImageGalleryProps {
 export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCurrentIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
   if (!images || images.length === 0) {
     return (
@@ -20,80 +44,72 @@ export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
     );
   }
 
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
   return (
     <>
       <div className="space-y-4">
-        {/* Main image */}
-        <div className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer">
-          <img
-            src={images[currentIndex]}
-            alt={`${title} - Image ${currentIndex + 1}`}
-            className="w-full h-full object-cover transition-transform group-hover:scale-105"
-            onClick={() => setIsOpen(true)}
-          />
-          
+        {/* Swipeable carousel */}
+        <div className="relative">
+          <div className="overflow-hidden rounded-lg" ref={emblaRef}>
+            <div className="flex">
+              {images.map((image, index) => (
+                <div 
+                  key={index} 
+                  className="flex-[0_0_100%] min-w-0"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <div className="aspect-square relative cursor-pointer">
+                    <img
+                      src={image}
+                      alt={`${title} - Image ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {images.length > 1 && (
             <>
               <Button
                 variant="secondary"
                 size="icon"
-                className="absolute left-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goToPrevious();
-                }}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
+                onClick={scrollPrev}
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
               <Button
                 variant="secondary"
                 size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goToNext();
-                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
+                onClick={scrollNext}
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>
-              
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-background/80 px-3 py-1 rounded-full text-sm">
+
+              {/* Counter */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1.5 rounded-full text-sm font-medium z-10">
                 {currentIndex + 1} / {images.length}
+              </div>
+
+              {/* Dots indicator */}
+              <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => emblaApi?.scrollTo(index)}
+                    className={`h-2 rounded-full transition-all ${
+                      index === currentIndex 
+                        ? "w-6 bg-white" 
+                        : "w-2 bg-white/50"
+                    }`}
+                  />
+                ))}
               </div>
             </>
           )}
         </div>
-
-        {/* Thumbnails */}
-        {images.length > 1 && (
-          <div className="grid grid-cols-4 gap-2">
-            {images.map((image, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`aspect-square rounded-lg overflow-hidden transition-all ${
-                  index === currentIndex
-                    ? "ring-2 ring-primary"
-                    : "opacity-60 hover:opacity-100"
-                }`}
-              >
-                <img
-                  src={image}
-                  alt={`${title} - Miniature ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Full screen dialog */}
@@ -121,7 +137,7 @@ export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
                   variant="secondary"
                   size="icon"
                   className="absolute left-4 top-1/2 -translate-y-1/2"
-                  onClick={goToPrevious}
+                  onClick={scrollPrev}
                 >
                   <ChevronLeft className="h-6 w-6" />
                 </Button>
@@ -129,7 +145,7 @@ export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
                   variant="secondary"
                   size="icon"
                   className="absolute right-4 top-1/2 -translate-y-1/2"
-                  onClick={goToNext}
+                  onClick={scrollNext}
                 >
                   <ChevronRight className="h-6 w-6" />
                 </Button>
