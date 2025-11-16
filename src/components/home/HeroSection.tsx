@@ -24,16 +24,16 @@ const HeroSection = () => {
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
         <div className="flex flex-col items-center animate-fade-in mb-4">
           <div className="flex items-center gap-2 md:gap-3">
-            <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <h1 className="text-2xl md:text-5xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               Bienvenue au
             </h1>
             <img 
               src={djassaLogo} 
               alt="DJASSA" 
-              className="h-10 md:h-16 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+              className="h-8 md:h-16 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
             />
           </div>
-          <span className="text-xl md:text-3xl font-pacifico text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] self-end mr-6 md:mr-12">Market</span>
+          <span className="text-lg md:text-3xl font-pacifico text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] self-end mr-4 md:mr-12">Market</span>
         </div>
         <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
           {t('hero.subtitle')}
