@@ -6,6 +6,10 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Simple cache
+const cache = new Map<string, { data: any; timestamp: number }>();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -33,6 +37,18 @@ serve(async (req) => {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // Check cache
+    const cacheKey = user.id;
+    const cached = cache.get(cacheKey);
+    
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+      console.log('Returning cached recommendations');
+      return new Response(
+        JSON.stringify(cached.data),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     // Récupérer le profil utilisateur pour le filtrage géographique
@@ -73,7 +89,7 @@ serve(async (req) => {
       return 999; // other
     };
 
-    // Récupérer toutes les annonces actives (y compris celles de l'utilisateur)
+    // Récupérer toutes les annonces actives - limité à 50 pour performance
     const { data: allListings } = await supabase
       .from("listings")
       .select(`
@@ -89,7 +105,7 @@ serve(async (req) => {
       `)
       .eq("status", "active")
       .order("created_at", { ascending: false })
-      .limit(100);
+      .limit(50);
 
     // Filtrer pour ne garder que les annonces du même pays
     const filteredListings = allListings?.filter(listing => {

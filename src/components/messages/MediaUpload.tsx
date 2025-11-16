@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Image, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useCamera } from '@/hooks/useCamera';
+import { errorTracker } from '@/utils/errorTracking';
 
 interface MediaUploadProps {
   onUpload: (url: string) => void;
@@ -12,14 +14,12 @@ interface MediaUploadProps {
 export const MediaUpload = ({ onUpload, userId }: MediaUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
+  const { pickFromGallery, isLoading: cameraLoading } = useCamera();
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadImage = async (file: File) => {
     try {
       setUploading(true);
-      const file = event.target.files?.[0];
-      if (!file) return;
 
-      // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast({
           title: 'Fichier trop volumineux',
@@ -29,7 +29,6 @@ export const MediaUpload = ({ onUpload, userId }: MediaUploadProps) => {
         return;
       }
 
-      // Upload to Supabase Storage
       const fileExt = file.name.split('.').pop();
       const fileName = `${userId}/${Date.now()}.${fileExt}`;
       
@@ -51,6 +50,7 @@ export const MediaUpload = ({ onUpload, userId }: MediaUploadProps) => {
       });
     } catch (error) {
       console.error('Upload error:', error);
+      errorTracker.logError('upload', 'Failed to upload media', error as Error);
       toast({
         title: 'Erreur',
         description: 'Impossible de télécharger l\'image',
@@ -59,6 +59,28 @@ export const MediaUpload = ({ onUpload, userId }: MediaUploadProps) => {
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleCameraUpload = async () => {
+    try {
+      const file = await pickFromGallery();
+      if (file) {
+        await uploadImage(file);
+      }
+    } catch (error: any) {
+      errorTracker.logError('camera', 'Failed to select media', error);
+      toast({
+        title: 'Erreur',
+        description: 'Impossible d\'accéder à la galerie',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    await uploadImage(file);
   };
 
   return (
@@ -74,11 +96,11 @@ export const MediaUpload = ({ onUpload, userId }: MediaUploadProps) => {
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => document.getElementById('media-upload')?.click()}
-        disabled={uploading}
+        onClick={handleCameraUpload}
+        disabled={uploading || cameraLoading}
         type="button"
       >
-        {uploading ? (
+        {uploading || cameraLoading ? (
           <Loader2 className="h-5 w-5 animate-spin" />
         ) : (
           <Image className="h-5 w-5" />

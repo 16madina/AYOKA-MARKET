@@ -31,6 +31,9 @@ import ProfileVisibility from "./pages/settings/ProfileVisibility";
 import BlockedUsers from "./pages/settings/BlockedUsers";
 import SalesHistory from "./pages/settings/SalesHistory";
 
+import TestCamera from "./pages/TestCamera";
+import AdminPerformance from "./pages/AdminPerformance";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -66,6 +69,8 @@ const App = () => (
           <Route path="/settings/profile-visibility" element={<ProfileVisibility />} />
           <Route path="/settings/blocked-users" element={<BlockedUsers />} />
           <Route path="/settings/sales-history" element={<SalesHistory />} />
+          <Route path="/test-camera" element={<TestCamera />} />
+          <Route path="/admin/performance" element={<AdminPerformance />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

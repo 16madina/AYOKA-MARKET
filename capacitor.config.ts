@@ -17,6 +17,14 @@ const config: CapacitorConfig = {
       showSpinner: false,
       splashFullScreen: true,
       splashImmersive: true
+    },
+    Camera: {
+      android: {
+        permissions: ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+      },
+      ios: {
+        permissions: ["NSCameraUsageDescription", "NSPhotoLibraryUsageDescription"]
+      }
     }
   }
 };
