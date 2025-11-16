@@ -13,6 +13,7 @@ import { PrivacyPolicy } from "@/components/auth/PrivacyPolicy";
 import { TermsConditions } from "@/components/auth/TermsConditions";
 import { westAfricanCountries } from "@/data/westAfricaData";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import djassaLogoAuth from "@/assets/djassa-logo-auth.png";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -199,7 +200,14 @@ const Auth = () => {
         </Button>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <img 
+                src={djassaLogoAuth} 
+                alt="DJASSA" 
+                className="h-12 w-auto"
+              />
+            </div>
             <CardTitle className="text-2xl">
               {isLogin ? "Connexion" : "Créer un compte"}
             </CardTitle>
