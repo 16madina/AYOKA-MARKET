@@ -72,12 +72,23 @@ export const SellerProfile = ({ userId }: SellerProfileProps) => {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="font-semibold text-lg">{profile.full_name || "Utilisateur"}</h3>
-              {profile.verified_seller && (
-                <Badge variant="default" className="flex items-center gap-1">
-                  <Shield className="h-3 w-3" />
-                  Vérifié
-                </Badge>
-              )}
+          {profile.verified_seller && (
+            <Badge variant="default" className="flex items-center gap-1">
+              <Shield className="h-3 w-3" />
+              Vérifié
+            </Badge>
+          )}
+          {profile.total_sales === 0 && (
+            <Badge variant="secondary" className="flex items-center gap-1">
+              Nouveau vendeur
+            </Badge>
+          )}
+          {profile.total_sales >= 10 && profile.rating_average >= 4.5 && (
+            <Badge className="flex items-center gap-1 bg-green-600">
+              <Star className="h-3 w-3" />
+              Vendeur fiable
+            </Badge>
+          )}
             </div>
             {profile.location && (
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -87,8 +98,17 @@ export const SellerProfile = ({ userId }: SellerProfileProps) => {
             )}
             {profile.rating_count > 0 && (
               <div className="flex items-center gap-1 mt-1">
-                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                <span className="font-semibold text-sm">{profile.rating_average.toFixed(1)}</span>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`h-4 w-4 ${
+                      star <= Math.round(profile.rating_average)
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-muted-foreground"
+                    }`}
+                  />
+                ))}
+                <span className="font-semibold text-sm ml-1">{profile.rating_average.toFixed(1)}</span>
                 <span className="text-xs text-muted-foreground">({profile.rating_count} avis)</span>
               </div>
             )}

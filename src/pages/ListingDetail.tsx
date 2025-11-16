@@ -6,10 +6,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ImageGallery } from "@/components/listing/ImageGallery";
 import { SellerProfile } from "@/components/listing/SellerProfile";
+import { SellerOtherListings } from "@/components/listing/SellerOtherListings";
 import { FavoriteButton } from "@/components/listing/FavoriteButton";
 import { ReportDialog } from "@/components/listing/ReportDialog";
 import LocationMap from "@/components/listing/LocationMap";
-import { ArrowLeft, MapPin, Eye, MessageCircle, Share2 } from "lucide-react";
+import { ArrowLeft, MapPin, Eye, MessageCircle, Share2, Heart } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import BottomNav from "@/components/BottomNav";
@@ -17,10 +20,12 @@ import { addToRecentlyViewed } from "@/utils/recentlyViewed";
 import { translateCondition } from "@/utils/translations";
 import { formatPrice } from "@/utils/currency";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
 
   const { data: user } = useQuery({
     queryKey: ["user"],
@@ -71,6 +76,22 @@ const ListingDetail = () => {
       }
 
       return data;
+    },
+  });
+
+  // Fetch favorites count
+  const { data: favoritesCount } = useQuery({
+    queryKey: ["listing-favorites-count", id],
+    queryFn: async () => {
+      if (!id) return 0;
+      
+      const { count, error } = await supabase
+        .from("favorites")
+        .select("*", { count: "exact", head: true })
+        .eq("listing_id", id);
+
+      if (error) throw error;
+      return count || 0;
     },
   });
 
@@ -126,21 +147,47 @@ const ListingDetail = () => {
     createConversation();
   };
 
-  const handleShare = async () => {
-    if (navigator.share && listing) {
+  const handleShare = async (method?: string) => {
+    if (!listing) return;
+    
+    const currency = userProfile?.currency || "FCFA";
+    const shareText = listing.price === 0 
+      ? `${listing.title} - Gratuit` 
+      : `${listing.title} - ${formatPrice(listing.price, currency)}`;
+    const shareUrl = window.location.href;
+
+    if (method === "copy") {
+      navigator.clipboard.writeText(shareUrl);
+      toast.success("Lien copié !");
+      setShareDialogOpen(false);
+      return;
+    }
+
+    if (method === "whatsapp") {
+      window.open(`https://wa.me/?text=${encodeURIComponent(shareText + " " + shareUrl)}`, "_blank");
+      setShareDialogOpen(false);
+      return;
+    }
+
+    if (method === "facebook") {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, "_blank");
+      setShareDialogOpen(false);
+      return;
+    }
+
+    // Native share
+    if (navigator.share) {
       try {
-        const currency = userProfile?.currency || "FCFA";
         await navigator.share({
           title: listing.title,
-          text: listing.price === 0 
-            ? `${listing.title} - Gratuit` 
-            : `${listing.title} - ${formatPrice(listing.price, currency)}`,
-          url: window.location.href,
+          text: shareText,
+          url: shareUrl,
         });
       } catch (error) {
         console.error("Share error:", error);
       }
     }
+    setShareDialogOpen(false);
   };
 
   if (isLoading) {
@@ -187,12 +234,21 @@ const ListingDetail = () => {
               <CardContent className="p-6 space-y-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-2 flex-wrap">
                       <Badge>{listing.categories?.name}</Badge>
                       {listing.condition && (
                         <Badge variant="outline">
                           {translateCondition(listing.condition)}
                         </Badge>
+                      )}
+                      {listing.status === "sold" && (
+                        <Badge className="bg-gray-500">Vendu</Badge>
+                      )}
+                      {listing.status === "reserved" && (
+                        <Badge className="bg-orange-500">Réservé</Badge>
+                      )}
+                      {listing.status === "active" && (
+                        <Badge className="bg-green-600">Disponible</Badge>
                       )}
                     </div>
                     <h1 className="text-3xl font-bold mb-2">{listing.title}</h1>
@@ -216,11 +272,23 @@ const ListingDetail = () => {
                   <div className="flex gap-2">
                     <FavoriteButton listingId={listing.id} />
                     <ReportDialog listingId={listing.id} />
-                    <Button variant="outline" size="icon" onClick={handleShare}>
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      onClick={() => setShareDialogOpen(true)}
+                      className="relative"
+                    >
                       <Share2 className="h-5 w-5" />
                     </Button>
                   </div>
                 </div>
+
+                {favoritesCount !== undefined && favoritesCount > 0 && (
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground pt-2">
+                    <Heart className="h-4 w-4 fill-red-500 text-red-500" />
+                    <span>{favoritesCount} {favoritesCount === 1 ? "personne intéressée" : "personnes intéressées"}</span>
+                  </div>
+                )}
 
                 <div className="pt-4 border-t">
                   <div className="text-3xl font-bold mb-4">
@@ -255,10 +323,51 @@ const ListingDetail = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             <SellerProfile userId={listing.user_id} />
+            <SellerOtherListings 
+              userId={listing.user_id} 
+              currentListingId={listing.id}
+              userCurrency={userProfile?.currency}
+            />
             <LocationMap location={listing.location} />
           </div>
         </div>
       </div>
+
+      {/* Share Dialog */}
+      <Dialog open={shareDialogOpen} onOpenChange={setShareDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Partager cette annonce</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Button 
+              variant="outline" 
+              className="w-full justify-start gap-3"
+              onClick={() => handleShare("whatsapp")}
+            >
+              <span className="text-xl">📱</span>
+              WhatsApp
+            </Button>
+            <Button 
+              variant="outline" 
+              className="w-full justify-start gap-3"
+              onClick={() => handleShare("facebook")}
+            >
+              <span className="text-xl">📘</span>
+              Facebook
+            </Button>
+            <Button 
+              variant="outline" 
+              className="w-full justify-start gap-3"
+              onClick={() => handleShare("copy")}
+            >
+              <span className="text-xl">📋</span>
+              Copier le lien
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <BottomNav />
     </div>
   );
