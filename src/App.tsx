@@ -28,6 +28,52 @@ import Privacy from "./pages/settings/Privacy";
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  const [userId, setUserId] = useState<string | undefined>();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUserId(user?.id);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  usePushNotifications(userId);
+  useFavoriteNotifications(userId);
+
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/edit-profile" element={<EditProfile />} />
+      <Route path="/categories" element={<Categories />} />
+      <Route path="/category/:categorySlug" element={<CategoryDetail />} />
+      <Route path="/publish" element={<Publish />} />
+      <Route path="/search" element={<Search />} />
+      <Route path="/listing/:id" element={<ListingDetail />} />
+      <Route path="/messages" element={<Messages />} />
+      <Route path="/favorites" element={<Favorites />} />
+      <Route path="/seller/:sellerId" element={<SellerPublicProfile />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/settings/account" element={<AccountManagement />} />
+      <Route path="/settings/faq" element={<FAQ />} />
+      <Route path="/settings/support" element={<Support />} />
+      <Route path="/settings/report" element={<Report />} />
+      <Route path="/settings/terms" element={<Terms />} />
+      <Route path="/settings/privacy" element={<Privacy />} />
+      <Route path="/help" element={<Help />} />
+      <Route path="/admin" element={<Admin />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
