@@ -27,7 +27,7 @@ export const PrivacyPolicy = ({ open, onOpenChange }: PrivacyPolicyProps) => {
             <section>
               <h3 className="font-semibold text-base mb-2">1. Collecte des informations</h3>
               <p className="text-muted-foreground">
-                Nous collectons les informations que vous nous fournissez directement lors de votre inscription, notamment votre nom, prénom, email, numéro de téléphone, pays et ville. Ces informations sont nécessaires pour créer et gérer votre compte ReVivo.
+                Nous collectons les informations que vous nous fournissez directement lors de votre inscription, notamment votre nom, prénom, email, numéro de téléphone, pays et ville. Ces informations sont nécessaires pour créer et gérer votre compte ReVend.
               </p>
             </section>
 
@@ -115,7 +115,7 @@ export const PrivacyPolicy = ({ open, onOpenChange }: PrivacyPolicyProps) => {
             <section>
               <h3 className="font-semibold text-base mb-2">9. Protection des mineurs</h3>
               <p className="text-muted-foreground">
-                ReVivo n'est pas destiné aux personnes de moins de 18 ans. Nous ne collectons pas sciemment d'informations personnelles auprès de mineurs. Si vous pensez qu'un mineur a fourni des informations personnelles, veuillez nous contacter immédiatement.
+                ReVend n'est pas destiné aux personnes de moins de 18 ans. Nous ne collectons pas sciemment d'informations personnelles auprès de mineurs. Si vous pensez qu'un mineur a fourni des informations personnelles, veuillez nous contacter immédiatement.
               </p>
             </section>
 
@@ -136,7 +136,7 @@ export const PrivacyPolicy = ({ open, onOpenChange }: PrivacyPolicyProps) => {
             <section>
               <h3 className="font-semibold text-base mb-2">11. Permissions de l'application</h3>
               <p className="text-muted-foreground">
-                ReVivo peut demander les permissions suivantes :
+                ReVend peut demander les permissions suivantes :
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
                 <li><strong>Appareil photo/Photos :</strong> Pour ajouter des images à vos annonces</li>
@@ -170,7 +170,7 @@ export const PrivacyPolicy = ({ open, onOpenChange }: PrivacyPolicyProps) => {
                 Pour toute question concernant cette politique de confidentialité ou pour exercer vos droits :
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
-                <li>Email : privacy@revivo.com</li>
+                <li>Email : privacy@revend.com</li>
                 <li>Via les paramètres de votre compte</li>
                 <li>Centre d'aide dans l'application</li>
               </ul>
