@@ -1,13 +1,15 @@
 {
   "name": "DJASSA - Marketplace de seconde vie",
   "short_name": "DJASSA",
-  "description": "Le marketplace de l'économie circulaire. Donnez une seconde vie à vos articles.",
+  "description": "Le marketplace de l'économie circulaire en Afrique de l'Ouest. Achetez et vendez facilement vos articles de seconde main.",
   "theme_color": "#ea384c",
   "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
+  "categories": ["shopping", "lifestyle"],
+  "lang": "fr-FR",
   "icons": [
     {
       "src": "/icon-192.png",

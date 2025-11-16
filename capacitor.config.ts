@@ -4,6 +4,7 @@ const config: CapacitorConfig = {
   appId: 'app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471',
   appName: 'DJASSA',
   webDir: 'dist',
+  backgroundColor: '#FFFFFF',
   server: {
     // URL de développement uniquement - désactiver en production
     // url: 'https://fdde6a57-c0ea-45b0-bd6d-4e42d3d22471.lovableproject.com?forceHideBadge=true',

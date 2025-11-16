@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  Copiez ce fichier vers : android/app/src/main/res/values/colors.xml
+  après avoir exécuté 'npx cap add android'
+-->
+<resources>
+    <!-- Couleurs principales de DJASSA -->
+    <color name="colorPrimary">#ea384c</color>
+    <color name="colorPrimaryDark">#d62d41</color>
+    <color name="colorAccent">#ea384c</color>
+    
+    <!-- Barres de statut et navigation -->
+    <color name="statusBarColor">#FFFFFF</color>
+    <color name="toolbarColor">#FFFFFF</color>
+    <color name="navigationBarColor">#FFFFFF</color>
+    
+    <!-- Splash screen -->
+    <color name="splashBackground">#FFFFFF</color>
+</resources>
