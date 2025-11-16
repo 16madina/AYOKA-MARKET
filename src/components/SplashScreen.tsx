@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import logo from "/logo.svg";
-import DjassaLogo from "./DjassaLogo";
+import djassaLogo from "@/assets/djassa-logo.png";
 
 interface SplashScreenProps {
   onFinish: () => void;
@@ -28,18 +27,11 @@ const SplashScreen = ({ onFinish }: SplashScreenProps) => {
     >
       <div className="flex flex-col items-center gap-6 animate-fade-in">
         <img
-          src={logo}
-          alt="DJASSA Logo"
-          className="w-32 h-32 animate-scale-in"
+          src={djassaLogo}
+          alt="DJASSA Market Logo"
+          className="w-64 md:w-80 animate-scale-in"
           style={{ animationDelay: "0.2s" }}
         />
-        
-        <div className="flex flex-col items-center gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>
-          <DjassaLogo className="w-64 md:w-80 h-16 md:h-20 text-foreground" />
-          <span className="text-3xl md:text-4xl font-pacifico text-primary">
-            Market
-          </span>
-        </div>
       </div>
     </div>
   );
