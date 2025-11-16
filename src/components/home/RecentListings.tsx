@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,6 +19,21 @@ const RecentListings = () => {
     queryFn: async () => {
       const { data: { session } } = await supabase.auth.getSession();
       return session;
+    },
+  });
+
+  // Fetch active ad banners
+  const { data: adBanners = [] } = useQuery({
+    queryKey: ["active-ad-banners"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("ad_banners")
+        .select("*")
+        .eq("active", true)
+        .order("display_order", { ascending: true });
+      
+      if (error) throw error;
+      return data;
     },
   });
   
@@ -177,6 +193,51 @@ const RecentListings = () => {
     </Card>
   );
 
+  // Insert ad banners every 6 listings
+  const listingsWithAds = useMemo(() => {
+    if (!displayedListings.length || !adBanners.length) return displayedListings;
+    
+    const result: any[] = [];
+    let bannerIndex = 0;
+    
+    displayedListings.forEach((listing, index) => {
+      result.push(listing);
+      
+      // After every 6 listings, insert an ad banner
+      if ((index + 1) % 6 === 0 && bannerIndex < adBanners.length) {
+        result.push({ 
+          ...adBanners[bannerIndex], 
+          isAd: true 
+        });
+        bannerIndex = (bannerIndex + 1) % adBanners.length; // Cycle through banners
+      }
+    });
+    
+    return result;
+  }, [displayedListings, adBanners]);
+
+  const renderItem = (item: any, index: number) => {
+    if (item.isAd) {
+      return (
+        <div key={`ad-${item.id}`} className="col-span-2 sm:col-span-2 lg:col-span-3 xl:col-span-4">
+          <a
+            href={item.link_url || '#'}
+            target={item.link_url ? '_blank' : undefined}
+            rel={item.link_url ? 'noopener noreferrer' : undefined}
+            className="block w-full"
+          >
+            <img
+              src={item.image_url}
+              alt={item.title}
+              className="w-full h-32 md:h-40 object-cover rounded-lg hover:opacity-90 transition-opacity"
+            />
+          </a>
+        </div>
+      );
+    }
+    return renderListingCard(item, index);
+  };
+
   return (
     <section className="py-8 px-4">
       <div className="max-w-screen-xl mx-auto">
@@ -197,7 +258,7 @@ const RecentListings = () => {
             {/* Mobile: 2 colonnes, Tablet: 2 colonnes, Desktop: 3 colonnes, XL: 4 colonnes */}
             {hasDisplayedListings ? (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                {displayedListings.map((listing, index) => renderListingCard(listing, index))}
+                {listingsWithAds.map((item, index) => renderItem(item, index))}
               </div>
             ) : isAuthenticated && hasUserLocation ? (
               <div className="text-center py-6 bg-muted/30 rounded-lg border border-border/50">

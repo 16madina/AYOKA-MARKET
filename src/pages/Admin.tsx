@@ -16,6 +16,7 @@ import { Users, FileText, ShieldAlert, Mail, MessageSquare, Ban, CheckCircle, XC
 import { User } from "@supabase/supabase-js";
 import BottomNav from "@/components/BottomNav";
 import { InactiveListingsReminder } from "@/components/admin/InactiveListingsReminder";
+import AdBannerManagement from "@/components/admin/AdBannerManagement";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -365,6 +366,10 @@ const Admin = () => {
             <TabsTrigger value="reminders" className="flex items-center gap-2">
               <Bell className="h-4 w-4" />
               Rappels
+            </TabsTrigger>
+            <TabsTrigger value="ads" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Publicités
             </TabsTrigger>
           </TabsList>
 
@@ -844,6 +849,10 @@ const Admin = () => {
           {/* Reminders Tab */}
           <TabsContent value="reminders">
             <InactiveListingsReminder />
+          </TabsContent>
+
+          <TabsContent value="ads">
+            <AdBannerManagement />
           </TabsContent>
         </Tabs>
       </div>
