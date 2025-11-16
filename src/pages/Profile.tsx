@@ -197,12 +197,9 @@ const Profile = () => {
         return;
       }
 
-      const confirmationUrl = `${window.location.origin}/`;
-      
       const { error } = await supabase.functions.invoke('send-verification-email', {
         body: {
           email: user.email,
-          confirmationUrl,
           userName: profile?.full_name || "utilisateur",
         },
       });
