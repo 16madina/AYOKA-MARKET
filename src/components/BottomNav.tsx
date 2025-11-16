@@ -26,12 +26,9 @@ const BottomNav = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50">
-      {/* Glassmorphism background with gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/90 to-background/80 backdrop-blur-xl border-t border-border/50" />
-      
-      <div className="relative max-w-screen-xl mx-auto px-2 pb-safe">
-        <div className="flex items-center justify-around gap-0.5 py-1">
+    <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-background/98 border-t border-border backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
+      <div className="relative max-w-screen-xl mx-auto px-2 py-2 pb-safe">
+        <div className="flex items-center justify-around gap-0.5">
           {navItems.map(({ to, icon: Icon, label, badge }) => (
             <NavLink
               key={to}
