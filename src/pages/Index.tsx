@@ -9,10 +9,13 @@ import RecentlyViewed from "@/components/home/RecentlyViewed";
 import FilterSheet from "@/components/home/FilterSheet";
 import RecommendedSheet from "@/components/home/RecommendedSheet";
 import BottomNav from "@/components/BottomNav";
+import { OnboardingWelcome } from "@/components/onboarding/OnboardingWelcome";
+import { useOnboarding } from "@/hooks/useOnboarding";
 
 const Index = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { welcomeCompleted, completeWelcome } = useOnboarding();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -39,6 +42,12 @@ const Index = () => {
         <RecommendedSheet />
       </div>
       <RecentListings />
+      
+      <OnboardingWelcome
+        open={!welcomeCompleted}
+        onComplete={completeWelcome}
+      />
+      
       <BottomNav />
     </div>
   );

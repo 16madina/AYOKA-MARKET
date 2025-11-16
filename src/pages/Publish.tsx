@@ -13,6 +13,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BottomNav from "@/components/BottomNav";
 import { ArrowLeft } from "lucide-react";
+import { PublishTutorial } from "@/components/onboarding/PublishTutorial";
+import { useOnboarding } from "@/hooks/useOnboarding";
 
 const Publish = () => {
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ const Publish = () => {
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [parentCategoryId, setParentCategoryId] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const { firstPublishCompleted, completeFirstPublish } = useOnboarding();
   
   const [formData, setFormData] = useState({
     title: "",
@@ -367,7 +370,7 @@ const Publish = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className="space-y-2" data-tutorial="category-select">
                   <Label htmlFor="category">Catégorie principale *</Label>
                   <Select
                     value={parentCategoryId}
@@ -411,7 +414,7 @@ const Publish = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className="space-y-2" data-tutorial="price-input">
                   <Label htmlFor="price">Prix (FCFA) {!formData.isFree && "*"}</Label>
                   <Input
                     id="price"
@@ -448,7 +451,7 @@ const Publish = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className="space-y-2" data-tutorial="location-input">
                   <Label htmlFor="location">Localisation *</Label>
                   <Input
                     id="location"
@@ -628,6 +631,12 @@ const Publish = () => {
           </CardContent>
         </Card>
       </div>
+      
+      <PublishTutorial
+        active={!firstPublishCompleted}
+        onComplete={completeFirstPublish}
+      />
+      
       <BottomNav />
     </div>
   );

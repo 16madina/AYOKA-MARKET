@@ -41,10 +41,12 @@ import {
   Mail,
   CheckCircle,
   Sun,
-  Moon
+  Moon,
+  RotateCcw
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { NotificationSettings } from "@/components/settings/NotificationSettings";
+import { useOnboarding } from "@/hooks/useOnboarding";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -52,6 +54,7 @@ const Settings = () => {
   const [notificationDialogOpen, setNotificationDialogOpen] = useState(false);
   const { darkMode, toggleDarkMode } = useDarkMode();
   const { language, setLanguage, t } = useLanguage();
+  const { resetOnboarding } = useOnboarding();
 
   const { data: userProfile } = useQuery({
     queryKey: ["userProfile", userId],
@@ -129,6 +132,11 @@ const Settings = () => {
       toast.success("Déconnexion réussie");
       navigate("/auth");
     }
+  };
+
+  const handleResetTutorial = () => {
+    resetOnboarding();
+    toast.success("Le tutoriel a été réinitialisé. Rechargez la page pour le revoir.");
   };
 
   const SettingSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -521,6 +529,14 @@ const Settings = () => {
               onClick={() => navigate("/settings/privacy")}
               iconColor="bg-gray-500/10"
               iconTextColor="text-gray-600"
+            />
+            <Separator />
+            <SettingItem 
+              icon={RotateCcw} 
+              label="Réinitialiser le tutoriel" 
+              onClick={handleResetTutorial}
+              iconColor="bg-purple-500/10"
+              iconTextColor="text-purple-600"
             />
           </CardContent>
         </SettingSection>
