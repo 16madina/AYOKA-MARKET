@@ -97,7 +97,7 @@ const RecommendedListings = () => {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {[...Array(4)].map((_, i) => (
             <Card key={i} className="overflow-hidden">
               <Skeleton className="w-full h-48" />
@@ -109,7 +109,7 @@ const RecommendedListings = () => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {recommendations.map((listing: any) => (
             <Card
               key={listing.id}

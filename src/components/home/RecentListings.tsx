@@ -191,7 +191,7 @@ const RecentListings = () => {
       <div className="max-w-screen-xl mx-auto">
         <h2 className="text-2xl font-bold mb-6">{t('listings.recent')}</h2>
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
             {[...Array(6)].map((_, i) => (
               <SkeletonCard key={i} />
             ))}
@@ -203,9 +203,9 @@ const RecentListings = () => {
           </div>
         ) : (
           <div className="space-y-8">
-            {/* Mobile: 1 colonne, Tablet: 2 colonnes, Desktop: 3 colonnes */}
+            {/* Mobile: 2 colonnes, Tablet: 2 colonnes, Desktop: 3 colonnes, XL: 4 colonnes */}
             {hasDisplayedListings ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {displayedListings.map((listing, index) => renderListingCard(listing, index))}
               </div>
             ) : isAuthenticated && hasUserLocation ? (
