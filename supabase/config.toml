@@ -2,3 +2,6 @@ project_id = "lczzyelucnfvkicwdbbe"
 
 [functions.recommend-listings]
 verify_jwt = true
+
+[functions.send-verification-email]
+verify_jwt = false

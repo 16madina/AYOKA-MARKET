@@ -72,8 +72,8 @@ export const SellerProfile = ({ userId }: SellerProfileProps) => {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="font-semibold text-lg">{profile.full_name || "Utilisateur"}</h3>
-          {profile.verified_seller && (
-            <Badge variant="default" className="flex items-center gap-1">
+          {profile.email_verified && (
+            <Badge variant="default" className="flex items-center gap-1 bg-green-600 hover:bg-green-700">
               <Shield className="h-3 w-3" />
               Vérifié
             </Badge>

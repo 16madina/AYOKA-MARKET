@@ -158,7 +158,7 @@ const Admin = () => {
       const matchesStatus = userStatusFilter === "all" ||
         (userStatusFilter === "banned" && user.is_banned) ||
         (userStatusFilter === "active" && !user.is_banned) ||
-        (userStatusFilter === "verified" && user.verified_seller);
+        (userStatusFilter === "verified" && user.email_verified);
       
       return matchesSearch && matchesStatus;
     });
@@ -410,8 +410,8 @@ const Admin = () => {
                           {profile.is_banned && (
                             <Badge variant="destructive">Banni</Badge>
                           )}
-                          {profile.verified_seller && (
-                            <Badge variant="default">Vérifié</Badge>
+                          {profile.email_verified && (
+                            <Badge variant="default" className="bg-green-600">Vérifié</Badge>
                           )}
                         </div>
                         <div className="text-sm text-muted-foreground mt-1 space-y-1">

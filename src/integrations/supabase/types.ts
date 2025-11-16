@@ -506,6 +506,7 @@ export type Database = {
           country: string | null
           created_at: string
           currency: string | null
+          email_verified: boolean | null
           first_name: string | null
           followers_count: number | null
           full_name: string | null
@@ -524,6 +525,7 @@ export type Database = {
           total_sales: number | null
           typing_in_conversation: string | null
           updated_at: string
+          verified_at: string | null
           verified_seller: boolean | null
         }
         Insert: {
@@ -535,6 +537,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           currency?: string | null
+          email_verified?: boolean | null
           first_name?: string | null
           followers_count?: number | null
           full_name?: string | null
@@ -553,6 +556,7 @@ export type Database = {
           total_sales?: number | null
           typing_in_conversation?: string | null
           updated_at?: string
+          verified_at?: string | null
           verified_seller?: boolean | null
         }
         Update: {
@@ -564,6 +568,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           currency?: string | null
+          email_verified?: boolean | null
           first_name?: string | null
           followers_count?: number | null
           full_name?: string | null
@@ -582,6 +587,7 @@ export type Database = {
           total_sales?: number | null
           typing_in_conversation?: string | null
           updated_at?: string
+          verified_at?: string | null
           verified_seller?: boolean | null
         }
         Relationships: []

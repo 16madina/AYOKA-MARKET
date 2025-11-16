@@ -147,11 +147,30 @@ const Auth = () => {
             .eq("id", data.user.id);
 
           if (profileError) console.error("Profile update error:", profileError);
+          
+          // Send verification email
+          try {
+            const confirmationUrl = `${window.location.origin}/auth/confirm`;
+            const emailResult = await supabase.functions.invoke('send-verification-email', {
+              body: {
+                email: formData.email,
+                confirmationUrl,
+                userName: formData.firstName
+              }
+            });
+            if (emailResult.error) {
+              console.error("Error sending verification email:", emailResult.error);
+            } else {
+              console.log("Verification email sent successfully");
+            }
+          } catch (emailError) {
+            console.error("Error sending verification email:", emailError);
+          }
         }
 
         toast({
           title: "Compte créé !",
-          description: "Votre compte a été créé avec succès. Bienvenue sur DJASSA !",
+          description: "Vérifiez votre email pour obtenir votre badge vérifié ✓",
         });
         navigate("/");
       }
