@@ -127,8 +127,8 @@ const Settings = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'ReVivo',
-          text: 'Découvrez ReVivo - Achetez et vendez facilement !',
+          title: 'DJASSA',
+          text: 'Découvrez DJASSA - Achetez et vendez facilement !',
           url: window.location.origin
         });
         toast.success('Application partagée avec succès');

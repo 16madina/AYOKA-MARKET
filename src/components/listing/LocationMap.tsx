@@ -13,7 +13,7 @@ const LocationMap = ({ location }: LocationMapProps) => {
   const map = useRef<mapboxgl.Map | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [distance, setDistance] = useState<number | null>(null);
-  const mapboxToken = 'pk.eyJ1IjoibWFkaW5hZGlhbGxvIiwiYSI6ImNtaHp6ZWJmcTBoOXQybHB3bnd2ZmcyM2wifQ.h0ayKla0WnwNaWsBvVybDg';
+  const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
   // Get user's location
   useEffect(() => {

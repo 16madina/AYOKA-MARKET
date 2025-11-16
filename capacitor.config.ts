@@ -5,8 +5,9 @@ const config: CapacitorConfig = {
   appName: 'DJASSA',
   webDir: 'dist',
   server: {
-    url: 'https://fdde6a57-c0ea-45b0-bd6d-4e42d3d22471.lovableproject.com?forceHideBadge=true',
-    cleartext: true
+    // URL de développement uniquement - désactiver en production
+    // url: 'https://fdde6a57-c0ea-45b0-bd6d-4e42d3d22471.lovableproject.com?forceHideBadge=true',
+    // cleartext: true
   },
   plugins: {
     SplashScreen: {
@@ -19,12 +20,27 @@ const config: CapacitorConfig = {
         permissions: ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
       },
       ios: {
-        permissions: ["NSCameraUsageDescription", "NSPhotoLibraryUsageDescription"]
+        permissions: [
+          "NSCameraUsageDescription: Nous avons besoin d'accéder à votre appareil photo pour prendre des photos de vos articles à vendre",
+          "NSPhotoLibraryUsageDescription: Nous avons besoin d'accéder à votre galerie pour sélectionner des photos de vos articles"
+        ]
       }
     },
     NativeBiometric: {
       ios: {
-        permissions: ["NSFaceIDUsageDescription"]
+        permissions: [
+          "NSFaceIDUsageDescription: Utilisez Face ID pour vous authentifier rapidement et en toute sécurité"
+        ]
+      }
+    },
+    Geolocation: {
+      android: {
+        permissions: ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+      },
+      ios: {
+        permissions: [
+          "NSLocationWhenInUseUsageDescription: Nous utilisons votre position pour estimer la distance avec les annonceurs et améliorer vos résultats de recherche"
+        ]
       }
     }
   }
