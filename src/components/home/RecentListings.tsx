@@ -145,10 +145,10 @@ const RecentListings = () => {
         )}
       </div>
       <CardContent className="p-4">
-        <h3 className="font-semibold text-lg mb-2 line-clamp-2 leading-tight">
+        <h3 className="font-semibold text-base mb-2 line-clamp-2 leading-tight">
           {listing.title}
         </h3>
-        <p className="font-bold text-primary text-lg mb-2">
+        <p className="font-bold text-primary text-base mb-2">
           {listing.price === 0 ? (
             <span className="text-green-600">
               {formatPriceWithConversion(0, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
