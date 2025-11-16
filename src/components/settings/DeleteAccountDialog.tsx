@@ -55,7 +55,7 @@ export const DeleteAccountDialog = ({ open, onOpenChange }: DeleteAccountDialogP
       const url = URL.createObjectURL(dataBlob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `revivo-data-export-${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `revend-data-export-${new Date().toISOString().split('T')[0]}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

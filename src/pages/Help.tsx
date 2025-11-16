@@ -91,7 +91,7 @@ const Help = () => {
     },
     {
       question: "Les frais et commissions",
-      answer: "La publication d'annonces est GRATUITE. ReVivo ne prend AUCUNE commission sur les ventes. Des services premium optionnels existent : mise en avant d'annonces, badge professionnel, statistiques avancées. Les prix sont clairement affichés avant tout achat."
+      answer: "La publication d'annonces est GRATUITE. ReVend ne prend AUCUNE commission sur les ventes. Des services premium optionnels existent : mise en avant d'annonces, badge professionnel, statistiques avancées. Les prix sont clairement affichés avant tout achat."
     },
     {
       question: "Puis-je vendre professionnellement ?",
@@ -140,7 +140,7 @@ const Help = () => {
           <h2 className="font-semibold text-lg">Guides pratiques</h2>
           <div className="space-y-3">
             <div className="p-4 bg-muted/50 rounded-lg">
-              <h3 className="font-medium mb-2">🎯 Bien démarrer sur ReVivo</h3>
+              <h3 className="font-medium mb-2">🎯 Bien démarrer sur ReVend</h3>
               <p className="text-sm text-muted-foreground">
                 Créez votre compte, complétez votre profil, publiez votre première annonce et découvrez toutes les fonctionnalités en 5 minutes.
               </p>
@@ -232,7 +232,7 @@ const Help = () => {
               <Mail className="h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Email</div>
-                <div className="text-xs text-muted-foreground">support@revivo.com • Réponse sous 24h</div>
+                <div className="text-xs text-muted-foreground">support@revend.com • Réponse sous 24h</div>
               </div>
             </Button>
           </div>

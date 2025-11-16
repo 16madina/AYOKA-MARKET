@@ -1,0 +1,27 @@
+{
+  "name": "ReVend - Marketplace de seconde vie",
+  "short_name": "ReVend",
+  "description": "Donnez une seconde vie à vos articles dans l'économie circulaire",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ea384c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "lang": "fr-FR",
+  "dir": "ltr"
+}
