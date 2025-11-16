@@ -229,6 +229,14 @@ const Settings = () => {
               iconColor="bg-purple-500/10"
               iconTextColor="text-purple-600"
             />
+            <Separator />
+            <SettingItem 
+              icon={Trash2} 
+              label="Supprimer mon compte" 
+              onClick={() => navigate("/account-management")}
+              iconColor="bg-destructive/10"
+              iconTextColor="text-destructive"
+            />
           </CardContent>
         </SettingSection>
 
@@ -473,6 +481,14 @@ const Settings = () => {
               onClick={() => navigate("/settings/faq")}
               iconColor="bg-indigo-500/10"
               iconTextColor="text-indigo-600"
+            />
+            <Separator />
+            <SettingItem 
+              icon={Shield} 
+              label="Règles de la communauté" 
+              onClick={() => navigate("/settings/community-guidelines")}
+              iconColor="bg-blue-500/10"
+              iconTextColor="text-blue-600"
             />
             <Separator />
             <SettingItem 
