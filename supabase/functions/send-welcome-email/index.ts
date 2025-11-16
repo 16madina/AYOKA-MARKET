@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -24,12 +23,16 @@ const handler = async (req: Request): Promise<Response> => {
     
     console.log("Sending welcome email to:", email);
 
-    const resend = new Resend(RESEND_API_KEY);
-
-    const emailResponse = await resend.emails.send({
-      from: "DJASSA Market <no-reply@djassamarket.com>",
-      to: [email],
-      subject: "Bienvenue sur DJASSA Market ! 🎉",
+    const emailResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: "DJASSA Market <no-reply@djassamarket.com>",
+        to: [email],
+        subject: "Bienvenue sur DJASSA Market ! 🎉",
       html: `
         <!DOCTYPE html>
         <html>
@@ -261,9 +264,17 @@ const handler = async (req: Request): Promise<Response> => {
           </body>
         </html>
       `,
-    });
+        }),
+      });
 
-    console.log("Welcome email sent successfully:", emailResponse);
+    if (!emailResponse.ok) {
+      const error = await emailResponse.json();
+      console.error("Error sending welcome email:", error);
+      throw error;
+    }
+
+    const data = await emailResponse.json();
+    console.log("Welcome email sent successfully:", data);
 
     return new Response(
       JSON.stringify({ success: true }),
