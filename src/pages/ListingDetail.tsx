@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ImageGallery } from "@/components/listing/ImageGallery";
 import { SellerProfile } from "@/components/listing/SellerProfile";
-import { SellerOtherListings } from "@/components/listing/SellerOtherListings";
 import { FavoriteButton } from "@/components/listing/FavoriteButton";
 import { ReportDialog } from "@/components/listing/ReportDialog";
 import LocationMap from "@/components/listing/LocationMap";
@@ -323,11 +322,6 @@ const ListingDetail = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             <SellerProfile userId={listing.user_id} />
-            <SellerOtherListings 
-              userId={listing.user_id} 
-              currentListingId={listing.id}
-              userCurrency={userProfile?.currency}
-            />
             <LocationMap location={listing.location} />
           </div>
         </div>
