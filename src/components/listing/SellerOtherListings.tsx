@@ -30,7 +30,7 @@ export const SellerOtherListings = ({
         .eq("status", "active")
         .neq("id", currentListingId)
         .order("created_at", { ascending: false })
-        .limit(4);
+        .limit(2);
       
       if (error) throw error;
       return data;
@@ -44,14 +44,15 @@ export const SellerOtherListings = ({
       <CardHeader>
         <CardTitle className="text-lg">Autres annonces du vendeur</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {listings.map((listing) => (
-          <Link
-            key={listing.id}
-            to={`/listing/${listing.id}`}
-            className="flex gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group"
-          >
-            <div className="relative w-20 h-20 rounded-md overflow-hidden flex-shrink-0 bg-muted">
+      <CardContent>
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          {listings.map((listing) => (
+            <Link
+              key={listing.id}
+              to={`/listing/${listing.id}`}
+              className="flex flex-col gap-2 rounded-lg hover:bg-muted/50 transition-colors group p-2"
+            >
+            <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden bg-muted">
               {listing.images?.[0] ? (
                 <img
                   src={listing.images[0]}
@@ -65,30 +66,28 @@ export const SellerOtherListings = ({
                 </div>
               )}
             </div>
-            <div className="flex-1 min-w-0">
-              <h4 className="font-medium text-sm line-clamp-1 group-hover:text-primary transition-colors">
+            <div className="flex flex-col gap-1">
+              <h4 className="font-medium text-sm line-clamp-2 group-hover:text-primary transition-colors">
                 {listing.title}
               </h4>
-              <Badge variant="outline" className="text-xs mt-1">
-                {listing.categories?.name}
-              </Badge>
-              <p className="text-primary font-bold mt-1">
+              <p className="text-primary font-bold text-sm">
                 {listing.price === 0 ? (
                   <span className="text-green-600">Gratuit</span>
                 ) : (
                   formatPrice(listing.price, userCurrency)
                 )}
               </p>
-              <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <MapPin className="h-3 w-3" />
                 <span className="line-clamp-1">{listing.location}</span>
               </div>
             </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
         <Link
           to={`/seller/${userId}`}
-          className="block text-center text-sm text-primary hover:underline font-medium"
+          className="block text-center text-sm text-primary hover:underline font-medium pt-2 border-t"
         >
           Voir toutes les annonces →
         </Link>
