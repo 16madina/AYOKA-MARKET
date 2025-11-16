@@ -115,6 +115,7 @@ const handler = async (req: Request): Promise<Response> => {
                 font-size: 16px;
                 line-height: 1.8;
                 margin-bottom: 20px;
+                text-align: center;
               }
               .button-container {
                 text-align: center;
@@ -192,18 +193,13 @@ const handler = async (req: Request): Promise<Response> => {
                 <h1 class="welcome-title">Bienvenue ${userName || ""}! 🎉</h1>
                 
                 <p class="welcome-text">
-                  Merci de vous être inscrit sur <strong style="color: #704214;">DJASSA Market</strong>, 
-                  votre marketplace de confiance pour l'économie circulaire en Afrique de l'Ouest.
+                  Merci de vous être inscrit sur <strong style="color: #704214;">DJASSA Market</strong>.
                 </p>
                 
-                <div class="info-box">
-                  <p style="margin: 0; color: #704214; font-weight: 600;">
-                    ✨ Pourquoi vérifier votre email ?
-                  </p>
-                  <p style="margin: 10px 0 0 0; color: #666; font-size: 14px;">
-                    Obtenez votre <span class="verify-badge">✓ Badge Vérifié</span> et accédez à toutes les fonctionnalités de la plateforme !
-                  </p>
-                </div>
+                <p class="welcome-text">
+                  Redonnez une deuxième vie à vos articles, faites des économies sur les articles que vous n'utilisez plus 
+                  ou offrez-les à quelqu'un dans le besoin.
+                </p>
                 
                 <div class="button-container">
                   <a href="${confirmationUrl}" class="verify-button">
