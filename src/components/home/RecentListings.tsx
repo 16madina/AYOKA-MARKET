@@ -98,33 +98,26 @@ const RecentListings = () => {
   const getBadges = (listing: any) => {
     const badges: JSX.Element[] = [];
     
-    // 1. Priorité: État (condition)
+    // 1. Priorité: État (condition) - toujours affiché
     if (listing.condition) {
       badges.push(
-        <Badge key="condition" className="bg-accent/90 text-accent-foreground backdrop-blur-sm text-xs">
+        <Badge key="condition" className="bg-accent/90 text-accent-foreground backdrop-blur-sm text-xs font-medium">
           {translateCondition(listing.condition, language)}
         </Badge>
       );
     }
     
-    // 2. Priorité: Proximité (uniquement si < 5km et si on a déjà moins de 2 badges)
-    if (badges.length < 2 && isAuthenticated) {
-      const locationInfo = getLocationPriority(
-        listing.location,
-        userProfile?.city || null,
-        userProfile?.country || null
+    // 2. Priorité: Catégorie (si moins de 2 badges)
+    if (badges.length < 2 && listing.categories?.name) {
+      badges.push(
+        <Badge key="category" variant="secondary" className="backdrop-blur-sm text-xs font-medium">
+          {listing.categories.name}
+        </Badge>
       );
-      
-      // Afficher "À proximité" uniquement si même ville (< 5km théorique)
-      if (locationInfo.priority === 'same-city') {
-        badges.push(
-          <Badge key="proximity" className={`${getLocationBadgeColor(locationInfo.priority)} backdrop-blur-sm text-xs flex items-center gap-1`}>
-            <MapPin className="h-3 w-3" />
-            {locationInfo.distance}
-          </Badge>
-        );
-      }
     }
+    
+    // Note: Badge proximité supprimé car toutes les annonces affichées sont déjà locales
+    // (filtrées par ville/pays), donc "À proximité" perd son sens
     
     return badges.slice(0, 2); // Maximum 2 badges
   };
@@ -137,17 +130,21 @@ const RecentListings = () => {
       style={{ animationDelay: `${index * 0.05}s` }}
       onClick={() => window.location.href = `/listing/${listing.id}`}
     >
-      <div className="aspect-square bg-muted relative overflow-hidden">
+      <div className="aspect-[4/3] bg-muted relative overflow-hidden">
         {listing.images?.[0] ? (
           <img
             src={listing.images[0]}
             alt={listing.title}
             loading="lazy"
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            style={{ objectPosition: 'center' }}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-            {t('listings.no_image')}
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/50">
+            <div className="text-center">
+              <MapPin className="h-12 w-12 mx-auto mb-2 opacity-20" />
+              <p className="text-sm">{t('listings.no_image')}</p>
+            </div>
           </div>
         )}
         {getBadges(listing).length > 0 && (
@@ -180,7 +177,7 @@ const RecentListings = () => {
   // Composant skeleton pour le chargement
   const SkeletonCard = () => (
     <Card className="overflow-hidden border-0 shadow-sm">
-      <Skeleton className="aspect-square w-full" />
+      <Skeleton className="aspect-[4/3] w-full" />
       <CardContent className="p-4 space-y-3">
         <Skeleton className="h-5 w-full" />
         <Skeleton className="h-6 w-24" />
