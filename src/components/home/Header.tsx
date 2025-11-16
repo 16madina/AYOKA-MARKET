@@ -1,12 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { LogIn, User, Moon, Sun, Bell } from "lucide-react";
+import { LogIn, User, Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/hooks/useDarkMode";
-import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 import { SystemNotifications } from "@/components/notifications/SystemNotifications";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -15,21 +11,6 @@ interface HeaderProps {
 const Header = ({ isAuthenticated }: HeaderProps) => {
   const navigate = useNavigate();
   const { darkMode, toggleDarkMode } = useDarkMode();
-  const [userId, setUserId] = useState<string | undefined>(undefined);
-  
-  useEffect(() => {
-    const getUser = async () => {
-      if (!isAuthenticated) {
-        setUserId(undefined);
-        return;
-      }
-      const { data: { user } } = await supabase.auth.getUser();
-      setUserId(user?.id);
-    };
-    getUser();
-  }, [isAuthenticated]);
-
-  const { unreadCount } = useUnreadMessages(userId);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -55,29 +36,7 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
               <Moon className="h-4 w-4" />
             )}
           </Button>
-          {isAuthenticated && (
-            <>
-              <SystemNotifications />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate("/messages")}
-                className="gap-2 relative"
-                aria-label="Messages"
-              >
-                <Bell className={`h-4 w-4 ${unreadCount > 0 ? 'animate-pulse text-primary' : ''}`} />
-                <span className="hidden sm:inline">Messages</span>
-                {unreadCount > 0 && (
-                  <Badge 
-                    variant="destructive" 
-                    className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs animate-bounce"
-                  >
-                    {unreadCount}
-                  </Badge>
-                )}
-              </Button>
-            </>
-          )}
+          {isAuthenticated && <SystemNotifications />}
           {isAuthenticated ? (
             <Button
               variant="ghost"
