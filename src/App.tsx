@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Categories from "./pages/Categories";
+import CategoryDetail from "./pages/CategoryDetail";
 import Publish from "./pages/Publish";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/search" element={<Search />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/:slug" element={<CategoryDetail />} />
           <Route path="/listing/:id" element={<ListingDetail />} />
           <Route path="/seller/:id" element={<SellerPublicProfile />} />
           <Route path="/publish" element={<Publish />} />

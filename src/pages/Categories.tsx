@@ -5,8 +5,10 @@ import BottomNav from "@/components/BottomNav";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 import { MessageCircle, Search, ArrowLeft } from "lucide-react";
 import * as Icons from "lucide-react";
+import { useState } from "react";
 
 // Import des images de fallback
 import electroniqueImg from "@/assets/categories/electronique.jpg";
@@ -31,6 +33,7 @@ const categoryImages: Record<string, string> = {
 
 const Categories = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data: categoriesWithCount, isLoading } = useQuery({
     queryKey: ["categories-with-count"],
@@ -43,7 +46,7 @@ const Categories = () => {
           slug,
           icon
         `)
-        .order("name");
+        .is("parent_id", null); // Only get parent categories
       
       if (error) throw error;
 
@@ -63,9 +66,21 @@ const Categories = () => {
         })
       );
 
-      return categoriesWithCounts;
+      // Sort: "Gratuit" first, then by count descending
+      const sorted = categoriesWithCounts.sort((a, b) => {
+        if (a.slug === "gratuit") return -1;
+        if (b.slug === "gratuit") return 1;
+        return b.count - a.count;
+      });
+
+      return sorted;
     },
   });
+
+  // Filter categories based on search query
+  const filteredCategories = categoriesWithCount?.filter(category =>
+    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen pb-24 bg-background">
@@ -80,30 +95,28 @@ const Categories = () => {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <h1 className="text-2xl font-bold">Catégories</h1>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="relative">
-              <MessageCircle className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                3
-              </span>
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-          </div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="relative"
+            onClick={() => navigate("/messages")}
+          >
+            <MessageCircle className="h-5 w-5" />
+          </Button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b">
-          <button className="flex-1 py-3 text-center text-muted-foreground hover:text-foreground">
-            Vendre
-          </button>
-          <button className="flex-1 py-3 text-center text-muted-foreground hover:text-foreground">
-            Pour vous
-          </button>
-          <button className="flex-1 py-3 text-center border-b-2 border-primary text-primary font-medium">
-            Catégories
-          </button>
+        {/* Search Bar */}
+        <div className="px-4 pb-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Rechercher une catégorie..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
         </div>
       </div>
 
@@ -122,9 +135,9 @@ const Categories = () => {
               </Card>
             ))}
           </div>
-        ) : (
+        ) : filteredCategories && filteredCategories.length > 0 ? (
           <div className="grid grid-cols-2 gap-4">
-            {categoriesWithCount?.map((category) => {
+            {filteredCategories.map((category) => {
               const IconComponent = Icons[category.icon as keyof typeof Icons] as any;
               const fallbackImage = categoryImages[category.slug] || autresImg;
               
@@ -132,23 +145,15 @@ const Categories = () => {
                 <Card
                   key={category.id}
                   className="relative overflow-hidden cursor-pointer group hover:scale-105 transition-transform duration-200 shadow-md"
-                  onClick={() => navigate(`/search?category=${category.id}`)}
+                  onClick={() => navigate(`/categories/${category.slug}`)}
                 >
-                  <div className="h-32 relative overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
-                    {IconComponent ? (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <IconComponent className="h-16 w-16 text-primary/30 group-hover:text-primary/50 transition-colors" />
-                      </div>
-                    ) : (
-                      <>
-                        <img 
-                          src={fallbackImage} 
-                          alt={category.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      </>
-                    )}
+                  <div className="h-32 relative overflow-hidden">
+                    <img 
+                      src={fallbackImage} 
+                      alt={category.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   </div>
                   <div className="p-3 bg-background">
                     <p className="text-sm font-medium text-center line-clamp-2">
@@ -161,6 +166,10 @@ const Categories = () => {
                 </Card>
               );
             })}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            Aucune catégorie trouvée
           </div>
         )}
       </div>
