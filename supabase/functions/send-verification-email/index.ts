@@ -1,6 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,7 +13,6 @@ const corsHeaders = {
 
 interface VerificationEmailRequest {
   email: string;
-  confirmationUrl: string;
   userName?: string;
 }
 
@@ -21,7 +23,28 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, confirmationUrl, userName }: VerificationEmailRequest = await req.json();
+    const { email, userName }: VerificationEmailRequest = await req.json();
+    
+    // Create Supabase admin client
+    const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
+
+    // Generate email verification link
+    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'magiclink',
+      email: email,
+    });
+
+    if (linkError) {
+      console.error("Error generating verification link:", linkError);
+      throw linkError;
+    }
+
+    const confirmationUrl = linkData.properties?.action_link;
 
     console.log("Sending verification email to:", email);
 
