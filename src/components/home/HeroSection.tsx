@@ -18,7 +18,7 @@ const HeroSection = () => {
           backgroundSize: 'cover'
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-background" />
       </div>
       
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
@@ -30,7 +30,7 @@ const HeroSection = () => {
             <img 
               src={djassaLogo} 
               alt="DJASSA" 
-              className="h-10 md:h-16"
+              className="h-10 md:h-16 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
             />
           </div>
           <span className="text-xl md:text-3xl font-pacifico text-primary/90 self-end mr-6 md:mr-12">Market</span>
