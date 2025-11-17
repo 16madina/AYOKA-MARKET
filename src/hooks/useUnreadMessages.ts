@@ -210,38 +210,24 @@ export const useUnreadMessages = (userId: string | undefined) => {
   const markAllAsRead = useCallback(async () => {
     if (!userId) return;
 
-    // Marquer tous les messages non lus comme lus
-    const { error } = await supabase
-      .from('messages')
-      .update({ is_read: true })
-      .eq('receiver_id', userId)
-      .eq('is_read', false);
+    try {
+      // Marquer tous les messages non lus comme lus
+      const { error } = await supabase
+        .from('messages')
+        .update({ is_read: true })
+        .eq('receiver_id', userId)
+        .eq('is_read', false);
 
-    if (!error) {
-      // Recharger le compteur complet pour être sûr
-      const { data: conversations } = await supabase
-        .from('conversations')
-        .select('id')
-        .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`);
+      if (error) throw error;
 
-      if (conversations) {
-        const conversationIds = conversations.map(c => c.id);
-        
-        const { count } = await supabase
-          .from('messages')
-          .select('*', { count: 'exact', head: true })
-          .in('conversation_id', conversationIds)
-          .eq('receiver_id', userId)
-          .eq('is_read', false);
-
-        setUnreadCount(count || 0);
-      }
+      // Réinitialiser immédiatement le compteur à 0
+      setUnreadCount(0);
       
       toast({
-        title: "Messages marqués comme lus",
-        description: "Tous vos messages ont été marqués comme lus",
+        title: "Tous les messages ont été marqués comme lus",
       });
-    } else {
+    } catch (error) {
+      console.error('Error marking all as read:', error);
       toast({
         title: "Erreur",
         description: "Impossible de marquer les messages comme lus",

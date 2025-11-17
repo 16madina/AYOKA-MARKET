@@ -179,7 +179,9 @@ export const ConversationList = ({
                         {otherUser?.full_name || "Utilisateur"}
                       </p>
                       {hasUnread && (
-                        <div className="h-2 w-2 bg-primary rounded-full shrink-0" />
+                        <Badge variant="default" className="h-5 min-w-[20px] px-1.5 text-xs shrink-0">
+                          {conv.unreadCount > 9 ? '9+' : conv.unreadCount}
+                        </Badge>
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground truncate">

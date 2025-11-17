@@ -18,10 +18,17 @@ const BottomNav = () => {
 
   const { unreadCount, refetchUnreadCount } = useUnreadMessages(user?.id);
 
-  // Recharger le compteur quand le composant se monte
+  // Recharger le compteur quand le composant se monte et périodiquement
   useEffect(() => {
     if (user?.id) {
       refetchUnreadCount();
+      
+      // Vérifier toutes les 30 secondes pour éviter les désynchronisations
+      const interval = setInterval(() => {
+        refetchUnreadCount();
+      }, 30000);
+      
+      return () => clearInterval(interval);
     }
   }, [user?.id, refetchUnreadCount]);
 
