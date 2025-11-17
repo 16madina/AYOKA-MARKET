@@ -58,7 +58,7 @@ export const LocationAutocomplete = ({
         const response = await fetch(
           `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
             value
-          )}&format=json&limit=5&addressdetails=1&countrycodes=sn,ml,bf,ne,ci,gn,mr,tg,bj,gm,gw,lr,sl`
+          )}&format=json&limit=5&addressdetails=1`
         );
         const data = await response.json();
         
