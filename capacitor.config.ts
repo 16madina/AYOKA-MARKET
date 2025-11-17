@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471',
+  appId: 'com.djassa.market',
   appName: 'DJASSA',
   webDir: 'dist',
   backgroundColor: '#FFFFFF',
