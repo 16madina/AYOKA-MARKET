@@ -48,16 +48,43 @@ export const getLocationPriority = (
   userCity: string | null,
   userCountry: string | null
 ): LocationPriority => {
-  // Parse location (format attendu: "Ville, Pays" ou "Ville")
-  let [city, country] = listingLocation.split(',').map(s => s.trim());
+  // Parse location (format attendu: "Ville, Pays" ou "Ville, Quartier")
+  const parts = listingLocation.split(',').map(s => s.trim());
+  let city = parts[0] || '';
+  let country = '';
   
-  // Si le pays n'est pas fourni, essayer de le déduire depuis la ville
-  if (!country && city) {
-    country = getCountryFromCity(city) || '';
+  // Si on a plusieurs parties, vérifier si la deuxième partie est un pays connu
+  if (parts.length > 1) {
+    const secondPart = parts[1];
+    // Vérifier si c'est un pays d'Afrique de l'Ouest
+    const isKnownCountry = westAfricanCountries.some(c => 
+      c.name.toLowerCase() === secondPart.toLowerCase()
+    );
+    
+    if (isKnownCountry) {
+      country = secondPart;
+    }
   }
   
-  // Même ville
-  if (userCity && city && city.toLowerCase() === userCity.toLowerCase()) {
+  // Si le pays n'est toujours pas identifié, essayer de le déduire depuis la ville principale
+  if (!country && city) {
+    const deducedCountry = getCountryFromCity(city);
+    if (deducedCountry) {
+      country = deducedCountry;
+    }
+  }
+  
+  // Normaliser les comparaisons
+  const normalizedCity = city.toLowerCase();
+  const normalizedCountry = country.toLowerCase();
+  const normalizedUserCity = userCity?.toLowerCase() || '';
+  const normalizedUserCountry = userCountry?.toLowerCase() || '';
+  
+  // Même ville (comparaison flexible - accepte si la ville de l'utilisateur contient ou est contenue dans la ville de l'annonce)
+  if (userCity && city && 
+      (normalizedCity === normalizedUserCity || 
+       normalizedCity.includes(normalizedUserCity) || 
+       normalizedUserCity.includes(normalizedCity))) {
     return {
       city,
       country: country || '',
@@ -67,7 +94,7 @@ export const getLocationPriority = (
   }
   
   // Même pays
-  if (userCountry && country && country.toLowerCase() === userCountry.toLowerCase()) {
+  if (userCountry && country && normalizedCountry === normalizedUserCountry) {
     return {
       city,
       country: country || '',

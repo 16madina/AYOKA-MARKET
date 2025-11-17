@@ -144,8 +144,10 @@ const RecentListings = () => {
           userCountry || null
         );
         console.log('🏠 Listing:', listing.title, '| Location:', listing.location, '| User:', userCity, userCountry, '| Priority:', locationInfo.priority);
-        // Filtrer par même ville ou même pays
-        return locationInfo.priority === 'same-city' || locationInfo.priority === 'same-country';
+        // Filtrer par même ville, même pays, ou pays voisin
+        return locationInfo.priority === 'same-city' || 
+               locationInfo.priority === 'same-country' || 
+               locationInfo.priority === 'neighboring-country';
       }) || []
     : listings || []; // Pas de localisation disponible : afficher tout
 
