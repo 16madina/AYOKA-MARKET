@@ -15,6 +15,7 @@ import BottomNav from "@/components/BottomNav";
 import { ArrowLeft, MapPin } from "lucide-react";
 import { PublishTutorial } from "@/components/onboarding/PublishTutorial";
 import { useOnboarding } from "@/hooks/useOnboarding";
+import { LocationAutocomplete } from "@/components/listing/LocationAutocomplete";
 
 const Publish = () => {
   const navigate = useNavigate();
@@ -533,17 +534,15 @@ const Publish = () => {
                       <span>Détecter ma position</span>
                     </Button>
                   </div>
-                  <Input
-                    id="location"
+                  <LocationAutocomplete
                     value={formData.location}
-                    onChange={(e) => handleInputChange("location", e.target.value)}
+                    onChange={(value) => handleInputChange("location", value)}
                     placeholder="Ex: Dakar, Sénégal"
-                    required
-                    maxLength={100}
                     className={errors.location ? "border-destructive" : formData.location.length >= 3 ? "border-green-500" : ""}
+                    error={errors.location}
+                    disabled={isSubmitting}
                   />
-                  {errors.location && <p className="text-sm text-destructive mt-1">{errors.location}</p>}
-                  <p className="text-xs text-muted-foreground mt-1">Modifiable - Entrez votre ville et pays</p>
+                  <p className="text-xs text-muted-foreground mt-1">Tapez pour voir des suggestions ou cliquez sur "Détecter ma position"</p>
                 </div>
 
                 <div className="space-y-2">
