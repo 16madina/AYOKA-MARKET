@@ -104,29 +104,18 @@ export const useUnreadMessages = (userId: string | undefined) => {
           filter: `receiver_id=eq.${userId}`,
         },
         async (payload) => {
+          console.log('[useUnreadMessages] UPDATE event received:', {
+            old: payload.old,
+            new: payload.new
+          });
+          
           const oldMessage = payload.old as any;
           const newMessage = payload.new as any;
           
           // Si le message passe de non-lu à lu, recharger le compteur complet
-          if (oldMessage.is_read === false && newMessage.is_read === true) {
-            // Recharger le compteur complet pour être sûr
-            const { data: conversations } = await supabase
-              .from('conversations')
-              .select('id')
-              .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`);
-
-            if (conversations) {
-              const conversationIds = conversations.map(c => c.id);
-              
-              const { count } = await supabase
-                .from('messages')
-                .select('*', { count: 'exact', head: true })
-                .in('conversation_id', conversationIds)
-                .eq('receiver_id', userId)
-                .eq('is_read', false);
-
-              setUnreadCount(count || 0);
-            }
+          if (oldMessage?.is_read === false && newMessage?.is_read === true) {
+            console.log('[useUnreadMessages] Message marked as read, reloading counter...');
+            await fetchUnreadCount();
           }
         }
       )
