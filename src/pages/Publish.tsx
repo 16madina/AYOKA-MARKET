@@ -101,12 +101,25 @@ const Publish = () => {
 
   // Auto-fill location and phone when profile is loaded
   useEffect(() => {
-    if (profile && profile.city && profile.country && !formData.location) {
-      setFormData(prev => ({
-        ...prev,
-        location: `${profile.city}, ${profile.country}`,
-        phone: profile.phone || ""
-      }));
+    if (profile && !formData.location && !formData.phone) {
+      const updates: any = {};
+      
+      // Pré-remplir la localisation si disponible
+      if (profile.city && profile.country) {
+        updates.location = `${profile.city}, ${profile.country}`;
+      }
+      
+      // Pré-remplir le téléphone si disponible
+      if (profile.phone) {
+        updates.phone = profile.phone;
+      }
+      
+      if (Object.keys(updates).length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          ...updates
+        }));
+      }
     }
   }, [profile]);
 
