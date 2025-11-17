@@ -197,14 +197,25 @@ const Profile = () => {
         return;
       }
 
-      const { error } = await supabase.functions.invoke('send-verification-email', {
+      const result = await supabase.functions.invoke('send-verification-email', {
         body: {
           email: user.email,
           userName: profile?.full_name || "utilisateur",
         },
       });
 
-      if (error) throw error;
+      if (result.error) {
+        // Handle rate limit error specifically
+        if (result.error.message?.includes("rate_limit") || result.error.message?.includes("429")) {
+          toastHook({
+            title: "Trop de demandes",
+            description: "Veuillez patienter quelques secondes avant de renvoyer l'email de vérification.",
+            variant: "destructive",
+          });
+          return;
+        }
+        throw result.error;
+      }
 
       setShowVerificationAlert(true);
     } catch (error) {
