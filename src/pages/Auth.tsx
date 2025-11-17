@@ -245,42 +245,56 @@ const Auth = () => {
 
         if (error) throw error;
 
-        // Update profile with additional data
-        if (data.user) {
-          const { error: profileError } = await supabase
-            .from("profiles")
-            .update({
-              first_name: formData.firstName,
-              last_name: formData.lastName,
-              full_name: `${formData.firstName} ${formData.lastName}`,
-              country: selectedCountry?.name,
-              city: formData.city,
-              phone: fullPhone,
-              location: `${formData.city}, ${selectedCountry?.name}`,
-              avatar_url: formData.avatar_url,
-            })
-            .eq("id", data.user.id);
+        // CRITICAL: Wait for profile to be created by trigger
+        if (!data.user) {
+          throw new Error("Erreur lors de la création du compte");
+        }
 
-          if (profileError) console.error("Profile update error:", profileError);
-          
-          // Send verification email
-          try {
-            const confirmationUrl = `${window.location.origin}/auth/confirm`;
-            const emailResult = await supabase.functions.invoke('send-verification-email', {
-              body: {
-                email: formData.email,
-                confirmationUrl,
-                userName: formData.firstName
-              }
-            });
-            if (emailResult.error) {
-              console.error("Error sending verification email:", emailResult.error);
-            } else {
-              console.log("Verification email sent successfully");
+        // Wait a bit for the trigger to create the profile
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Update profile with additional data
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .update({
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            full_name: `${formData.firstName} ${formData.lastName}`,
+            country: selectedCountry?.name,
+            city: formData.city,
+            phone: fullPhone,
+            location: `${formData.city}, ${selectedCountry?.name}`,
+            avatar_url: formData.avatar_url,
+          })
+          .eq("id", data.user.id);
+
+        if (profileError) {
+          console.error("Profile update error:", profileError);
+          // CRITICAL: If profile update fails, inform the user
+          toast({
+            title: "Erreur de profil",
+            description: "Votre compte a été créé mais les informations du profil n'ont pas pu être enregistrées. Veuillez les ajouter dans vos paramètres.",
+            variant: "destructive",
+          });
+        }
+        
+        // Send verification email
+        try {
+          const confirmationUrl = `${window.location.origin}/auth/confirm`;
+          const emailResult = await supabase.functions.invoke('send-verification-email', {
+            body: {
+              email: formData.email,
+              confirmationUrl,
+              userName: formData.firstName
             }
-          } catch (emailError) {
-            console.error("Error sending verification email:", emailError);
+          });
+          if (emailResult.error) {
+            console.error("Error sending verification email:", emailResult.error);
+          } else {
+            console.log("Verification email sent successfully");
           }
+        } catch (emailError) {
+          console.error("Error sending verification email:", emailError);
         }
 
         toast({
