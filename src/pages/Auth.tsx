@@ -229,7 +229,7 @@ const Auth = () => {
 
         const fullPhone = formData.phone ? `${dialCode}${formData.phone}` : "";
 
-        // Sign up
+        // Sign up - Envoyer TOUTES les données dans raw_user_meta_data
         const { error, data } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
@@ -239,43 +239,18 @@ const Auth = () => {
               first_name: formData.firstName,
               last_name: formData.lastName,
               full_name: `${formData.firstName} ${formData.lastName}`,
+              phone: fullPhone,
+              avatar_url: formData.avatar_url,
+              country: selectedCountry?.name,
+              city: formData.city,
             },
           },
         });
 
         if (error) throw error;
 
-        // CRITICAL: Wait for profile to be created by trigger
         if (!data.user) {
           throw new Error("Erreur lors de la création du compte");
-        }
-
-        // Wait a bit for the trigger to create the profile
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Update profile with additional data
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .update({
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            full_name: `${formData.firstName} ${formData.lastName}`,
-            country: selectedCountry?.name,
-            city: formData.city,
-            phone: fullPhone,
-            location: `${formData.city}, ${selectedCountry?.name}`,
-            avatar_url: formData.avatar_url,
-          })
-          .eq("id", data.user.id);
-
-        if (profileError) {
-          console.error("Profile update error:", profileError);
-          // CRITICAL: If profile update fails, inform the user
-          toast({
-            title: "Erreur de profil",
-            description: "Votre compte a été créé mais les informations du profil n'ont pas pu être enregistrées. Veuillez les ajouter dans vos paramètres.",
-            variant: "destructive",
-          });
         }
         
         // Send verification email
