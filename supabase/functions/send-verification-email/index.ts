@@ -69,7 +69,7 @@ const handler = async (req: Request): Promise<Response> => {
       appUrl = `https://${appUrl}`;
     }
     
-    const confirmationUrl = `${appUrl}/email-verified?userId=${user.id}`;
+    const confirmationUrl = `${appUrl.replace(/\/$/, '')}/email-verified?userId=${user.id}`;
 
     console.log("Confirmation URL:", confirmationUrl);
 
