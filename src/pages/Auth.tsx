@@ -12,7 +12,7 @@ import { ProfileImageUpload } from "@/components/auth/ProfileImageUpload";
 import { PrivacyPolicy } from "@/components/auth/PrivacyPolicy";
 import { TermsConditions } from "@/components/auth/TermsConditions";
 import { allCountries } from "@/data/westAfricaData";
-import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft, MapPin } from "lucide-react";
 import djassaLogoAuth from "@/assets/djassa-logo-auth.png";
 
 const Auth = () => {
@@ -42,6 +42,75 @@ const Auth = () => {
 
   const selectedCountry = allCountries.find((c) => c.code === formData.country);
   const dialCode = selectedCountry?.dialCode || "";
+
+  // Fonction pour détecter la localisation manuellement
+  const detectLocation = async () => {
+    if (!('geolocation' in navigator)) {
+      toast({
+        title: "Géolocalisation non disponible",
+        description: "Votre navigateur ne supporte pas la géolocalisation",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Détection en cours...",
+      description: "Veuillez autoriser l'accès à votre localisation",
+    });
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`
+          );
+          const data = await response.json();
+          
+          const detectedCity = data.address?.city || data.address?.town || data.address?.village || null;
+          const detectedCountry = data.address?.country || null;
+          
+          if (detectedCountry) {
+            const matchingCountry = allCountries.find(c => 
+              c.name.toLowerCase() === detectedCountry.toLowerCase()
+            );
+            if (matchingCountry) {
+              setFormData(prev => ({
+                ...prev,
+                country: matchingCountry.code,
+                city: detectedCity || ""
+              }));
+              toast({
+                title: "Localisation détectée !",
+                description: `${detectedCity}, ${detectedCountry}`,
+              });
+            } else {
+              toast({
+                title: "Pays non trouvé",
+                description: "Veuillez sélectionner votre pays manuellement",
+                variant: "destructive",
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching location details:', error);
+          toast({
+            title: "Erreur de détection",
+            description: "Impossible de détecter votre localisation",
+            variant: "destructive",
+          });
+        }
+      },
+      (error) => {
+        console.log('Geolocation permission denied:', error);
+        toast({
+          title: "Permission refusée",
+          description: "Veuillez autoriser l'accès à votre localisation",
+          variant: "destructive",
+        });
+      }
+    );
+  };
 
   // Détecter automatiquement la localisation de l'utilisateur
   useEffect(() => {
@@ -303,7 +372,20 @@ const Auth = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="country">Pays *</Label>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="country">Pays *</Label>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={detectLocation}
+                        disabled={isLoading}
+                        className="h-8 gap-2 text-xs"
+                      >
+                        <MapPin className="h-3.5 w-3.5" />
+                        <span>Détecter ma position</span>
+                      </Button>
+                    </div>
                     <Select
                       value={formData.country}
                       onValueChange={(value) =>
