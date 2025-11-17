@@ -201,7 +201,25 @@ export const useUnreadMessages = (userId: string | undefined) => {
       .eq('is_read', false);
 
     if (!error) {
-      setUnreadCount(0);
+      // Recharger le compteur complet pour être sûr
+      const { data: conversations } = await supabase
+        .from('conversations')
+        .select('id')
+        .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`);
+
+      if (conversations) {
+        const conversationIds = conversations.map(c => c.id);
+        
+        const { count } = await supabase
+          .from('messages')
+          .select('*', { count: 'exact', head: true })
+          .in('conversation_id', conversationIds)
+          .eq('receiver_id', userId)
+          .eq('is_read', false);
+
+        setUnreadCount(count || 0);
+      }
+      
       toast({
         title: "Messages marqués comme lus",
         description: "Tous vos messages ont été marqués comme lus",
