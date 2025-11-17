@@ -17,7 +17,7 @@ const Messages = () => {
     searchParams.get("conversation")
   );
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -44,6 +44,17 @@ const Messages = () => {
       markConversationAsRead(selectedConversationId);
     }
   }, [selectedConversationId, user?.id, markConversationAsRead]);
+
+  if (isLoadingUser) {
+    return (
+      <div className="min-h-screen pb-16 md:pb-0 bg-muted/30 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) return null;
 
