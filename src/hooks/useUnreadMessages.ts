@@ -98,23 +98,6 @@ export const useUnreadMessages = (userId: string | undefined) => {
       .on(
         'postgres_changes',
         {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'messages',
-          filter: `receiver_id=eq.${userId}`,
-        },
-        async (payload) => {
-          const updatedMessage = payload.new as any;
-          
-          // Si le message a été marqué comme lu, décrémenter le compteur
-          if (updatedMessage.is_read === true) {
-            setUnreadCount(prev => Math.max(0, prev - 1));
-          }
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
           event: 'INSERT',
           schema: 'public',
           table: 'price_offers',
@@ -157,6 +140,7 @@ export const useUnreadMessages = (userId: string | undefined) => {
   const markConversationAsRead = async (conversationId: string) => {
     if (!userId) return;
 
+    // Compter le nombre de messages non lus avant de les marquer
     const { data: unreadMessages } = await supabase
       .from('messages')
       .select('id')
@@ -165,12 +149,16 @@ export const useUnreadMessages = (userId: string | undefined) => {
       .eq('is_read', false);
 
     if (unreadMessages && unreadMessages.length > 0) {
+      // Marquer les messages comme lus
       await supabase
         .from('messages')
         .update({ is_read: true })
         .eq('conversation_id', conversationId)
         .eq('receiver_id', userId)
         .eq('is_read', false);
+      
+      // Mettre à jour le compteur localement immédiatement
+      setUnreadCount(prev => Math.max(0, prev - unreadMessages.length));
     }
   };
 
