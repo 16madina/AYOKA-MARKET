@@ -98,6 +98,23 @@ export const useUnreadMessages = (userId: string | undefined) => {
       .on(
         'postgres_changes',
         {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'messages',
+          filter: `receiver_id=eq.${userId}`,
+        },
+        async (payload) => {
+          const updatedMessage = payload.new as any;
+          
+          // Si le message a été marqué comme lu, décrémenter le compteur
+          if (updatedMessage.is_read === true) {
+            setUnreadCount(prev => Math.max(0, prev - 1));
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
           event: 'INSERT',
           schema: 'public',
           table: 'price_offers',
