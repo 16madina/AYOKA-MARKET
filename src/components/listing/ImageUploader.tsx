@@ -155,47 +155,66 @@ export const ImageUploader = ({ images, onImagesChange, maxImages = 10 }: ImageU
         )}
       </div>
 
-      <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
-        {images.map((image, index) => (
-          <div 
-            key={index} 
-            className="relative group aspect-square cursor-move"
-            draggable
-            onDragStart={() => handleDragStart(index)}
-            onDragOver={(e) => handleDragOver(e, index)}
-            onDragEnd={handleDragEnd}
-          >
-            <img
-              src={image}
-              alt={`Photo ${index + 1}`}
-              className="w-full h-full object-cover rounded-lg border-2 border-border"
-            />
-            <div className="absolute top-1 left-1 bg-background/80 text-xs px-1.5 py-0.5 rounded">
-              {index + 1}
+      {/* Zone de sélection principale */}
+      {images.length === 0 ? (
+        <label className="border-2 border-dashed border-border rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-accent/50 transition-colors min-h-[200px]">
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={handleFileSelect}
+            disabled={uploading || cameraLoading}
+          />
+          {uploading || cameraLoading ? (
+            <div className="text-center">
+              <Upload className="h-12 w-12 text-muted-foreground mb-3 mx-auto animate-pulse" />
+              <span className="text-base text-muted-foreground font-medium">Envoi en cours...</span>
             </div>
-            <Button
-              type="button"
-              variant="destructive"
-              size="icon"
-              className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={() => removeImage(index)}
-            >
-              <X className="h-3 w-3" />
-            </Button>
-          </div>
-        ))}
+          ) : (
+            <div className="text-center">
+              <Upload className="h-12 w-12 text-primary mb-3 mx-auto" />
+              <span className="text-base font-medium mb-1">Sélectionnez vos photos</span>
+              <span className="text-sm text-muted-foreground">Choisissez jusqu'à {maxImages} photos</span>
+            </div>
+          )}
+        </label>
+      ) : (
+        <div className="space-y-3">
+          {/* Grid des images uploadées */}
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+            {images.map((image, index) => (
+              <div 
+                key={index} 
+                className="relative group aspect-square cursor-move"
+                draggable
+                onDragStart={() => handleDragStart(index)}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDragEnd={handleDragEnd}
+              >
+                <img
+                  src={image}
+                  alt={`Photo ${index + 1}`}
+                  className="w-full h-full object-cover rounded-lg border-2 border-border"
+                />
+                <div className="absolute top-1 left-1 bg-background/80 text-xs px-1.5 py-0.5 rounded">
+                  {index + 1}
+                </div>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => removeImage(index)}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            ))}
 
-        {Array.from({ length: Math.min(maxImages - images.length, maxImages - images.length < 5 ? maxImages - images.length : 5) }).map((_, index) => (
-          <label 
-            key={`empty-${index}`}
-            className={`aspect-square border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-accent/50 transition-colors ${index === 0 && images.length < maxImages ? "" : ""}`}
-            onClick={index === 0 ? (e) => {
-              e.preventDefault();
-              handleCameraUpload();
-            } : undefined}
-          >
-            {index === 0 && (
-              <>
+            {/* Bouton d'ajout si pas encore au maximum */}
+            {images.length < maxImages && (
+              <label className="aspect-square border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-accent/50 transition-colors">
                 <input
                   type="file"
                   accept="image/*"
@@ -215,16 +234,9 @@ export const ImageUploader = ({ images, onImagesChange, maxImages = 10 }: ImageU
                     <span className="text-xs text-muted-foreground">Ajouter</span>
                   </div>
                 )}
-              </>
+              </label>
             )}
-          </label>
-        ))}
-      </div>
-
-      {images.length === 0 && (
-        <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 p-3 rounded-lg">
-          <ImageIcon className="h-4 w-4" />
-          <span>Ajoutez au moins une photo de votre article (max {maxImages})</span>
+          </div>
         </div>
       )}
     </div>
