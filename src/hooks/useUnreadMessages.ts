@@ -147,23 +147,6 @@ export const useUnreadMessages = (userId: string | undefined) => {
           }
         }
       )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'messages',
-          filter: `receiver_id=eq.${userId}`,
-        },
-        (payload) => {
-          const updatedMessage = payload.new as any;
-          
-          // Si le message a été lu, décrémenter le compteur
-          if (updatedMessage.is_read) {
-            setUnreadCount(prev => Math.max(0, prev - 1));
-          }
-        }
-      )
       .subscribe();
 
     return () => {
