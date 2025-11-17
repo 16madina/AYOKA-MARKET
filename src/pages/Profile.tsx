@@ -205,6 +205,8 @@ const Profile = () => {
       });
 
       if (result.error) {
+        console.error("Error sending verification email:", result.error);
+        
         // Handle rate limit error specifically
         if (result.error.message?.includes("rate_limit") || result.error.message?.includes("429")) {
           toastHook({
@@ -214,6 +216,17 @@ const Profile = () => {
           });
           return;
         }
+        
+        // Handle network errors
+        if (result.error.message?.includes("Failed to send a request")) {
+          toastHook({
+            title: "Erreur de connexion",
+            description: "Veuillez vérifier votre connexion internet et réessayer.",
+            variant: "destructive",
+          });
+          return;
+        }
+        
         throw result.error;
       }
 

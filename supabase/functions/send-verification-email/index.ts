@@ -46,7 +46,13 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Use the APP_URL environment variable for the confirmation URL
-    const appUrl = Deno.env.get("APP_URL") || 'https://djassamarket.com';
+    let appUrl = Deno.env.get("APP_URL") || 'https://djassamarket.com';
+    
+    // Ensure the URL has a protocol
+    if (!appUrl.startsWith('http://') && !appUrl.startsWith('https://')) {
+      appUrl = `https://${appUrl}`;
+    }
+    
     const confirmationUrl = `${appUrl}/email-verified?userId=${user.id}`;
 
     console.log("Confirmation URL:", confirmationUrl);
