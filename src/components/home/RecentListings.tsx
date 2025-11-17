@@ -127,15 +127,18 @@ const RecentListings = () => {
   // - Ordre chronologique (nouvelles annonces en premier)
   // - Pas de tri par proximité géographique
   const isAuthenticated = !!session?.user;
-  const userCity = userProfile?.city || guestLocation.city;
-  const userCountry = userProfile?.country || guestLocation.country;
+  const userCity = userProfile?.city || guestLocation.city || null;
+  const userCountry = userProfile?.country || guestLocation.country || null;
   
-  const displayedListings = (userCity || userCountry)
+  // Si aucune localisation valide, afficher TOUTES les annonces
+  const hasValidLocation = !!(userCity?.trim() || userCountry?.trim());
+  
+  const displayedListings = hasValidLocation
     ? listings?.filter(listing => {
         const locationInfo = getLocationPriority(
           listing.location,
-          userCity || null,
-          userCountry || null
+          userCity,
+          userCountry
         );
         console.log('🏠 Listing:', listing.title, '| Location:', listing.location, '| User:', userCity, userCountry, '| Priority:', locationInfo.priority);
         // Afficher toutes les annonces du même pays (toutes villes) + pays voisins
@@ -143,9 +146,9 @@ const RecentListings = () => {
                locationInfo.priority === 'same-country' || 
                locationInfo.priority === 'neighboring-country';
       }) || []
-    : listings || []; // Pas de localisation disponible : afficher tout
+    : listings || []; // Pas de localisation disponible : afficher TOUT
 
-  console.log('📊 Auth:', isAuthenticated, '| Total listings:', listings?.length, '| Displayed listings:', displayedListings.length, '| User location:', userProfile?.city, userProfile?.country);
+  console.log('📊 Auth:', isAuthenticated, '| Total listings:', listings?.length, '| Displayed listings:', displayedListings.length, '| User location:', userCity, userCountry, '| Has valid location:', hasValidLocation);
 
   const hasDisplayedListings = displayedListings.length > 0;
   const hasUserLocation = !!(userProfile?.city || userProfile?.country);
