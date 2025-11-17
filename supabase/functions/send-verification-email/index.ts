@@ -45,8 +45,24 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("User not found");
     }
 
-    // Use the APP_URL environment variable for the confirmation URL
-    let appUrl = Deno.env.get("APP_URL") || 'https://djassamarket.com';
+    // Use the APP_URL environment variable or fallback to preview URL
+    let appUrl = Deno.env.get("APP_URL");
+    
+    // If no APP_URL is set, try to get it from request origin
+    if (!appUrl) {
+      const origin = req.headers.get('origin') || req.headers.get('referer');
+      if (origin) {
+        try {
+          const url = new URL(origin);
+          appUrl = `${url.protocol}//${url.host}`;
+        } catch (e) {
+          console.error("Error parsing origin:", e);
+          appUrl = 'https://djassamarket.com'; // Final fallback
+        }
+      } else {
+        appUrl = 'https://djassamarket.com'; // Final fallback
+      }
+    }
     
     // Ensure the URL has a protocol
     if (!appUrl.startsWith('http://') && !appUrl.startsWith('https://')) {
