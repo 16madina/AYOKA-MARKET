@@ -610,7 +610,7 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       )}
 
       {/* Input - Sticky at bottom */}
-      <div className="sticky bottom-0 left-0 right-0 bg-background border-t pb-16 md:pb-0">
+      <div className="sticky bottom-0 left-0 right-0 bg-background border-t">
         <Card className="border-0 shadow-lg rounded-none">
           <form onSubmit={handleSend} className="p-3">
             <div className="flex items-center gap-2">
