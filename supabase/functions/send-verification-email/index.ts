@@ -247,6 +247,25 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!emailResponse.ok) {
       console.error("Error sending email:", data);
+      
+      // Handle rate limit errors specifically
+      if (emailResponse.status === 429) {
+        return new Response(
+          JSON.stringify({ 
+            success: false, 
+            error: "rate_limit",
+            message: "Trop de demandes. Veuillez patienter quelques secondes avant de réessayer." 
+          }),
+          {
+            status: 429,
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders,
+            },
+          }
+        );
+      }
+      
       throw new Error(data.error || "Failed to send email");
     }
 
