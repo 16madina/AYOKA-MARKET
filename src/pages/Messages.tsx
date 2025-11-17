@@ -43,7 +43,9 @@ const Messages = () => {
     if (selectedConversationId && user?.id) {
       markConversationAsRead(selectedConversationId);
     }
-  }, [selectedConversationId, user?.id, markConversationAsRead]);
+    // markConversationAsRead est mémorisé avec useCallback, sûr de ne pas l'inclure
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedConversationId, user?.id]);
 
   if (isLoadingUser) {
     return (

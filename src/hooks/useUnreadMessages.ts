@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -98,6 +98,24 @@ export const useUnreadMessages = (userId: string | undefined) => {
       .on(
         'postgres_changes',
         {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'messages',
+          filter: `receiver_id=eq.${userId}`,
+        },
+        async (payload) => {
+          const oldMessage = payload.old as any;
+          const newMessage = payload.new as any;
+          
+          // Si le message passe de non-lu à lu
+          if (oldMessage.is_read === false && newMessage.is_read === true) {
+            setUnreadCount(prev => Math.max(0, prev - 1));
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
           event: 'INSERT',
           schema: 'public',
           table: 'price_offers',
@@ -132,12 +150,22 @@ export const useUnreadMessages = (userId: string | undefined) => {
       )
       .subscribe();
 
+    // Re-fetch le compteur quand l'utilisateur revient sur la page
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchUnreadCount();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     return () => {
       supabase.removeChannel(channel);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [userId, toast]);
 
-  const markConversationAsRead = async (conversationId: string) => {
+  const markConversationAsRead = useCallback(async (conversationId: string) => {
     if (!userId) return;
 
     // Compter le nombre de messages non lus avant de les marquer
@@ -160,7 +188,7 @@ export const useUnreadMessages = (userId: string | undefined) => {
       // Mettre à jour le compteur localement immédiatement
       setUnreadCount(prev => Math.max(0, prev - unreadMessages.length));
     }
-  };
+  }, [userId]);
 
   return { unreadCount, markConversationAsRead };
 };
