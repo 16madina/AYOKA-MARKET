@@ -47,6 +47,19 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
   // Enable presence tracking
   usePresence(userId);
 
+  // Check if current user has verified email
+  const { data: currentUserProfile } = useQuery({
+    queryKey: ["currentUserProfile", userId],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("email_verified")
+        .eq("id", userId)
+        .single();
+      return data;
+    },
+  });
+
   const { data: conversation } = useQuery({
     queryKey: ["conversation", conversationId],
     queryFn: async () => {
@@ -141,6 +154,11 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
 
   const sendTextMessage = useMutation({
     mutationFn: async ({ content, type = 'text' }: { content: string; type?: string }) => {
+      // Check if email is verified
+      if (!currentUserProfile?.email_verified) {
+        throw new Error("Email not verified");
+      }
+
       const receiverId = conversation?.buyer_id === userId
         ? conversation?.seller_id
         : conversation?.buyer_id;
@@ -162,17 +180,42 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       setMessage("");
       stopTyping();
     },
-    onError: () => {
-      toast({
-        title: "Erreur",
-        description: "Impossible d'envoyer le message",
-        variant: "destructive",
-      });
+    onError: (error: Error) => {
+      if (error.message === "Email not verified") {
+        toast({
+          title: "Email non vérifié",
+          description: "Vous devez vérifier votre email avant d'envoyer des messages.",
+          variant: "destructive",
+        });
+        // Show a button to go to profile
+        setTimeout(() => {
+          toast({
+            title: "Vérifiez votre email",
+            description: "Consultez votre profil pour renvoyer l'email de vérification.",
+            action: (
+              <Button variant="outline" size="sm" onClick={() => navigate("/profile")}>
+                Voir mon profil
+              </Button>
+            ),
+          });
+        }, 500);
+      } else {
+        toast({
+          title: "Erreur",
+          description: "Impossible d'envoyer le message",
+          variant: "destructive",
+        });
+      }
     },
   });
 
   const sendImageMessage = useMutation({
     mutationFn: async (mediaUrl: string) => {
+      // Check if email is verified
+      if (!currentUserProfile?.email_verified) {
+        throw new Error("Email not verified");
+      }
+
       const receiverId = conversation?.buyer_id === userId
         ? conversation?.seller_id
         : conversation?.buyer_id;
@@ -193,10 +236,41 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
       queryClient.invalidateQueries({ queryKey: ["conversations", userId] });
     },
+    onError: (error: Error) => {
+      if (error.message === "Email not verified") {
+        toast({
+          title: "Email non vérifié",
+          description: "Vous devez vérifier votre email avant d'envoyer des messages.",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          toast({
+            title: "Vérifiez votre email",
+            description: "Consultez votre profil pour renvoyer l'email de vérification.",
+            action: (
+              <Button variant="outline" size="sm" onClick={() => navigate("/profile")}>
+                Voir mon profil
+              </Button>
+            ),
+          });
+        }, 500);
+      } else {
+        toast({
+          title: "Erreur",
+          description: "Impossible d'envoyer l'image",
+          variant: "destructive",
+        });
+      }
+    },
   });
 
   const sendLocationMessage = useMutation({
     mutationFn: async (location: { lat: number; lng: number; name: string }) => {
+      // Check if email is verified
+      if (!currentUserProfile?.email_verified) {
+        throw new Error("Email not verified");
+      }
+
       const receiverId = conversation?.buyer_id === userId
         ? conversation?.seller_id
         : conversation?.buyer_id;
@@ -218,6 +292,32 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
       queryClient.invalidateQueries({ queryKey: ["conversations", userId] });
+    },
+    onError: (error: Error) => {
+      if (error.message === "Email not verified") {
+        toast({
+          title: "Email non vérifié",
+          description: "Vous devez vérifier votre email avant d'envoyer des messages.",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          toast({
+            title: "Vérifiez votre email",
+            description: "Consultez votre profil pour renvoyer l'email de vérification.",
+            action: (
+              <Button variant="outline" size="sm" onClick={() => navigate("/profile")}>
+                Voir mon profil
+              </Button>
+            ),
+          });
+        }, 500);
+      } else {
+        toast({
+          title: "Erreur",
+          description: "Impossible d'envoyer la localisation",
+          variant: "destructive",
+        });
+      }
     },
   });
 

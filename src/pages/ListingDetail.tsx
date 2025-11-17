@@ -42,7 +42,7 @@ const ListingDetail = () => {
       
       const { data } = await supabase
         .from("profiles")
-        .select("currency")
+        .select("currency, email_verified")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -103,6 +103,18 @@ const ListingDetail = () => {
   const handleContact = () => {
     if (!user) {
       navigate("/auth");
+      return;
+    }
+
+    // Check if email is verified
+    if (!userProfile?.email_verified) {
+      toast.error("Email non vérifié", {
+        description: "Vous devez vérifier votre email pour contacter les vendeurs. Consultez votre profil pour renvoyer l'email de vérification.",
+        action: {
+          label: "Voir mon profil",
+          onClick: () => navigate("/profile"),
+        },
+      });
       return;
     }
 
