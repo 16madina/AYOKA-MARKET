@@ -485,7 +485,7 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       </Card>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto p-6 pb-20 space-y-6">
         {isLoading ? (
           <div className="text-center text-muted-foreground">Chargement...</div>
         ) : (
