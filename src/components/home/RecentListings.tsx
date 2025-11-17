@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
 import { translateCondition } from "@/utils/translations";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { sortListingsByLocation } from "@/utils/geographicFiltering";
+import { sortListingsByLocation, getLocationPriority } from "@/utils/geographicFiltering";
 import { formatPriceWithConversion } from "@/utils/currency";
 
 const RecentListings = () => {
@@ -144,6 +144,29 @@ const RecentListings = () => {
   const hasUserLocation = !!(userProfile?.city || userProfile?.country);
 
 
+  // Fonction pour obtenir le badge de proximité (uniquement pour utilisateurs authentifiés)
+  const getProximityBadge = (listing: any) => {
+    if (!session?.user || !hasValidLocation) return null;
+    
+    const locationInfo = getLocationPriority(listing.location, userCity, userCountry);
+    
+    const badges: Record<string, { emoji: string; text: string; color: string }> = {
+      'same-city': { emoji: '📍', text: t('proximity.same_city') || 'Votre ville', color: 'bg-green-500/80' },
+      'same-country': { emoji: '🏳️', text: t('proximity.same_country') || 'Votre pays', color: 'bg-blue-500/80' },
+      'neighboring-country': { emoji: '🌍', text: t('proximity.neighboring') || 'Pays voisin', color: 'bg-orange-500/80' },
+    };
+    
+    const badge = badges[locationInfo.priority];
+    if (!badge) return null;
+    
+    return (
+      <div className={`${badge.color} text-white text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm flex items-center gap-1 font-medium`}>
+        <span>{badge.emoji}</span>
+        <span className="hidden sm:inline">{badge.text}</span>
+      </div>
+    );
+  };
+
   // Fonction pour déterminer les badges à afficher (max 2, avec priorité)
   const getBadges = (listing: any) => {
     const badges: JSX.Element[] = [];
@@ -191,6 +214,11 @@ const RecentListings = () => {
         {getBadges(listing).length > 0 && (
           <div className="absolute top-2 left-2 flex flex-col gap-1.5 items-start">
             {getBadges(listing)}
+          </div>
+        )}
+        {getProximityBadge(listing) && (
+          <div className="absolute top-2 right-2">
+            {getProximityBadge(listing)}
           </div>
         )}
       </div>

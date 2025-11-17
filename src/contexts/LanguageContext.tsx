@@ -112,6 +112,11 @@ const translations: Record<Language, Record<string, string>> = {
     "listings.no_local": "Aucune annonce autour de vous pour l'instant",
     "listings.nearby_countries": "Annonces des pays voisins",
     
+    // Proximity badges
+    "proximity.same_city": "Votre ville",
+    "proximity.same_country": "Votre pays",
+    "proximity.neighboring": "Pays voisin",
+    
     // Conditions
     "condition.new": "Neuf",
     "condition.like_new": "Comme neuf",
@@ -261,6 +266,11 @@ const translations: Record<Language, Record<string, string>> = {
     "listings.free": "Free",
     "listings.no_local": "No listings around you at the moment",
     "listings.nearby_countries": "Listings from nearby countries",
+    
+    // Proximity badges
+    "proximity.same_city": "Your city",
+    "proximity.same_country": "Your country",
+    "proximity.neighboring": "Nearby country",
     
     // Conditions
     "condition.new": "New",
