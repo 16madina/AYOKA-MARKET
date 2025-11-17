@@ -652,37 +652,48 @@ const Publish = () => {
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="Ex: +225 01 02 03 04 05"
                   />
+                  {profile?.phone && !formData.phone && (
+                    <p className="text-xs text-muted-foreground">
+                      💡 Votre numéro de profil sera utilisé par défaut
+                    </p>
+                  )}
                 </div>
 
-                {formData.phone && (
-                  <div className="space-y-2 ml-2">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="phone_visible"
-                        checked={formData.phone_visible}
-                        onCheckedChange={(checked) =>
-                          setFormData({ ...formData, phone_visible: checked as boolean })
-                        }
-                      />
-                      <Label htmlFor="phone_visible" className="cursor-pointer font-normal">
-                        Afficher mon numéro dans l'annonce
-                      </Label>
-                    </div>
-                    
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="whatsapp_available"
-                        checked={formData.whatsapp_available}
-                        onCheckedChange={(checked) =>
-                          setFormData({ ...formData, whatsapp_available: checked as boolean })
-                        }
-                      />
-                      <Label htmlFor="whatsapp_available" className="cursor-pointer font-normal">
-                        WhatsApp disponible sur ce numéro
-                      </Label>
-                    </div>
+                <div className="space-y-3 ml-2 p-3 bg-muted/30 rounded-md">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="phone_visible"
+                      checked={formData.phone_visible}
+                      onCheckedChange={(checked) =>
+                        setFormData({ ...formData, phone_visible: checked as boolean })
+                      }
+                      disabled={!formData.phone && !profile?.phone}
+                    />
+                    <Label htmlFor="phone_visible" className="cursor-pointer font-normal">
+                      Afficher mon numéro dans l'annonce
+                    </Label>
                   </div>
-                )}
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="whatsapp_available"
+                      checked={formData.whatsapp_available}
+                      onCheckedChange={(checked) =>
+                        setFormData({ ...formData, whatsapp_available: checked as boolean })
+                      }
+                      disabled={!formData.phone && !profile?.phone}
+                    />
+                    <Label htmlFor="whatsapp_available" className="cursor-pointer font-normal">
+                      WhatsApp disponible sur ce numéro
+                    </Label>
+                  </div>
+                  
+                  {(!formData.phone && !profile?.phone) && (
+                    <p className="text-xs text-muted-foreground">
+                      ⚠️ Ajoutez un numéro pour activer ces options
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* Section CGU */}
