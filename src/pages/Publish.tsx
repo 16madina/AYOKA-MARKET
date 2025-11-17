@@ -129,16 +129,16 @@ const Publish = () => {
 
     switch (name) {
       case "title":
-        if (value.length < 10) {
-          newErrors.title = "Le titre doit contenir au moins 10 caractères";
+        if (value.length < 5) {
+          newErrors.title = "Le titre doit contenir au moins 5 caractères";
         } else {
           delete newErrors.title;
         }
         break;
       case "description":
         const wordCount = value.trim().split(/\s+/).filter(word => word.length > 0).length;
-        if (wordCount < 20) {
-          newErrors.description = `La description doit contenir au moins 20 mots (actuellement: ${wordCount} mots)`;
+        if (wordCount < 4) {
+          newErrors.description = `La description doit contenir au moins 4 mots (actuellement: ${wordCount} mots)`;
         } else if (value.length > 1000) {
           newErrors.description = "La description ne peut pas dépasser 1000 caractères";
         } else {
