@@ -135,11 +135,23 @@ const RecentListings = () => {
   const hasValidLocation = !!(userCity?.trim() || userCountry?.trim());
   
   // Vérifier si l'utilisateur est en Afrique de l'Ouest
+  console.log('🔍 Checking user country:', JSON.stringify(userCountry), '| Type:', typeof userCountry);
+  console.log('🔍 Guest location:', JSON.stringify(guestLocation));
+  console.log('🔍 User profile country:', JSON.stringify(userProfile?.country));
+  
   const isUserInWestAfrica = userCountry 
-    ? westAfricanCountries.some(c => 
-        c.name.toLowerCase() === userCountry.toLowerCase()
-      )
+    ? westAfricanCountries.some(c => {
+        const countryLower = (userCountry || '').trim().toLowerCase();
+        const westAfricaLower = c.name.toLowerCase();
+        const match = westAfricaLower === countryLower;
+        if (match) {
+          console.log('🎯 MATCH FOUND:', c.name, '===', userCountry);
+        }
+        return match;
+      })
     : false;
+  
+  console.log('🔍 Final result - Is user in West Africa:', isUserInWestAfrica);
   
   // Filtrer uniquement si l'utilisateur EST en Afrique de l'Ouest
   const displayedListings = hasValidLocation && isUserInWestAfrica
