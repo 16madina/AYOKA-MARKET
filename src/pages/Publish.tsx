@@ -12,7 +12,7 @@ import { ImageUploader } from "@/components/listing/ImageUploader";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BottomNav from "@/components/BottomNav";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MapPin } from "lucide-react";
 import { PublishTutorial } from "@/components/onboarding/PublishTutorial";
 import { useOnboarding } from "@/hooks/useOnboarding";
 
@@ -219,6 +219,69 @@ const Publish = () => {
 
   const handleSubcategoryChange = (value: string) => {
     setFormData(prev => ({ ...prev, category_id: value, subcategory_id: value }));
+  };
+
+  // Fonction pour détecter la localisation manuellement
+  const detectLocation = async () => {
+    if (!('geolocation' in navigator)) {
+      toast({
+        title: "Géolocalisation non disponible",
+        description: "Votre navigateur ne supporte pas la géolocalisation",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Détection en cours...",
+      description: "Veuillez autoriser l'accès à votre localisation",
+    });
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`
+          );
+          const data = await response.json();
+          
+          const detectedCity = data.address?.city || data.address?.town || data.address?.village || "";
+          const detectedCountry = data.address?.country || "";
+          
+          if (detectedCity && detectedCountry) {
+            setFormData(prev => ({
+              ...prev,
+              location: `${detectedCity}, ${detectedCountry}`
+            }));
+            toast({
+              title: "Localisation détectée !",
+              description: `${detectedCity}, ${detectedCountry}`,
+            });
+          } else {
+            toast({
+              title: "Localisation partielle",
+              description: "Impossible de détecter votre localisation complète",
+              variant: "destructive",
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching location details:', error);
+          toast({
+            title: "Erreur de détection",
+            description: "Impossible de détecter votre localisation",
+            variant: "destructive",
+          });
+        }
+      },
+      (error) => {
+        console.log('Geolocation permission denied:', error);
+        toast({
+          title: "Permission refusée",
+          description: "Veuillez autoriser l'accès à votre localisation",
+          variant: "destructive",
+        });
+      }
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -456,7 +519,20 @@ const Publish = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2" data-tutorial="location-input">
-                  <Label htmlFor="location">Localisation *</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="location">Localisation *</Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={detectLocation}
+                      disabled={isSubmitting}
+                      className="h-8 gap-2 text-xs"
+                    >
+                      <MapPin className="h-3.5 w-3.5" />
+                      <span>Détecter ma position</span>
+                    </Button>
+                  </div>
                   <Input
                     id="location"
                     value={formData.location}
