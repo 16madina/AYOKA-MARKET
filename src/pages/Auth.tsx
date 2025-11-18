@@ -13,7 +13,7 @@ import { PrivacyPolicy } from "@/components/auth/PrivacyPolicy";
 import { TermsConditions } from "@/components/auth/TermsConditions";
 import { allCountries } from "@/data/westAfricaData";
 import { Eye, EyeOff, ArrowLeft, MapPin } from "lucide-react";
-import djassaLogoAuth from "@/assets/djassa-logo-auth.png";
+import kazamLogo from "@/assets/kazam-logo.png";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -192,7 +192,7 @@ const Auth = () => {
 
         toast({
           title: "Connexion réussie",
-          description: "Bienvenue sur DJASSA !",
+          description: "Bienvenue sur KAZAM Market !",
         });
         navigate("/");
       } else {
@@ -306,8 +306,8 @@ const Auth = () => {
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <img 
-                src={djassaLogoAuth} 
-                alt="DJASSA" 
+                src={kazamLogo} 
+                alt="KAZAM Market" 
                 className="h-12 w-auto"
               />
             </div>
@@ -316,8 +316,8 @@ const Auth = () => {
             </CardTitle>
             <CardDescription>
               {isLogin
-                ? "Connectez-vous à votre compte DJASSA"
-                : "Rejoignez la communauté DJASSA"}
+                ? "Connectez-vous à votre compte KAZAM Market"
+                : "Rejoignez la communauté KAZAM Market"}
             </CardDescription>
           </CardHeader>
           <CardContent>

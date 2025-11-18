@@ -214,7 +214,7 @@ export const TermsConditions = ({ open, onOpenChange }: TermsConditionsProps) =>
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
                 <li>Le centre d'aide dans l'application</li>
-                <li>Email : support@djassa.com</li>
+                <li>Email : support@kazammarket.com</li>
                 <li>Les paramètres de votre compte</li>
               </ul>
             </section>

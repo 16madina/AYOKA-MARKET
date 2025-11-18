@@ -12,7 +12,7 @@ interface OnboardingWelcomeProps {
 const slides = [
   {
     icon: Shield,
-    title: "Bienvenue Au DJASSA",
+    title: "Bienvenue Au KAZAM Market",
     description: "Votre marketplace de confiance pour acheter et vendre en toute sécurité en Afrique de l'Ouest.",
     tip: "Plus de 10 000 annonces actives dans votre région",
     color: "bg-primary",

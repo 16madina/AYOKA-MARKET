@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import djassaLogo from "@/assets/djassa-logo.png";
+import kazamLogo from "@/assets/kazam-logo.png";
 
 interface SplashScreenProps {
   onFinish: () => void;
@@ -29,8 +29,8 @@ const SplashScreen = ({ onFinish }: SplashScreenProps) => {
         {/* Un seul logo avec animation */}
         <div className="relative animate-scale-in">
           <img
-            src={djassaLogo}
-            alt="DJASSA Market"
+            src={kazamLogo}
+            alt="KAZAM Market"
             className="w-80 md:w-96 drop-shadow-2xl"
             style={{ 
               imageRendering: 'crisp-edges',

@@ -78,7 +78,7 @@ export const SystemNotifications = () => {
         },
         () => {
           refetch();
-          toast.info("Nouvelle notification d'Admin DJASSA");
+          toast.info("Nouvelle notification d'Admin KAZAM");
         }
       )
       .subscribe();
@@ -178,7 +178,7 @@ export const SystemNotifications = () => {
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5" />
-            Messages Admin DJASSA
+            Messages Admin KAZAM
           </SheetTitle>
           <SheetDescription>
             Notifications et rappels importants

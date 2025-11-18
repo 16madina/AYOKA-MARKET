@@ -232,7 +232,7 @@ const Help = () => {
               <Mail className="h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Email</div>
-                <div className="text-xs text-muted-foreground">support@djassamarket.com • Réponse sous 24h</div>
+                <div className="text-xs text-muted-foreground">support@kazammarket.com • Réponse sous 24h</div>
               </div>
             </Button>
           </div>

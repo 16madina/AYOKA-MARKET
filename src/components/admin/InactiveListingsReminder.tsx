@@ -19,9 +19,9 @@ Si l'article est toujours disponible, n'hésitez pas à la promouvoir pour augme
 
 Si l'article a été vendu, pensez à mettre à jour le statut de votre annonce.
 
-Merci d'utiliser DJASSA Market !
+Merci d'utiliser KAZAM Market !
 
-L'équipe Admin DJASSA`;
+L'équipe Admin KAZAM`;
 
 export const InactiveListingsReminder = () => {
   const navigate = useNavigate();

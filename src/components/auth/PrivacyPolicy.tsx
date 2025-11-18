@@ -170,7 +170,7 @@ export const PrivacyPolicy = ({ open, onOpenChange }: PrivacyPolicyProps) => {
                 Pour toute question concernant cette politique de confidentialité ou pour exercer vos droits :
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
-                <li>Email : privacy@djassa.com</li>
+                <li>Email : privacy@kazammarket.com</li>
                 <li>Via les paramètres de votre compte</li>
                 <li>Centre d'aide dans l'application</li>
               </ul>

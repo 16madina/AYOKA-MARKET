@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.djassa.market',
-  appName: 'DJASSA',
+  appId: 'com.kazam.market',
+  appName: 'KAZAM Market',
   webDir: 'dist',
   backgroundColor: '#FFFFFF',
   server: {
