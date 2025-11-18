@@ -155,15 +155,15 @@ export const ConversationList = ({
             onClick={() => onSelectConversation(conv.id)}
           >
             <div className="flex items-start gap-3">
-              <div className="relative">
-                <Avatar className="h-12 w-12">
+              <div className="relative shrink-0">
+                <Avatar className="h-10 w-10">
                   <AvatarImage src={otherUser?.avatar_url || ""} />
                   <AvatarFallback className="bg-primary text-primary-foreground">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
                 {otherUser?.is_online && (
-                  <div className="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-background" />
+                  <div className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-green-500 rounded-full border-2 border-background" />
                 )}
                 {hasUnread && (
                   <div className="absolute -top-1 -right-1 h-5 w-5 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">

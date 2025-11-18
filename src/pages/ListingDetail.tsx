@@ -262,17 +262,17 @@ const ListingDetail = () => {
                         <Badge className="bg-green-600">Disponible</Badge>
                       )}
                     </div>
-                    <h1 className="text-3xl font-bold mb-2">{listing.title}</h1>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <h1 className="text-2xl md:text-3xl font-bold mb-2">{listing.title}</h1>
+                    <div className="flex flex-wrap items-center gap-3 text-xs md:text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <MapPin className="h-4 w-4" />
-                        <span>{listing.location}</span>
+                        <MapPin className="h-3.5 w-3.5 shrink-0" />
+                        <span className="truncate">{listing.location}</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Eye className="h-4 w-4" />
-                        <span>{listing.views === 1 ? "1 vue" : `${listing.views || 0} vues`}</span>
+                        <Eye className="h-3.5 w-3.5 shrink-0" />
+                        <span className="whitespace-nowrap">{listing.views === 1 ? "1 vue" : `${listing.views || 0} vues`}</span>
                       </div>
-                      <span>
+                      <span className="whitespace-nowrap">
                         {formatDistanceToNow(new Date(listing.created_at), {
                           addSuffix: true,
                           locale: fr,
@@ -280,16 +280,16 @@ const ListingDetail = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1.5 shrink-0">
                     <FavoriteButton listingId={listing.id} />
                     <ReportDialog listingId={listing.id} />
                     <Button 
                       variant="outline" 
-                      size="icon" 
+                      size="icon"
                       onClick={() => setShareDialogOpen(true)}
-                      className="relative"
+                      className="relative h-9 w-9"
                     >
-                      <Share2 className="h-5 w-5" />
+                      <Share2 className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>

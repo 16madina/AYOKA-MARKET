@@ -79,9 +79,8 @@ export const ReportDialog = ({ listingId, trigger }: ReportDialogProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <Button variant="outline" size="sm">
-            <AlertCircle className="h-4 w-4 mr-2" />
-            Signaler
+          <Button variant="outline" size="icon" className="h-9 w-9">
+            <AlertCircle className="h-4 w-4" />
           </Button>
         )}
       </DialogTrigger>
