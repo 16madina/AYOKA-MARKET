@@ -30,7 +30,7 @@ const HeroSection = () => {
           <img 
             src={kazamLogo} 
             alt="KAZAM Market" 
-            className="h-16 md:h-32 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
+            className="h-32 md:h-48 lg:h-56 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
           />
         </div>
         <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl animate-fade-in" style={{ animationDelay: "0.2s" }}>

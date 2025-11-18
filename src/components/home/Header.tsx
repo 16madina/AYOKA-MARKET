@@ -20,7 +20,7 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
           <img 
             src={kazamLogo} 
             alt="KAZAM Market" 
-            className="h-8 cursor-pointer transition-all duration-300 hover:scale-105"
+            className="h-12 md:h-14 cursor-pointer transition-all duration-300 hover:scale-105"
           />
         </div>
 
