@@ -27,26 +27,31 @@ import artCollectionImg from "@/assets/categories/art-collection.jpg";
 import sportsLoisirsImg from "@/assets/categories/sports-loisirs.jpg";
 import emploiServicesImg from "@/assets/categories/emploi-services.jpg";
 import immobilierImg from "@/assets/categories/immobilier.jpg";
+import animauxImg from "@/assets/categories/animaux.jpg";
+import vehiculesImg from "@/assets/categories/vehicules.jpg";
+import gratuitImg from "@/assets/categories/gratuit.jpg";
+import loisirsImg from "@/assets/categories/loisirs.jpg";
+import servicesImg from "@/assets/categories/services.jpg";
 
 const categoryImages: Record<string, string> = {
   "electronique": electroniqueImg,
   "mode": vetementsEnfantsImg,
-  "vehicules": piecesAutoImg,
+  "vehicules": vehiculesImg,
   "maison": maisonCuisineImg,
   "maison-jardin": maisonCuisineImg,
-  "loisirs": articlesSportImg,
-  "services": artImg,
+  "loisirs": loisirsImg,
+  "services": servicesImg,
   "immobilier": immobilierImg,
-  "emploi": autresImg,
+  "emploi": emploiServicesImg,
+  "emploi-services": emploiServicesImg,
   "alimentation": alimentationImg,
   "beaute-sante": beauteSanteImg,
   "bricolage": bricolageImg,
   "informatique": informatiqueImg,
   "art-collection": artCollectionImg,
   "sports-loisirs": sportsLoisirsImg,
-  "emploi-services": emploiServicesImg,
-  "animaux": autresImg,
-  "gratuit": autresImg,
+  "animaux": animauxImg,
+  "gratuit": gratuitImg,
   "autres": autresImg,
 };
 
