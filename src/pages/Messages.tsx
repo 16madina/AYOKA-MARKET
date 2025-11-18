@@ -70,8 +70,8 @@ const Messages = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen pb-16 md:pb-0 bg-muted/30">
-      <div className="max-w-screen-xl mx-auto h-screen flex flex-col">
+    <div className="min-h-dvh bg-muted/30">
+      <div className="max-w-screen-xl mx-auto h-dvh flex flex-col pb-16 pb-safe md:pb-0">
         {/* Header - Hidden on mobile when chat is open */}
         <div className={`${selectedConversationId ? 'hidden md:block' : 'block'} bg-card border-b border-border p-4`}>
           <div className="flex items-center justify-between gap-4">
