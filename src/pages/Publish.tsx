@@ -397,7 +397,7 @@ const Publish = () => {
           variant="ghost"
           size="icon"
           onClick={() => navigate(-1)}
-          className="mb-4"
+          className="mb-4 mt-2"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>

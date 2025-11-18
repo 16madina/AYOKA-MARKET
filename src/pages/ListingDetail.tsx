@@ -220,12 +220,12 @@ const ListingDetail = () => {
 
   return (
     <div className="min-h-screen pb-24 bg-muted/30">
-      <div className="max-w-screen-xl mx-auto p-4 md:p-6">
+      <div className="max-w-screen-xl mx-auto p-4 md:p-6 pt-safe">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => navigate(-1)}
-          className="mb-4"
+          className="mb-4 mt-2"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
