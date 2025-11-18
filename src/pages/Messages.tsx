@@ -73,7 +73,7 @@ const Messages = () => {
     <div className="min-h-dvh pb-16 pb-safe md:pb-0 bg-muted/30">
       <div className="max-w-screen-xl mx-auto h-[calc(100dvh-4rem)] md:h-dvh flex flex-col">
         {/* Header - Hidden on mobile when chat is open */}
-        <div className={`${selectedConversationId ? 'hidden md:block' : 'block'} bg-card border-b border-border p-4`}>
+        <div className={`${selectedConversationId ? 'hidden md:block' : 'block'} bg-card border-b border-border p-4 pt-safe`}>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <Button
