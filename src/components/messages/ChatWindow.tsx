@@ -707,7 +707,7 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       )}
 
       {/* Input - Fixed at bottom */}
-      <div className="bg-background border-t shrink-0">
+      <div className="bg-background border-t shrink-0 pb-safe">
         <Card className="border-0 shadow-lg rounded-none">
           <form onSubmit={handleSend} className="p-3">
             <div className="flex items-center gap-2">
