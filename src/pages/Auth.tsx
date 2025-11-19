@@ -304,11 +304,11 @@ const Auth = () => {
 
         <Card>
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center mb-6">
               <img 
                 src={kazamLogo} 
                 alt="KAZAM Market" 
-                className="h-12 w-auto animate-float-rotate"
+                className="h-32 w-auto animate-float-rotate drop-shadow-2xl"
               />
             </div>
             <CardTitle className="text-2xl">
