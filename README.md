@@ -1,10 +1,10 @@
-# DJASSA - Marketplace de seconde vie
+# KAZAM Market - Marketplace de seconde vie
 
-**DJASSA** est le marketplace de référence en Afrique de l'Ouest dédié à l'économie circulaire. Notre mission : donner une seconde vie à vos articles.
+**KAZAM Market** est le marketplace de référence en Afrique de l'Ouest dédié à l'économie circulaire. Notre mission : donner une seconde vie à vos articles.
 
 ## À propos
 
-DJASSA facilite l'achat et la vente d'articles d'occasion en mettant l'accent sur :
+KAZAM Market facilite l'achat et la vente d'articles d'occasion en mettant l'accent sur :
 - 🔄 L'économie circulaire
 - ♻️ La seconde vie des objets
 - 🌍 Le développement durable
@@ -95,7 +95,7 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/c
 
 ## Contact
 
-Pour toute question : support@djassa.com
+Pour toute question : support@kazammarket.com
 
 ---
 

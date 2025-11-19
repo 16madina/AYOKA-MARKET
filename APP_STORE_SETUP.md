@@ -1,10 +1,10 @@
 # Configuration des métadonnées pour iOS et Android
 
-Ce guide vous aide à configurer toutes les métadonnées nécessaires pour publier DJASSA sur l'App Store (iOS) et le Play Store (Android).
+Ce guide vous aide à configurer toutes les métadonnées nécessaires pour publier KAZAM Market sur l'App Store (iOS) et le Play Store (Android).
 
 ## 📱 Informations de base de l'application
 
-- **Nom de l'app** : DJASSA
+- **Nom de l'app** : KAZAM Market
 - **Package ID** : `app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471`
 - **Version** : 1.0.0
 - **Description courte** : Marketplace de petites annonces pour l'Afrique de l'Ouest
@@ -110,7 +110,7 @@ Ou configurez le splash dans `android/app/src/main/res/values/styles.xml` :
 1. Ouvrez `ios/App/App.xcodeproj` dans Xcode
 2. Sélectionnez le projet "App" dans le navigateur
 3. Dans la section "General", modifiez :
-   - **Display Name** : DJASSA
+   - **Display Name** : KAZAM Market
    - **Bundle Identifier** : app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471
    - **Version** : 1.0.0
    - **Build** : 1
@@ -118,9 +118,9 @@ Ou configurez le splash dans `android/app/src/main/res/values/styles.xml` :
 Ou modifiez directement `ios/App/App/Info.plist` :
 ```xml
 <key>CFBundleDisplayName</key>
-<string>DJASSA</string>
+<string>KAZAM Market</string>
 <key>CFBundleName</key>
-<string>DJASSA</string>
+<string>KAZAM Market</string>
 ```
 
 ### Android

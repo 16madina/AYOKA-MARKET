@@ -1,6 +1,6 @@
-# ✅ Checklist complète pour soumettre DJASSA aux stores
+# ✅ Checklist complète pour soumettre KAZAM Market aux stores
 
-Cette checklist vous guide étape par étape pour soumettre DJASSA sur l'App Store (iOS) et le Play Store (Android).
+Cette checklist vous guide étape par étape pour soumettre KAZAM Market sur l'App Store (iOS) et le Play Store (Android).
 
 ## 📋 Pré-requis généraux
 
@@ -66,7 +66,7 @@ Voir `resources/screenshot-guide.md` pour plus de détails.
 ### Android
 
 #### Fichiers de configuration
-- [ ] `android/app/src/main/res/values/strings.xml` mis à jour avec "DJASSA"
+- [ ] `android/app/src/main/res/values/strings.xml` mis à jour avec "KAZAM Market"
 - [ ] `android/app/src/main/res/values/colors.xml` avec les couleurs (#ea384c)
 - [ ] `android/app/src/main/AndroidManifest.xml` avec toutes les permissions
 - [ ] `android/app/build.gradle` avec version correcte (1.0.0)
@@ -91,7 +91,7 @@ Voir `resources/screenshot-guide.md` pour plus de détails.
 
 #### Fichiers de configuration
 - [ ] `ios/App/App/Info.plist` avec tous les NSUsageDescription
-- [ ] Display Name défini sur "DJASSA"
+- [ ] Display Name défini sur "KAZAM Market"
 - [ ] Bundle Identifier : app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471
 - [ ] Version : 1.0.0, Build : 1
 
