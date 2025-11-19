@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.kazam.market',
+  appId: 'com.kazammarket.app',
   appName: 'KAZAM Market',
   webDir: 'dist',
   backgroundColor: '#FFFFFF',
