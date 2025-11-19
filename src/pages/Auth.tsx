@@ -308,7 +308,7 @@ const Auth = () => {
               <img 
                 src={kazamLogo} 
                 alt="KAZAM Market" 
-                className="h-12 w-auto"
+                className="h-12 w-auto animate-float-rotate"
               />
             </div>
             <CardTitle className="text-2xl">
