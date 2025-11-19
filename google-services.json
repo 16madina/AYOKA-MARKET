@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "943261135802",
+    "project_number": "524154723994",
     "project_id": "kazam-market",
     "storage_bucket": "kazam-market.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:943261135802:android:91a94946730bc9c356a383",
+        "mobilesdk_app_id": "1:524154723994:android:82f99eb9ffa54ac535c923",
         "android_client_info": {
-          "package_name": "com.kazam.market"
+          "package_name": "com.kazammarket.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDRfHwAfUBwcoF7DndZs8e6monzK6E9PB4"
+          "current_key": "AIzaSyAhUa6B30PGLUbXvAVZvYEAiuoNxbvnmmg"
         }
       ],
       "services": {
