@@ -49,8 +49,11 @@ const LocationMap = ({ location }: LocationMapProps) => {
   };
 
   useEffect(() => {
-    if (!mapContainer.current || !mapboxToken) {
-      console.error('Mapbox token is not configured');
+    // Token Mapbox public - remplacez par votre propre token depuis https://mapbox.com
+    const token = mapboxToken || 'pk.eyJ1IjoiZGphc3NhLWFwcCIsImEiOiJjbTZnN2x1aGMwNGhtMm1zZXN2eWE2aDVqIn0.XXX';
+    
+    if (!mapContainer.current || !token || token.includes('XXX')) {
+      console.error('Mapbox token is not configured. Please add your token from https://mapbox.com');
       return;
     }
 
