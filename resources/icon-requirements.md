@@ -1,4 +1,4 @@
-# Guide de création des icônes pour KAZAM Market
+# Guide de création des icônes pour DJASSA
 
 ## 🎨 Création de l'icône principale
 
@@ -7,7 +7,7 @@
 - **Format** : PNG avec fond opaque (pas de transparence)
 - **Marges** : Laissez 10% de marge sur tous les côtés
 - **Style** : Simple, reconnaissable, cohérent avec votre marque
-- **Couleurs** : Utilisez les couleurs de votre marque (#ea384c pour KAZAM Market)
+- **Couleurs** : Utilisez les couleurs de votre marque (#ea384c pour DJASSA)
 
 ### Règles importantes
 ❌ **À ÉVITER** :
@@ -108,7 +108,7 @@ android/app/src/main/res/
 - **Zone sûre** : Gardez les éléments importants dans un cercle de 1200px au centre
 
 ### Création du splash screen
-1. Fond uni avec la couleur de votre marque (#FFFFFF pour KAZAM Market)
+1. Fond uni avec la couleur de votre marque (#FFFFFF pour DJASSA)
 2. Logo centré (environ 400x400px)
 3. Pas de texte (excepté le nom de l'app si nécessaire)
 4. Simple et rapide à charger

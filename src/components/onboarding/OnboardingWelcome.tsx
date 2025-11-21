@@ -3,7 +3,6 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Shield, Search, MessageSquare, CheckCircle, ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import kazamLogo from "@/assets/kazam-logo.png";
 
 interface OnboardingWelcomeProps {
   open: boolean;
@@ -13,7 +12,7 @@ interface OnboardingWelcomeProps {
 const slides = [
   {
     icon: Shield,
-    title: "Bienvenue Au KAZAM Market",
+    title: "Bienvenue Au DJASSA",
     description: "Votre marketplace de confiance pour acheter et vendre en toute sécurité en Afrique de l'Ouest.",
     tip: "Plus de 10 000 annonces actives dans votre région",
     color: "bg-primary",
@@ -83,24 +82,14 @@ export const OnboardingWelcome = ({ open, onComplete }: OnboardingWelcomeProps) 
 
         {/* Slide content */}
         <div className="p-8 pt-4 flex flex-col items-center text-center">
-          {/* Logo or Icon */}
-          {currentSlide === 0 ? (
-            <div className="mb-6 animate-scale-in">
-              <img 
-                src={kazamLogo} 
-                alt="KAZAM Market" 
-                className="h-32 w-auto drop-shadow-2xl"
-              />
-            </div>
-          ) : (
-            <div className={cn(
-              "w-20 h-20 rounded-full flex items-center justify-center mb-6 animate-scale-in",
-              slide.color,
-              "bg-opacity-10"
-            )}>
-              <Icon className={cn("h-10 w-10", slide.color.replace('bg-', 'text-'))} />
-            </div>
-          )}
+          {/* Icon */}
+          <div className={cn(
+            "w-20 h-20 rounded-full flex items-center justify-center mb-6 animate-scale-in",
+            slide.color,
+            "bg-opacity-10"
+          )}>
+            <Icon className={cn("h-10 w-10", slide.color.replace('bg-', 'text-'))} />
+          </div>
 
           {/* Title */}
           <h2 className="text-2xl font-bold mb-3 animate-fade-in">

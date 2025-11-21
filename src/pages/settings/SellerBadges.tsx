@@ -88,7 +88,7 @@ const SellerBadgesInfo = () => {
                 <Trophy className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h2 className="font-semibold text-lg mb-2">Système de badges KAZAM</h2>
+                <h2 className="font-semibold text-lg mb-2">Système de badges DJASSA</h2>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   Les badges sont automatiquement attribués en fonction de vos performances et de votre engagement. 
                   Ils permettent aux acheteurs d'identifier rapidement les vendeurs fiables et réactifs.

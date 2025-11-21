@@ -27,21 +27,21 @@ export const TermsConditions = ({ open, onOpenChange }: TermsConditionsProps) =>
             <section>
               <h3 className="font-semibold text-base mb-2">1. Acceptation des conditions</h3>
               <p className="text-muted-foreground">
-                En vous inscrivant et en utilisant KAZAM, vous acceptez d'être lié par ces conditions générales d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre plateforme.
+                En vous inscrivant et en utilisant DJASSA, vous acceptez d'être lié par ces conditions générales d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre plateforme.
               </p>
             </section>
 
             <section>
               <h3 className="font-semibold text-base mb-2">2. Description du service</h3>
               <p className="text-muted-foreground">
-                KAZAM est une plateforme de petites annonces dédiée à l'économie circulaire, permettant aux utilisateurs de donner une seconde vie à leurs articles. Nous facilitons la mise en relation entre acheteurs et vendeurs pour promouvoir la revente et le réemploi.
+                DJASSA est une plateforme de petites annonces dédiée à l'économie circulaire, permettant aux utilisateurs de donner une seconde vie à leurs articles. Nous facilitons la mise en relation entre acheteurs et vendeurs pour promouvoir la revente et le réemploi.
               </p>
             </section>
 
             <section>
               <h3 className="font-semibold text-base mb-2">3. Inscription et compte utilisateur</h3>
               <p className="text-muted-foreground">
-                Pour utiliser certaines fonctionnalités de KAZAM, vous devez créer un compte. Vous vous engagez à :
+                Pour utiliser certaines fonctionnalités de DJASSA, vous devez créer un compte. Vous vous engagez à :
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
                 <li>Fournir des informations exactes et à jour</li>
@@ -68,7 +68,7 @@ export const TermsConditions = ({ open, onOpenChange }: TermsConditionsProps) =>
             <section>
               <h3 className="font-semibold text-base mb-2">5. Transactions</h3>
               <p className="text-muted-foreground">
-                KAZAM facilite la mise en relation entre acheteurs et vendeurs, mais n'est pas partie aux transactions. Les paiements se font directement entre utilisateurs (espèces, Mobile Money, virement, etc.) en dehors de la plateforme. Les utilisateurs sont responsables de :
+                DJASSA facilite la mise en relation entre acheteurs et vendeurs, mais n'est pas partie aux transactions. Les paiements se font directement entre utilisateurs (espèces, Mobile Money, virement, etc.) en dehors de la plateforme. Les utilisateurs sont responsables de :
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
                 <li>La négociation des prix et conditions</li>
@@ -98,14 +98,14 @@ export const TermsConditions = ({ open, onOpenChange }: TermsConditionsProps) =>
             <section>
               <h3 className="font-semibold text-base mb-2">7. Propriété intellectuelle</h3>
               <p className="text-muted-foreground">
-                Tout le contenu de KAZAM (logo, design, interface, textes, graphiques, etc.) est protégé par les droits de propriété intellectuelle. Vous ne pouvez pas utiliser, copier, reproduire ou distribuer ce contenu sans autorisation écrite préalable. En publiant du contenu sur KAZAM, vous accordez à la plateforme une licence non exclusive pour afficher et distribuer ce contenu.
+                Tout le contenu de DJASSA (logo, design, interface, textes, graphiques, etc.) est protégé par les droits de propriété intellectuelle. Vous ne pouvez pas utiliser, copier, reproduire ou distribuer ce contenu sans autorisation écrite préalable. En publiant du contenu sur DJASSA, vous accordez à la plateforme une licence non exclusive pour afficher et distribuer ce contenu.
               </p>
             </section>
 
             <section>
               <h3 className="font-semibold text-base mb-2">8. Modération et vérification</h3>
               <p className="text-muted-foreground">
-                KAZAM se réserve le droit de modérer, modifier ou supprimer tout contenu qui viole ces conditions ou les lois en vigueur. Nous pouvons également suspendre ou supprimer des annonces sans préavis si nécessaire pour protéger la communauté.
+                DJASSA se réserve le droit de modérer, modifier ou supprimer tout contenu qui viole ces conditions ou les lois en vigueur. Nous pouvons également suspendre ou supprimer des annonces sans préavis si nécessaire pour protéger la communauté.
               </p>
               <p className="text-muted-foreground mt-2">
                 <strong>Badge "Vendeur vérifié" :</strong> Ce badge est attribué aux utilisateurs ayant complété le processus de vérification d'identité (pièce d'identité valide, email vérifié) et ayant maintenu une bonne réputation sur la plateforme (minimum 5 transactions complétées avec une note moyenne ≥4/5 étoiles).
@@ -115,7 +115,7 @@ export const TermsConditions = ({ open, onOpenChange }: TermsConditionsProps) =>
             <section>
               <h3 className="font-semibold text-base mb-2">9. Sécurité des transactions</h3>
               <p className="text-muted-foreground">
-                KAZAM recommande fortement de :
+                DJASSA recommande fortement de :
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
                 <li>Rencontrer les vendeurs dans des lieux publics et sûrs</li>
@@ -146,7 +146,7 @@ export const TermsConditions = ({ open, onOpenChange }: TermsConditionsProps) =>
             <section>
               <h3 className="font-semibold text-base mb-2">11. Limitation de responsabilité</h3>
               <p className="text-muted-foreground">
-                KAZAM agit uniquement comme intermédiaire entre acheteurs et vendeurs. Nous ne pouvons être tenus responsables de :
+                DJASSA agit uniquement comme intermédiaire entre acheteurs et vendeurs. Nous ne pouvons être tenus responsables de :
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
                 <li>La qualité, la sécurité ou la légalité des articles vendus</li>
@@ -174,14 +174,14 @@ export const TermsConditions = ({ open, onOpenChange }: TermsConditionsProps) =>
             <section>
               <h3 className="font-semibold text-base mb-2">13. Achats intégrés et paiements</h3>
               <p className="text-muted-foreground">
-                Les transactions sur KAZAM s'effectuent directement entre utilisateurs. Aucun achat intégré n'est effectué via l'App Store ou Google Play. KAZAM peut proposer des services premium (badges vérifiés, mises en avant d'annonces) qui seront clairement indiqués avec leur prix.
+                Les transactions sur DJASSA s'effectuent directement entre utilisateurs. Aucun achat intégré n'est effectué via l'App Store ou Google Play. DJASSA peut proposer des services premium (badges vérifiés, mises en avant d'annonces) qui seront clairement indiqués avec leur prix.
               </p>
             </section>
 
             <section>
               <h3 className="font-semibold text-base mb-2">14. Confidentialité et données personnelles</h3>
               <p className="text-muted-foreground">
-                L'utilisation de vos données personnelles est régie par notre Politique de Confidentialité. En utilisant KAZAM, vous acceptez notre traitement des données conformément au RGPD et aux lois sur la protection des données applicables.
+                L'utilisation de vos données personnelles est régie par notre Politique de Confidentialité. En utilisant DJASSA, vous acceptez notre traitement des données conformément au RGPD et aux lois sur la protection des données applicables.
               </p>
             </section>
 
@@ -214,7 +214,7 @@ export const TermsConditions = ({ open, onOpenChange }: TermsConditionsProps) =>
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
                 <li>Le centre d'aide dans l'application</li>
-                <li>Email : support@kazammarket.com</li>
+                <li>Email : support@djassa.com</li>
                 <li>Les paramètres de votre compte</li>
               </ul>
             </section>

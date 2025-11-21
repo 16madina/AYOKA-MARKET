@@ -91,7 +91,7 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.settings": "Paramètres",
     
     // Hero section
-    "hero.title": "Bienvenue au KAZAM Market",
+    "hero.title": "Bienvenue au DJASSA",
     "hero.subtitle": "Donnez une seconde vie à vos articles",
     "hero.search_placeholder": "Rechercher un article de seconde vie...",
     "hero.search_button": "Rechercher",
@@ -246,7 +246,7 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.settings": "Settings",
     
     // Hero section
-    "hero.title": "Welcome to KAZAM Market",
+    "hero.title": "Welcome to DJASSA",
     "hero.subtitle": "Give your items a second life",
     "hero.search_placeholder": "Search for a second-life item...",
     "hero.search_button": "Search",

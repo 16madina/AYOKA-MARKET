@@ -57,10 +57,10 @@ const handler = async (req: Request): Promise<Response> => {
           appUrl = `${url.protocol}//${url.host}`;
         } catch (e) {
           console.error("Error parsing origin:", e);
-          appUrl = 'https://kazammarket.com'; // Final fallback
+          appUrl = 'https://djassamarket.com'; // Final fallback
         }
       } else {
-        appUrl = 'https://kazammarket.com'; // Final fallback
+        appUrl = 'https://djassamarket.com'; // Final fallback
       }
     }
     
@@ -82,9 +82,9 @@ const handler = async (req: Request): Promise<Response> => {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "KAZAM Market <no-reply@kazammarket.com>",
+        from: "DJASSA Market <no-reply@djassamarket.com>",
         to: [email],
-        subject: "Vérifiez votre adresse email - KAZAM Market",
+        subject: "Vérifiez votre adresse email - DJASSA Market",
         html: `
         <!DOCTYPE html>
         <html>
@@ -247,15 +247,15 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div class="footer">
                 <p class="footer-text">
-                  <strong style="color: #704214;">KAZAM Market</strong><br>
+                  <strong style="color: #704214;">DJASSA Market</strong><br>
                   Votre marketplace pour l'économie circulaire<br>
                   Ensemble pour un avenir durable 🌍
                 </p>
                 <p class="footer-text" style="margin-top: 15px;">
-                  <a href="https://kazammarket.com" class="footer-link">kazammarket.com</a>
+                  <a href="https://djassamarket.com" class="footer-link">djassamarket.com</a>
                 </p>
                 <p class="footer-text" style="margin-top: 10px; font-size: 11px;">
-                  © ${new Date().getFullYear()} KAZAM Market. Tous droits réservés.
+                  © ${new Date().getFullYear()} DJASSA Market. Tous droits réservés.
                 </p>
               </div>
             </div>

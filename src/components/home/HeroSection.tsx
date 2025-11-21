@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-marketplace-new.jpg";
-import kazamLogo from "@/assets/kazam-logo.png";
+import djassaLogo from "@/assets/djassa-hero-logo.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -27,17 +27,20 @@ const HeroSection = () => {
       
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
         <div className="flex flex-col items-center animate-fade-in mb-4">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-            Bienvenue à
-          </h1>
-          <img 
-            src={kazamLogo} 
-            alt="KAZAM Market" 
-            className="h-40 md:h-56 lg:h-64 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
-          />
+          <div className="flex items-center gap-2 md:gap-3">
+            <h1 className="text-2xl md:text-5xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              Bienvenue au
+            </h1>
+            <img 
+              src={djassaLogo} 
+              alt="DJASSA" 
+              className="h-8 md:h-16 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
+            />
+          </div>
+          <span className="text-lg md:text-3xl font-pacifico text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] self-end mr-4 md:mr-12">Market</span>
         </div>
-        <p className="text-lg md:text-xl text-white font-semibold mb-8 max-w-2xl animate-fade-in drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]" style={{ animationDelay: "0.2s" }}>
-          L'endroit où vous donnez une seconde vie à vos articles
+        <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          {t('hero.subtitle')}
         </p>
         
         <div className="w-full max-w-2xl flex gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>

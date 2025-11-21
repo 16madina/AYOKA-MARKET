@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { LogIn, User, Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/hooks/useDarkMode";
 import { SystemNotifications } from "@/components/notifications/SystemNotifications";
-import kazamLogo from "@/assets/kazam-logo.png";
+import djassaLogo from "@/assets/djassa-header-logo.png";
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -15,12 +15,12 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-safe">
-      <div className="container flex h-12 items-center justify-between px-4">
+      <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <img 
-            src={kazamLogo} 
-            alt="KAZAM Market" 
-            className="h-20 md:h-24 cursor-pointer transition-all duration-300 hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] dark:invert dark:drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)]"
+            src={djassaLogo} 
+            alt="DJASSA" 
+            className="h-6 cursor-pointer transition-all duration-300 hover:scale-105 dark:invert dark:brightness-0 dark:contrast-200"
           />
         </div>
 

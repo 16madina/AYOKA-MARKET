@@ -154,33 +154,6 @@ All colors MUST be HSL.
     }
   }
 
-  @keyframes float-rotate {
-    0% {
-      transform: translateY(0px) rotate(0deg);
-    }
-    25% {
-      transform: translateY(-8px) rotate(-3deg);
-    }
-    50% {
-      transform: translateY(-12px) rotate(0deg);
-    }
-    75% {
-      transform: translateY(-8px) rotate(3deg);
-    }
-    100% {
-      transform: translateY(0px) rotate(0deg);
-    }
-  }
-
-  @keyframes pen-write {
-    0%, 100% {
-      transform: translateY(0px) rotate(-5deg);
-    }
-    50% {
-      transform: translateY(-5px) rotate(5deg);
-    }
-  }
-
   .animate-fade-in {
     animation: fade-in 0.6s ease-out forwards;
   }
@@ -199,14 +172,6 @@ All colors MUST be HSL.
 
   .animate-float {
     animation: float 3s ease-in-out infinite;
-  }
-
-  .animate-float-rotate {
-    animation: float-rotate 4s ease-in-out infinite;
-  }
-
-  .animate-pen-write {
-    animation: pen-write 2s ease-in-out infinite;
   }
 
   /* Typing indicator dot animations */

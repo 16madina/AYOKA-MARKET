@@ -42,7 +42,7 @@ export const useBiometricAuth = () => {
 
     try {
       await NativeBiometric.verifyIdentity({
-        reason: 'Authentifiez-vous pour accéder à KAZAM',
+        reason: 'Authentifiez-vous pour accéder à DJASSA',
         title: 'Authentification',
         subtitle: 'Utilisez votre biométrie',
         description: 'Touchez le capteur ou regardez l\'écran',

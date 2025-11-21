@@ -2,7 +2,7 @@
 
 ## 📸 Images générées
 
-Ce dossier contient les captures d'écran et visuels promotionnels pour KAZAM Market :
+Ce dossier contient les captures d'écran et visuels promotionnels pour DJASSA :
 
 ### Captures d'écran disponibles
 

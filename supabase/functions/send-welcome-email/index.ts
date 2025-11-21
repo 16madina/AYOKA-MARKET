@@ -30,9 +30,9 @@ const handler = async (req: Request): Promise<Response> => {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "KAZAM Market <no-reply@kazammarket.com>",
+        from: "DJASSA Market <no-reply@djassamarket.com>",
         to: [email],
-        subject: "Bienvenue sur KAZAM Market ! 🎉",
+        subject: "Bienvenue sur DJASSA Market ! 🎉",
       html: `
         <!DOCTYPE html>
         <html>
@@ -65,7 +65,7 @@ const handler = async (req: Request): Promise<Response> => {
                 display: inline-block;
               }
               .logo {
-                max-width: 180px;
+                max-width: 200px;
                 height: auto;
               }
               .content {
@@ -181,7 +181,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="email-container">
               <div class="header">
                 <div class="logo-container">
-                  <img src="https://kazammarket.com/kazam-logo.png" alt="KAZAM Market" class="logo" />
+                  <img src="https://djassamarket.com/djassa-logo-email.png" alt="DJASSA Market" class="logo" />
                 </div>
               </div>
               
@@ -189,7 +189,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <h1 class="welcome-title">Félicitations ${userName} ! 🎉</h1>
                 
                 <p class="welcome-text">
-                  Votre compte <strong style="color: #704214;">KAZAM Market</strong> est maintenant <strong>vérifié et actif</strong> !
+                  Votre compte <strong style="color: #704214;">DJASSA Market</strong> est maintenant <strong>vérifié et actif</strong> !
                 </p>
 
                 <div class="features-box">
@@ -247,17 +247,17 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div class="footer">
                 <p class="footer-text">
-                  <strong style="color: #704214;">KAZAM Market</strong><br>
+                  <strong style="color: #704214;">DJASSA Market</strong><br>
                   Votre marketplace pour l'économie circulaire<br>
                   Ensemble pour un avenir durable 🌍
                 </p>
                 <p class="footer-links">
-                  <a href="https://kazammarket.com" class="footer-link">Site web</a> • 
-                  <a href="https://kazammarket.com/help" class="footer-link">Aide</a> • 
-                  <a href="https://kazammarket.com/settings/terms" class="footer-link">CGU</a>
+                  <a href="https://djassamarket.com" class="footer-link">Site web</a> • 
+                  <a href="https://djassamarket.com/help" class="footer-link">Aide</a> • 
+                  <a href="https://djassamarket.com/settings/terms" class="footer-link">CGU</a>
                 </p>
                 <p class="copyright">
-                  © ${new Date().getFullYear()} KAZAM Market. Tous droits réservés.
+                  © ${new Date().getFullYear()} DJASSA Market. Tous droits réservés.
                 </p>
               </div>
             </div>

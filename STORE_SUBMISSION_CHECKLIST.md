@@ -1,6 +1,6 @@
-# ✅ Checklist complète pour soumettre KAZAM Market aux stores
+# ✅ Checklist complète pour soumettre DJASSA aux stores
 
-Cette checklist vous guide étape par étape pour soumettre KAZAM Market sur l'App Store (iOS) et le Play Store (Android).
+Cette checklist vous guide étape par étape pour soumettre DJASSA sur l'App Store (iOS) et le Play Store (Android).
 
 ## 📋 Pré-requis généraux
 
@@ -66,7 +66,7 @@ Voir `resources/screenshot-guide.md` pour plus de détails.
 ### Android
 
 #### Fichiers de configuration
-- [ ] `android/app/src/main/res/values/strings.xml` mis à jour avec "KAZAM Market"
+- [ ] `android/app/src/main/res/values/strings.xml` mis à jour avec "DJASSA"
 - [ ] `android/app/src/main/res/values/colors.xml` avec les couleurs (#ea384c)
 - [ ] `android/app/src/main/AndroidManifest.xml` avec toutes les permissions
 - [ ] `android/app/build.gradle` avec version correcte (1.0.0)
@@ -91,7 +91,7 @@ Voir `resources/screenshot-guide.md` pour plus de détails.
 
 #### Fichiers de configuration
 - [ ] `ios/App/App/Info.plist` avec tous les NSUsageDescription
-- [ ] Display Name défini sur "KAZAM Market"
+- [ ] Display Name défini sur "DJASSA"
 - [ ] Bundle Identifier : app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471
 - [ ] Version : 1.0.0, Build : 1
 
@@ -126,7 +126,7 @@ Dans Android Studio :
 - [ ] Sélectionner "Android App Bundle"
 - [ ] Créer ou sélectionner keystore (GARDER PRÉCIEUSEMENT !)
 - [ ] Build → .aab généré dans `android/app/release/`
-- [ ] Fichier .aab sauvegardé (kazam-release-1.0.0.aab)
+- [ ] Fichier .aab sauvegardé (djassa-release-1.0.0.aab)
 
 **IMPORTANT** : Sauvegardez votre keystore et son mot de passe en lieu sûr !
 
@@ -155,7 +155,7 @@ Dans Xcode :
 ### Métadonnées communes
 
 **Nom de l'app**
-- Nom : KAZAM Market
+- Nom : DJASSA
 - Sous-titre iOS (30 char max) : Marketplace seconde main
 - Description courte Android (80 char max) : Achetez et vendez facilement en Afrique de l'Ouest
 
@@ -170,16 +170,16 @@ Dans Xcode :
 - Android : Tags similaires
 
 **Contact**
-- Email support : support@kazammarket.com
-- Site web : https://kazammarket.com (ou votre URL Lovable)
+- Email support : support@djassamarket.com
+- Site web : https://djassamarket.com (ou votre URL Lovable)
 - Politique de confidentialité : (URL vers votre politique)
 
 ### Description de l'app
 
 ```
-KAZAM Market - Le marketplace de l'économie circulaire en Afrique de l'Ouest
+DJASSA - Le marketplace de l'économie circulaire en Afrique de l'Ouest
 
-🌍 KAZAM Market vous permet d'acheter et de vendre facilement des articles de seconde main dans toute l'Afrique de l'Ouest.
+🌍 DJASSA vous permet d'acheter et de vendre facilement des articles de seconde main dans toute l'Afrique de l'Ouest.
 
 ✨ FONCTIONNALITÉS PRINCIPALES
 
@@ -221,7 +221,7 @@ KAZAM Market - Le marketplace de l'économie circulaire en Afrique de l'Ouest
 • Loisirs & Sports
 • Et bien plus encore !
 
-💡 POURQUOI CHOISIR KAZAM Market ?
+💡 POURQUOI CHOISIR DJASSA ?
 
 ✓ Gratuit à télécharger et à utiliser
 ✓ Pas de frais cachés
@@ -232,14 +232,14 @@ KAZAM Market - Le marketplace de l'économie circulaire en Afrique de l'Ouest
 
 🌱 ENGAGÉS POUR L'ÉCONOMIE CIRCULAIRE
 
-Donnez une seconde vie à vos articles et contribuez à une consommation plus responsable. Avec KAZAM Market, chaque objet trouve un nouveau propriétaire.
+Donnez une seconde vie à vos articles et contribuez à une consommation plus responsable. Avec DJASSA, chaque objet trouve un nouveau propriétaire.
 
 📞 SUPPORT
 
 Besoin d'aide ? Notre équipe est là pour vous.
-Email : support@kazammarket.com
+Email : support@djassamarket.com
 
-Téléchargez KAZAM Market maintenant et rejoignez la communauté du marketplace circulaire !
+Téléchargez DJASSA maintenant et rejoignez la communauté du marketplace circulaire !
 ```
 
 ### Informations légales
@@ -257,10 +257,10 @@ Téléchargez KAZAM Market maintenant et rejoignez la communauté du marketplace
 - [ ] Connexion sur [App Store Connect](https://appstoreconnect.apple.com/)
 - [ ] "Mes Apps" → "+" → Nouvelle app
 - [ ] Plateforme : iOS
-- [ ] Nom : KAZAM Market
+- [ ] Nom : DJASSA
 - [ ] Langue principale : Français
 - [ ] Bundle ID : app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471
-- [ ] SKU : kazam-ios-001
+- [ ] SKU : djassa-ios-001
 
 **Informations de l'app**
 - [ ] Captures d'écran uploadées (toutes tailles requises)
@@ -274,7 +274,7 @@ Téléchargez KAZAM Market maintenant et rejoignez la communauté du marketplace
 **Versions et build**
 - [ ] Sélectionner le build uploadé depuis Xcode
 - [ ] Numéro de version : 1.0.0
-- [ ] Copyright : © 2025 KAZAM Market
+- [ ] Copyright : © 2025 DJASSA
 
 **Review Information**
 - [ ] Contact de review (nom, email, téléphone)
@@ -295,7 +295,7 @@ Téléchargez KAZAM Market maintenant et rejoignez la communauté du marketplace
 **Dans Google Play Console**
 - [ ] Connexion sur [Play Console](https://play.google.com/console/)
 - [ ] "Créer une application"
-- [ ] Nom : KAZAM Market
+- [ ] Nom : DJASSA
 - [ ] Langue par défaut : Français (France)
 - [ ] Type : Application
 - [ ] Gratuit/Payant : Gratuit
@@ -400,4 +400,4 @@ Pour les prochaines versions :
 
 ---
 
-Bonne chance pour la soumission de KAZAM Market ! 🚀
+Bonne chance pour la soumission de DJASSA ! 🚀

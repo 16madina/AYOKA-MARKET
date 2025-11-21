@@ -169,7 +169,7 @@ const translated = translateCondition("like_new", "en");
    <h1>{t('hero.title')}</h1>
    
    // ❌ Mauvais
-   <h1>Bienvenue sur KAZAM Market</h1>
+   <h1>Bienvenue sur DJASSA</h1>
    ```
 
 4. **Tester dans les deux langues**

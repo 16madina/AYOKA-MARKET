@@ -9,11 +9,11 @@ const Terms = () => {
   const sections = [
     {
       title: "1. Acceptation des conditions",
-      content: "En accédant et en utilisant KAZAM Market, vous acceptez d'être lié par ces conditions générales d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre service."
+      content: "En accédant et en utilisant DJASSA, vous acceptez d'être lié par ces conditions générales d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre service."
     },
     {
       title: "2. Description du service",
-      content: "KAZAM Market est une plateforme de marketplace permettant aux utilisateurs d'acheter et de vendre des articles d'occasion. Nous agissons en tant qu'intermédiaire entre acheteurs et vendeurs. Les transactions financières se font directement entre utilisateurs via cash, Mobile Money ou autres moyens de paiement convenus entre les parties, en dehors de la plateforme."
+      content: "DJASSA est une plateforme de marketplace permettant aux utilisateurs d'acheter et de vendre des articles d'occasion. Nous agissons en tant qu'intermédiaire entre acheteurs et vendeurs. Les transactions financières se font directement entre utilisateurs via cash, Mobile Money ou autres moyens de paiement convenus entre les parties, en dehors de la plateforme."
     },
     {
       title: "3. Inscription et compte utilisateur",
@@ -29,7 +29,7 @@ const Terms = () => {
     },
     {
       title: "6. Transactions et paiements",
-      content: "KAZAM Market facilite la mise en relation entre acheteurs et vendeurs mais n'est pas partie prenante aux transactions. Les paiements se font directement entre utilisateurs selon les méthodes convenues (espèces, Mobile Money, virement bancaire, etc.) en dehors de la plateforme. KAZAM Market n'a pas accès aux paiements et n'est pas responsable des litiges financiers entre acheteurs et vendeurs."
+      content: "DJASSA facilite la mise en relation entre acheteurs et vendeurs mais n'est pas partie prenante aux transactions. Les paiements se font directement entre utilisateurs selon les méthodes convenues (espèces, Mobile Money, virement bancaire, etc.) en dehors de la plateforme. DJASSA n'a pas accès aux paiements et n'est pas responsable des litiges financiers entre acheteurs et vendeurs."
     },
     {
       title: "7. Contenus interdits",
@@ -37,7 +37,7 @@ const Terms = () => {
     },
     {
       title: "8. Propriété intellectuelle",
-      content: "Tout le contenu de KAZAM Market (logo, interface, textes) est protégé par le droit d'auteur. En publiant du contenu, vous accordez à KAZAM Market une licence d'utilisation. Vous garantissez détenir les droits sur le contenu publié."
+      content: "Tout le contenu de DJASSA (logo, interface, textes) est protégé par le droit d'auteur. En publiant du contenu, vous accordez à DJASSA une licence d'utilisation. Vous garantissez détenir les droits sur le contenu publié."
     },
     {
       title: "9. Modération et vérification",
@@ -45,7 +45,7 @@ const Terms = () => {
     },
     {
       title: "10. Limitation de responsabilité",
-      content: "KAZAM Market n'est pas responsable : de la qualité des articles vendus, des litiges entre utilisateurs, des pertes financières, et des dommages indirects. Utilisez le service à vos propres risques."
+      content: "DJASSA n'est pas responsable : de la qualité des articles vendus, des litiges entre utilisateurs, des pertes financières, et des dommages indirects. Utilisez le service à vos propres risques."
     },
     {
       title: "11. Protection des données",
@@ -61,7 +61,7 @@ const Terms = () => {
     },
     {
       title: "14. Droit applicable et juridiction",
-      content: "Ces conditions sont régies par les lois du pays où KAZAM Market est enregistré. Tout litige sera soumis aux tribunaux compétents de cette juridiction."
+      content: "Ces conditions sont régies par les lois du pays où DJASSA est enregistré. Tout litige sera soumis aux tribunaux compétents de cette juridiction."
     },
     {
       title: "15. Contact",
@@ -95,7 +95,7 @@ const Terms = () => {
         <Card className="mb-6">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">
-              Bienvenue sur KAZAM Market. En utilisant notre plateforme, vous acceptez les conditions générales d'utilisation suivantes. Veuillez les lire attentivement.
+              Bienvenue sur DJASSA. En utilisant notre plateforme, vous acceptez les conditions générales d'utilisation suivantes. Veuillez les lire attentivement.
             </p>
           </CardContent>
         </Card>
@@ -116,7 +116,7 @@ const Terms = () => {
         <Card className="mt-6 bg-blue-500/10 border-blue-500/20">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground">Note importante :</span> Ces conditions constituent un accord légal entre vous et KAZAM Market. En continuant à utiliser nos services, vous confirmez avoir lu, compris et accepté ces conditions.
+              <span className="font-semibold text-foreground">Note importante :</span> Ces conditions constituent un accord légal entre vous et DJASSA. En continuant à utiliser nos services, vous confirmez avoir lu, compris et accepté ces conditions.
             </p>
           </CardContent>
         </Card>

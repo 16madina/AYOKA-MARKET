@@ -1,6 +1,6 @@
-# 📱 Ressources pour la soumission de KAZAM Market sur les stores
+# 📱 Ressources pour la soumission de DJASSA sur les stores
 
-Bienvenue dans le dossier des ressources pour préparer KAZAM Market pour l'App Store et le Play Store !
+Bienvenue dans le dossier des ressources pour préparer DJASSA pour l'App Store et le Play Store !
 
 ## 📂 Contenu de ce dossier
 
@@ -156,10 +156,10 @@ resources/
 - **[Previewed](https://previewed.app/)** - Mockups de devices
 - **[Shots](https://shots.so/)** - Frames iOS/Android
 
-## 📱 Informations de l'app KAZAM Market
+## 📱 Informations de l'app DJASSA
 
 ```
-Nom : KAZAM Market
+Nom : DJASSA
 Package ID : app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471
 Version : 1.0.0
 Build : 1
@@ -171,7 +171,7 @@ Catégories :
 - Primaire : Shopping
 - Secondaire : Lifestyle
 
-Support : support@kazammarket.com
+Support : support@djassamarket.com
 ```
 
 ## ✅ Checklist rapide
@@ -233,6 +233,6 @@ Pour toute question sur la configuration ou la soumission :
 
 ---
 
-Bonne chance avec KAZAM Market ! 🚀
+Bonne chance avec DJASSA ! 🚀
 
 N'oubliez pas : la première soumission est toujours la plus difficile. Une fois que vous aurez compris le processus, les mises à jour seront beaucoup plus simples !
