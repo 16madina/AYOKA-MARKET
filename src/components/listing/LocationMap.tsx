@@ -13,7 +13,7 @@ const LocationMap = ({ location }: LocationMapProps) => {
   const map = useRef<mapboxgl.Map | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [distance, setDistance] = useState<number | null>(null);
-  const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
+  const mapboxToken = 'pk.eyJ1IjoibWFkaW5hZGlhbGxvIiwiYSI6ImNtaTk0MGFqeDA4ZTUya3BwdWRjem9taWEifQ.lk8PZBhucJrtRbd7xENEuw';
 
   // Get user's location
   useEffect(() => {
@@ -49,11 +49,8 @@ const LocationMap = ({ location }: LocationMapProps) => {
   };
 
   useEffect(() => {
-    // Token Mapbox public - remplacez par votre propre token depuis https://mapbox.com
-    const token = mapboxToken || 'pk.eyJ1IjoiZGphc3NhLWFwcCIsImEiOiJjbTZnN2x1aGMwNGhtMm1zZXN2eWE2aDVqIn0.XXX';
-    
-    if (!mapContainer.current || !token || token.includes('XXX')) {
-      console.error('Mapbox token is not configured. Please add your token from https://mapbox.com');
+    if (!mapContainer.current || !mapboxToken) {
+      console.error('Mapbox token is not configured');
       return;
     }
 

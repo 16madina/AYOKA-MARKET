@@ -45,11 +45,10 @@ export const ListingsMap = ({
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    // Token Mapbox public - remplacez par votre propre token depuis https://mapbox.com
-    const mapboxToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN || 'pk.eyJ1IjoiZGphc3NhLWFwcCIsImEiOiJjbTZnN2x1aGMwNGhtMm1zZXN2eWE2aDVqIn0.XXX';
+    const mapboxToken = 'pk.eyJ1IjoibWFkaW5hZGlhbGxvIiwiYSI6ImNtaTk0MGFqeDA4ZTUya3BwdWRjem9taWEifQ.lk8PZBhucJrtRbd7xENEuw';
     
-    if (!mapboxToken || mapboxToken.includes('XXX')) {
-      console.error('Mapbox token not configured. Please add your token from https://mapbox.com');
+    if (!mapboxToken) {
+      console.error('Mapbox token not configured');
       return;
     }
 
