@@ -45,9 +45,11 @@ export const ListingsMap = ({
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    const mapboxToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN;
-    if (!mapboxToken) {
-      console.error('Mapbox token not found');
+    // Token Mapbox public - remplacez par votre propre token depuis https://mapbox.com
+    const mapboxToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN || 'pk.eyJ1IjoiZGphc3NhLWFwcCIsImEiOiJjbTZnN2x1aGMwNGhtMm1zZXN2eWE2aDVqIn0.XXX';
+    
+    if (!mapboxToken || mapboxToken.includes('XXX')) {
+      console.error('Mapbox token not configured. Please add your token from https://mapbox.com');
       return;
     }
 
