@@ -45,6 +45,8 @@ const Publish = () => {
     phone: "",
     phone_visible: false,
     whatsapp_available: false,
+    latitude: null as number | null,
+    longitude: null as number | null,
   });
 
   const { data: user } = useQuery({
@@ -267,7 +269,9 @@ const Publish = () => {
           if (detectedCity && detectedCountry) {
             setFormData(prev => ({
               ...prev,
-              location: `${detectedCity}, ${detectedCountry}`
+              location: `${detectedCity}, ${detectedCountry}`,
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
             }));
             toast({
               title: "Localisation détectée !",
@@ -365,6 +369,8 @@ const Publish = () => {
         phone: formData.phone || null,
         phone_visible: formData.phone_visible,
         whatsapp_available: formData.whatsapp_available,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
       });
 
       if (error) throw error;
@@ -552,6 +558,13 @@ const Publish = () => {
                   <LocationAutocomplete
                     value={formData.location}
                     onChange={(value) => handleInputChange("location", value)}
+                    onCoordinatesChange={(lat, lng) => {
+                      setFormData(prev => ({
+                        ...prev,
+                        latitude: lat,
+                        longitude: lng,
+                      }));
+                    }}
                     placeholder="Ex: Dakar, Sénégal"
                     className={errors.location ? "border-destructive" : formData.location.length >= 3 ? "border-green-500" : ""}
                     error={errors.location}

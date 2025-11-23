@@ -12,6 +12,7 @@ interface LocationSuggestion {
 interface LocationAutocompleteProps {
   value: string;
   onChange: (value: string) => void;
+  onCoordinatesChange?: (lat: number, lng: number) => void;
   onDetectLocation?: () => void;
   placeholder?: string;
   className?: string;
@@ -22,6 +23,7 @@ interface LocationAutocompleteProps {
 export const LocationAutocomplete = ({
   value,
   onChange,
+  onCoordinatesChange,
   onDetectLocation,
   placeholder = "Ex: Dakar, Sénégal",
   className,
@@ -85,6 +87,9 @@ export const LocationAutocomplete = ({
 
   const handleSuggestionClick = (suggestion: LocationSuggestion) => {
     onChange(suggestion.display_name);
+    if (onCoordinatesChange) {
+      onCoordinatesChange(parseFloat(suggestion.lat), parseFloat(suggestion.lon));
+    }
     setShowSuggestions(false);
     setSuggestions([]);
   };

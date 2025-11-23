@@ -45,6 +45,8 @@ const MapView = () => {
           categories(name)
         `)
         .eq("status", "active")
+        .not("latitude", "is", null)
+        .not("longitude", "is", null)
         .order("created_at", { ascending: false })
         .limit(100);
 

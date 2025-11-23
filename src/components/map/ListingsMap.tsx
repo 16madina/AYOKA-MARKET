@@ -14,6 +14,8 @@ interface Listing {
   currency: string;
   images: string[];
   location: string;
+  latitude?: number | null;
+  longitude?: number | null;
   profiles?: {
     full_name: string;
     avatar_url: string;
@@ -107,36 +109,25 @@ export const ListingsMap = ({
   }, [centerLat, centerLng, zoom]);
 
   useEffect(() => {
-    if (!map.current) return;
+    if (!map.current || !listings || listings.length === 0) return;
 
     // Supprimer les anciens marqueurs
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    // Coordonnées approximatives pour les villes d'Abidjan
-    const locationCoords: { [key: string]: [number, number] } = {
-      'Cocody': [-3.9854, 5.3515],
-      'Plateau': [-4.0267, 5.3250],
-      'Marcory': [-4.0017, 5.2950],
-      'Adjamé': [-4.0217, 5.3517],
-      'Yopougon': [-4.0917, 5.3450],
-      'Abobo': [-4.0183, 5.4233],
-      'Koumassi': [-3.9650, 5.2933],
-      'Treichville': [-4.0100, 5.2917],
-      'Port-Bouët': [-3.9217, 5.2550],
-      'Abidjan': [-4.0083, 5.3600],
-    };
+    const bounds = new mapboxgl.LngLatBounds();
+    let hasValidBounds = false;
 
-    // Ajouter les nouveaux marqueurs
+    // Ajouter les nouveaux marqueurs avec coordonnées réelles
     listings.forEach((listing) => {
-      // Extraire la ville de la location
-      const city = listing.location.split(',')[0].trim();
-      const coords = locationCoords[city] || locationCoords['Abidjan'];
+      // Ignorer les annonces sans coordonnées GPS
+      if (!listing.latitude || !listing.longitude) {
+        console.log(`Annonce ignorée (pas de coordonnées): ${listing.title}`);
+        return;
+      }
 
-      // Ajouter un petit décalage aléatoire pour éviter la superposition
-      const randomOffset = () => (Math.random() - 0.5) * 0.01;
-      const lng = coords[0] + randomOffset();
-      const lat = coords[1] + randomOffset();
+      const lng = listing.longitude;
+      const lat = listing.latitude;
 
       // Créer un élément personnalisé pour le marqueur
       const el = document.createElement('div');
@@ -179,25 +170,30 @@ export const ListingsMap = ({
       });
 
       markersRef.current.push(marker);
+      bounds.extend([lng, lat]);
+      hasValidBounds = true;
     });
 
     // Ajuster la vue pour montrer tous les marqueurs
-    if (listings.length > 0) {
-      const coordinates = listings.map(listing => {
-        const city = listing.location.split(',')[0].trim();
-        const coords = locationCoords[city] || locationCoords['Abidjan'];
-        const randomOffset = () => (Math.random() - 0.5) * 0.01;
-        return [coords[0] + randomOffset(), coords[1] + randomOffset()];
-      });
-
-      const bounds = coordinates.reduce((bounds, coord) => {
-        return bounds.extend(coord as [number, number]);
-      }, new mapboxgl.LngLatBounds(coordinates[0] as [number, number], coordinates[0] as [number, number]));
-
-      map.current.fitBounds(bounds, {
-        padding: { top: 50, bottom: 50, left: 50, right: 50 },
-        maxZoom: 13
-      });
+    if (hasValidBounds) {
+      if (listings.length === 1) {
+        // Une seule annonce: centrer dessus
+        const listing = listings[0];
+        if (listing.latitude && listing.longitude) {
+          map.current.flyTo({
+            center: [listing.longitude, listing.latitude],
+            zoom: 13,
+            duration: 1000
+          });
+        }
+      } else {
+        // Plusieurs annonces: adapter les limites
+        map.current.fitBounds(bounds, {
+          padding: { top: 80, bottom: 280, left: 50, right: 50 },
+          maxZoom: 13,
+          duration: 1000
+        });
+      }
     }
   }, [listings]);
 
