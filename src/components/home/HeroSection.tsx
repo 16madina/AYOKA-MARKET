@@ -23,13 +23,13 @@ const HeroSection = () => {
       
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
         <div className="flex flex-col items-center animate-fade-in mb-4">
-          <h1 className="text-2xl md:text-4xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mb-1">
+          <h1 className="text-2xl md:text-4xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mb-0">
             Bienvenue sur
           </h1>
           <img 
             src={bazaramMarketLogo} 
             alt="BAZARAM MARKET" 
-            className="h-20 md:h-32 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
+            className="h-24 md:h-40 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
           />
         </div>
         <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl animate-fade-in" style={{
