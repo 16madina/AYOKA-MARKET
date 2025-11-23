@@ -43,7 +43,7 @@ const HeroSection = () => {
             <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-warm-earth/40 via-warm-gold/40 to-warm-terra/40 -z-10 animate-pulse" />
           </div>
         </div>
-        <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl animate-fade-in" style={{
+        <p className="text-lg md:text-xl text-white font-semibold mb-8 max-w-2xl animate-fade-in bg-black/30 backdrop-blur-sm px-6 py-3 rounded-lg drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" style={{
         animationDelay: "0.2s"
       }}>
           {t('hero.subtitle')}
