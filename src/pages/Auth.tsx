@@ -13,7 +13,6 @@ import { PrivacyPolicy } from "@/components/auth/PrivacyPolicy";
 import { TermsConditions } from "@/components/auth/TermsConditions";
 import { allCountries } from "@/data/westAfricaData";
 import { Eye, EyeOff, ArrowLeft, MapPin, Chrome } from "lucide-react";
-import { FaFacebook } from "react-icons/fa";
 import bazaramMarketLogo from "@/assets/bazaram-market-logo.png";
 
 const Auth = () => {
@@ -344,8 +343,8 @@ const Auth = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {/* OAuth Buttons */}
-            <div className="space-y-3 mb-6">
+            {/* OAuth Button */}
+            <div className="mb-6">
               <Button
                 type="button"
                 variant="outline"
@@ -355,16 +354,6 @@ const Auth = () => {
               >
                 <Chrome className="h-5 w-5" />
                 Continuer avec Google
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => handleOAuthSignIn('facebook')}
-                disabled={isLoading}
-              >
-                <FaFacebook className="h-5 w-5 text-[#1877F2]" />
-                Continuer avec Facebook
               </Button>
             </div>
 
