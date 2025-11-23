@@ -18,7 +18,7 @@ const HeroSection = () => {
       backgroundPosition: 'center center',
       backgroundSize: 'cover'
     }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
       </div>
       
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
