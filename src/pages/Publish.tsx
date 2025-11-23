@@ -665,9 +665,6 @@ const Publish = () => {
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="Ex: +225 01 02 03 04 05"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    🔒 Votre numéro est automatiquement masqué. Cochez la case ci-dessous pour l'afficher dans l'annonce.
-                  </p>
                   {profile?.phone && !formData.phone && (
                     <p className="text-xs text-muted-foreground">
                       💡 Votre numéro de profil sera utilisé par défaut
