@@ -57,10 +57,10 @@ const handler = async (req: Request): Promise<Response> => {
           appUrl = `${url.protocol}//${url.host}`;
         } catch (e) {
           console.error("Error parsing origin:", e);
-          appUrl = 'https://djassamarket.com'; // Final fallback
+          appUrl = 'https://bazarammarket.com'; // Final fallback
         }
       } else {
-        appUrl = 'https://djassamarket.com'; // Final fallback
+        appUrl = 'https://bazarammarket.com'; // Final fallback
       }
     }
     
@@ -82,9 +82,9 @@ const handler = async (req: Request): Promise<Response> => {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "DJASSA <no-reply@djassamarket.com>",
+        from: "BAZARAM <no-reply@bazarammarket.com>",
         to: [email],
-        subject: "Vérifiez votre adresse email - DJASSA",
+        subject: "Vérifiez votre adresse email - BAZARAM",
         html: `
         <!DOCTYPE html>
         <html>
@@ -207,7 +207,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="email-container">
               <div class="header">
                 <div class="logo-container">
-                  <img src="https://djassamarket.com/djassa-logo-email.png" alt="DJASSA" class="logo" />
+                  <img src="https://bazarammarket.com/djassa-logo-email.png" alt="BAZARAM" class="logo" />
                 </div>
               </div>
               
@@ -215,7 +215,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <h1 class="welcome-title">Bienvenue ${userName || ""}! 🎉</h1>
                 
                 <p class="welcome-text">
-                  Merci de vous être inscrit sur <strong style="color: #704214;">DJASSA</strong>.
+                  Merci de vous être inscrit sur <strong style="color: #704214;">BAZARAM</strong>.
                 </p>
                 
                 <p class="welcome-text">
@@ -241,21 +241,21 @@ const handler = async (req: Request): Promise<Response> => {
                 <div class="divider"></div>
                 
                 <p style="color: #999; font-size: 13px; text-align: center; font-style: italic;">
-                  Si vous n'avez pas créé de compte sur DJASSA, vous pouvez ignorer cet email en toute sécurité.
+                  Si vous n'avez pas créé de compte sur BAZARAM, vous pouvez ignorer cet email en toute sécurité.
                 </p>
               </div>
               
               <div class="footer">
                 <p class="footer-text">
-                  <strong style="color: #704214;">DJASSA</strong><br>
+                  <strong style="color: #704214;">BAZARAM</strong><br>
                   Votre marketplace pour l'économie circulaire<br>
                   Ensemble pour un avenir durable 🌍
                 </p>
                 <p class="footer-text" style="margin-top: 15px;">
-                  <a href="https://djassamarket.com" class="footer-link">djassamarket.com</a>
+                  <a href="https://bazarammarket.com" class="footer-link">bazarammarket.com</a>
                 </p>
                 <p class="footer-text" style="margin-top: 10px; font-size: 11px;">
-                  © ${new Date().getFullYear()} DJASSA. Tous droits réservés.
+                  © ${new Date().getFullYear()} BAZARAM. Tous droits réservés.
                 </p>
               </div>
             </div>
