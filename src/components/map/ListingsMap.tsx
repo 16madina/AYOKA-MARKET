@@ -49,13 +49,15 @@ interface ListingsMapProps {
   centerLat?: number;
   centerLng?: number;
   zoom?: number;
+  heatmapMode?: boolean;
 }
 
 export const ListingsMap = ({ 
   listings, 
   centerLat = 5.3600, // Abidjan par défaut
   centerLng = -4.0083,
-  zoom = 11
+  zoom = 11,
+  heatmapMode = false
 }: ListingsMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -138,6 +140,7 @@ export const ListingsMap = ({
       if (mapInstance.getLayer('clusters')) mapInstance.removeLayer('clusters');
       if (mapInstance.getLayer('cluster-count')) mapInstance.removeLayer('cluster-count');
       if (mapInstance.getLayer('unclustered-point')) mapInstance.removeLayer('unclustered-point');
+      if (mapInstance.getLayer('listings-heatmap')) mapInstance.removeLayer('listings-heatmap');
       if (mapInstance.getSource('listings')) mapInstance.removeSource('listings');
 
     // Supprimer les anciens marqueurs
@@ -168,131 +171,187 @@ export const ListingsMap = ({
 
     if (features.length === 0) return;
 
-    // Ajouter la source avec clustering
-    mapInstance.addSource('listings', {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: features
-      },
-      cluster: true,
-      clusterMaxZoom: 14,
-      clusterRadius: 50
-    });
-
-    // Couche pour les clusters
-    mapInstance.addLayer({
-      id: 'clusters',
-      type: 'circle',
-      source: 'listings',
-      filter: ['has', 'point_count'],
-      paint: {
-        'circle-color': [
-          'step',
-          ['get', 'point_count'],
-          'hsl(var(--primary))',
-          10,
-          'hsl(var(--accent))',
-          30,
-          'hsl(var(--destructive))'
-        ],
-        'circle-radius': [
-          'step',
-          ['get', 'point_count'],
-          20,
-          10,
-          30,
-          30,
-          40
-        ],
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#fff'
-      }
-    });
-
-    // Texte du compteur dans les clusters
-    mapInstance.addLayer({
-      id: 'cluster-count',
-      type: 'symbol',
-      source: 'listings',
-      filter: ['has', 'point_count'],
-      layout: {
-        'text-field': '{point_count_abbreviated}',
-        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 14
-      },
-      paint: {
-        'text-color': '#ffffff'
-      }
-    });
-
-    // Couche pour les marqueurs individuels
-    mapInstance.addLayer({
-      id: 'unclustered-point',
-      type: 'circle',
-      source: 'listings',
-      filter: ['!', ['has', 'point_count']],
-      paint: {
-        'circle-color': 'hsl(var(--primary))',
-        'circle-radius': 12,
-        'circle-stroke-width': 3,
-        'circle-stroke-color': '#fff'
-      }
-    });
-
-    // Click sur cluster: zoomer
-    mapInstance.on('click', 'clusters', (e) => {
-      const features = mapInstance.queryRenderedFeatures(e.point, {
-        layers: ['clusters']
+    if (heatmapMode) {
+      // Mode Heatmap: Ajouter la source sans clustering
+      mapInstance.addSource('listings', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: features
+        }
       });
-      
-      if (!features.length) return;
-      
-      const clusterId = features[0].properties?.cluster_id;
-      const source = mapInstance.getSource('listings') as mapboxgl.GeoJSONSource;
-      
-      source.getClusterExpansionZoom(clusterId, (err, zoom) => {
-        if (err) return;
+
+      // Couche heatmap avec dégradé de couleurs
+      mapInstance.addLayer({
+        id: 'listings-heatmap',
+        type: 'heatmap',
+        source: 'listings',
+        paint: {
+          // Intensité de la heatmap basée sur le zoom
+          'heatmap-intensity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            0, 1,
+            15, 3
+          ],
+          // Rayon de chaque point de la heatmap
+          'heatmap-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            0, 2,
+            15, 30
+          ],
+          // Dégradé de couleurs (bleu -> vert -> jaune -> orange -> rouge)
+          'heatmap-color': [
+            'interpolate',
+            ['linear'],
+            ['heatmap-density'],
+            0, 'rgba(33,102,172,0)',
+            0.2, 'rgb(103,169,207)',
+            0.4, 'rgb(209,229,240)',
+            0.6, 'rgb(253,219,199)',
+            0.8, 'rgb(239,138,98)',
+            1, 'rgb(178,24,43)'
+          ],
+          // Opacité basée sur le zoom
+          'heatmap-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            7, 0.8,
+            15, 0.6
+          ]
+        }
+      });
+    } else {
+      // Mode Clustering: Ajouter la source avec clustering
+      mapInstance.addSource('listings', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: features
+        },
+        cluster: true,
+        clusterMaxZoom: 14,
+        clusterRadius: 50
+      });
+
+      // Couche pour les clusters
+      mapInstance.addLayer({
+        id: 'clusters',
+        type: 'circle',
+        source: 'listings',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': [
+            'step',
+            ['get', 'point_count'],
+            'hsl(var(--primary))',
+            10,
+            'hsl(var(--accent))',
+            30,
+            'hsl(var(--destructive))'
+          ],
+          'circle-radius': [
+            'step',
+            ['get', 'point_count'],
+            20,
+            10,
+            30,
+            30,
+            40
+          ],
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#fff'
+        }
+      });
+
+      // Texte du compteur dans les clusters
+      mapInstance.addLayer({
+        id: 'cluster-count',
+        type: 'symbol',
+        source: 'listings',
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': '{point_count_abbreviated}',
+          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          'text-size': 14
+        },
+        paint: {
+          'text-color': '#ffffff'
+        }
+      });
+
+      // Couche pour les marqueurs individuels
+      mapInstance.addLayer({
+        id: 'unclustered-point',
+        type: 'circle',
+        source: 'listings',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-color': 'hsl(var(--primary))',
+          'circle-radius': 12,
+          'circle-stroke-width': 3,
+          'circle-stroke-color': '#fff'
+        }
+      });
+
+      // Click sur cluster: zoomer
+      mapInstance.on('click', 'clusters', (e) => {
+        const features = mapInstance.queryRenderedFeatures(e.point, {
+          layers: ['clusters']
+        });
         
-        const coordinates = (features[0].geometry as any).coordinates;
-        mapInstance.easeTo({
-          center: coordinates,
-          zoom: zoom
+        if (!features.length) return;
+        
+        const clusterId = features[0].properties?.cluster_id;
+        const source = mapInstance.getSource('listings') as mapboxgl.GeoJSONSource;
+        
+        source.getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (err) return;
+          
+          const coordinates = (features[0].geometry as any).coordinates;
+          mapInstance.easeTo({
+            center: coordinates,
+            zoom: zoom
+          });
         });
       });
-    });
 
-    // Click sur marqueur individuel: afficher la carte
-    mapInstance.on('click', 'unclustered-point', (e) => {
-      if (!e.features || !e.features[0]) return;
-      
-      const props = e.features[0].properties;
-      const listing = listings.find(l => l.id === props?.id);
-      
-      if (listing) {
-        setSelectedListing(listing);
-        const coordinates = (e.features[0].geometry as any).coordinates.slice();
-        mapInstance.flyTo({
-          center: coordinates,
-          zoom: 14,
-          duration: 1000
-        });
-      }
-    });
+      // Click sur marqueur individuel: afficher la carte
+      mapInstance.on('click', 'unclustered-point', (e) => {
+        if (!e.features || !e.features[0]) return;
+        
+        const props = e.features[0].properties;
+        const listing = listings.find(l => l.id === props?.id);
+        
+        if (listing) {
+          setSelectedListing(listing);
+          const coordinates = (e.features[0].geometry as any).coordinates.slice();
+          mapInstance.flyTo({
+            center: coordinates,
+            zoom: 14,
+            duration: 1000
+          });
+        }
+      });
 
-    // Curseur pointer sur clusters et marqueurs
-    mapInstance.on('mouseenter', 'clusters', () => {
-      mapInstance.getCanvas().style.cursor = 'pointer';
-    });
-    mapInstance.on('mouseleave', 'clusters', () => {
-      mapInstance.getCanvas().style.cursor = '';
-    });
-    mapInstance.on('mouseenter', 'unclustered-point', () => {
-      mapInstance.getCanvas().style.cursor = 'pointer';
-    });
-    mapInstance.on('mouseleave', 'unclustered-point', () => {
-      mapInstance.getCanvas().style.cursor = '';
-    });
+      // Curseur pointer sur clusters et marqueurs
+      mapInstance.on('mouseenter', 'clusters', () => {
+        mapInstance.getCanvas().style.cursor = 'pointer';
+      });
+      mapInstance.on('mouseleave', 'clusters', () => {
+        mapInstance.getCanvas().style.cursor = '';
+      });
+      mapInstance.on('mouseenter', 'unclustered-point', () => {
+        mapInstance.getCanvas().style.cursor = 'pointer';
+      });
+      mapInstance.on('mouseleave', 'unclustered-point', () => {
+        mapInstance.getCanvas().style.cursor = '';
+      });
+    }
 
     // Ajuster la vue pour montrer tous les marqueurs
     const bounds = new mapboxgl.LngLatBounds();
@@ -327,7 +386,7 @@ export const ListingsMap = ({
       // Cleanup: retirer l'event listener si le composant est démonté avant le chargement
       mapInstance.off('style.load', addListingsToMap);
     };
-  }, [listings]);
+  }, [listings, heatmapMode]);
 
   return (
     <div className="relative w-full h-full">

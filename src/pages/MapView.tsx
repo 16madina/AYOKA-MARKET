@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ListingsMap } from "@/components/map/ListingsMap";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Filter, MapIcon, MapPin, Locate } from "lucide-react";
+import { ArrowLeft, Filter, MapIcon, MapPin, Locate, Layers } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -18,6 +18,8 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { calculateDistance } from "@/utils/distanceCalculation";
 import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const MapView = () => {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ const MapView = () => {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [distanceFilterEnabled, setDistanceFilterEnabled] = useState(false);
+  const [heatmapMode, setHeatmapMode] = useState(false);
 
   const { data: categories } = useQuery({
     queryKey: ["categories"],
@@ -131,6 +134,28 @@ const MapView = () => {
 
         {/* Filtres */}
         <div className="px-4 pb-4 space-y-3">
+          {/* Mode de visualisation */}
+          <Card className="p-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Layers className="h-4 w-4 text-muted-foreground" />
+                <Label htmlFor="heatmap-mode" className="text-sm font-medium cursor-pointer">
+                  Mode carte de chaleur
+                </Label>
+              </div>
+              <Switch
+                id="heatmap-mode"
+                checked={heatmapMode}
+                onCheckedChange={setHeatmapMode}
+              />
+            </div>
+            {heatmapMode && (
+              <p className="text-xs text-muted-foreground mt-2">
+                Les zones rouges indiquent une forte concentration d'annonces
+              </p>
+            )}
+          </Card>
+
           {/* Filtre catégorie */}
           <Card className="p-3">
             <div className="flex items-center gap-3">
@@ -208,7 +233,7 @@ const MapView = () => {
             <Skeleton className="w-full h-full rounded-lg" />
           </div>
         ) : listings && listings.length > 0 ? (
-          <ListingsMap listings={listings} />
+          <ListingsMap listings={listings} heatmapMode={heatmapMode} />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center p-8">
             <Card className="p-8 text-center max-w-md">
