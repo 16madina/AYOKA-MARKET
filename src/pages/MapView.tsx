@@ -106,7 +106,7 @@ const MapView = () => {
       </div>
 
       {/* Map Container */}
-      <div className="flex-1 relative pb-20">
+      <div className="relative pb-20 h-[calc(100vh-180px)]">
         {isLoading ? (
           <div className="absolute inset-0 p-4">
             <Skeleton className="w-full h-full rounded-lg" />
