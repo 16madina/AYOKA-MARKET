@@ -207,7 +207,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="email-container">
               <div class="header">
                 <div class="logo-container">
-                  <img src="https://bazarammarket.com/djassa-logo-email.png" alt="BAZARAM" class="logo" />
+                  <img src="https://bazarammarket.com/bazaram-logo-email.png" alt="BAZARAM" class="logo" />
                 </div>
               </div>
               
