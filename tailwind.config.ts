@@ -51,9 +51,9 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         warm: {
-          earth: "hsl(25 60% 45%)",
-          terra: "hsl(30 45% 55%)",
-          gold: "hsl(35 50% 50%)",
+          earth: "hsl(25 45% 35%)",
+          terra: "hsl(30 40% 50%)",
+          gold: "hsl(35 55% 55%)",
         },
       },
       borderRadius: {
