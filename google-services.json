@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "943261135802",
-    "project_id": "djassa-market",
-    "storage_bucket": "djassa-market.firebasestorage.app"
+    "project_number": "410120109044",
+    "project_id": "bazaram-321cc",
+    "storage_bucket": "bazaram-321cc.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:943261135802:android:91a94946730bc9c356a383",
+        "mobilesdk_app_id": "1:410120109044:android:94855d1989c4110025d7a1",
         "android_client_info": {
-          "package_name": "com.djassamarket.app"
+          "package_name": "com.bazaram.market"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDRfHwAfUBwcoF7DndZs8e6monzK6E9PB4"
+          "current_key": "AIzaSyD74HwegtTuQIptKgc0Tzd6MEuyUiZnSwE"
         }
       ],
       "services": {
