@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { LogIn, User, Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/hooks/useDarkMode";
 import { SystemNotifications } from "@/components/notifications/SystemNotifications";
-import BazaramLogo from "@/components/BazaramLogo";
+import bazaramLogo from "@/assets/bazaram-logo.png";
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -17,7 +17,11 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-safe">
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
-          <BazaramLogo className="h-6 cursor-pointer transition-all duration-300 hover:scale-105" />
+          <img 
+            src={bazaramLogo} 
+            alt="BAZARAM" 
+            className="h-8 cursor-pointer transition-all duration-300 hover:scale-105"
+          />
         </div>
 
         <nav className="flex items-center gap-3">
