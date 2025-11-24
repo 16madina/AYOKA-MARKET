@@ -65,16 +65,57 @@ const Admin = () => {
     checkAuth();
   }, [navigate]);
 
-  // Fetch all users
+  // Fetch all users with their emails
   const { data: users, refetch: refetchUsers } = useQuery({
     queryKey: ["admin-users"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: profilesData, error: profilesError } = await supabase
         .from("profiles")
         .select("*")
         .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
+      
+      if (profilesError) throw profilesError;
+
+      // Fetch user emails from edge function
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) {
+        return profilesData;
+      }
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-user-emails`,
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${session.session.access_token}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (!response.ok) {
+          console.error('Failed to fetch emails');
+          return profilesData;
+        }
+
+        const { emails } = await response.json();
+        const emailMap = new Map<string, string>();
+        emails?.forEach((item: any) => {
+          if (item.email) {
+            emailMap.set(item.id, item.email);
+          }
+        });
+
+        // Merge profile data with emails
+        return profilesData?.map(profile => ({
+          ...profile,
+          email: emailMap.get(profile.id) || null
+        })) || [];
+      } catch (error) {
+        console.error('Error fetching emails:', error);
+        return profilesData;
+      }
     },
     enabled: isAdmin,
   });
@@ -427,7 +468,7 @@ const Admin = () => {
                         <div className="text-sm text-muted-foreground mt-1 space-y-1">
                           <p className="flex items-center gap-2">
                             <Mail className="h-3 w-3" />
-                            Email: Contact via profil
+                            {(profile as any).email || "Email non disponible"}
                           </p>
                           {profile.phone && (
                             <p className="flex items-center gap-2">
