@@ -70,19 +70,17 @@ export const PriceOfferHistory = ({ conversationId }: PriceOfferHistoryProps) =>
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
-      <Card className="p-2 bg-muted/30 border-muted">
-        <CollapsibleTrigger className="flex items-center justify-between w-full hover:opacity-80 transition-opacity">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-medium">📋 Historique ({offers.length})</span>
-          </div>
-          <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? "rotate-180" : ""}`} />
-        </CollapsibleTrigger>
-        
-        <CollapsibleContent className="mt-2 space-y-1.5">
+      <CollapsibleTrigger className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors py-1">
+        <span className="font-medium">📋 Historique ({offers.length})</span>
+        <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+      </CollapsibleTrigger>
+      
+      <CollapsibleContent className="mt-1.5">
+        <Card className="p-2 bg-muted/20 border-muted/50 space-y-1.5">
           {offers.map((offer: any) => (
             <div
               key={offer.id}
-              className="flex items-center justify-between p-1.5 rounded bg-background/50 border border-border/50"
+              className="flex items-center justify-between p-1.5 rounded bg-background/50 border border-border/30"
             >
               <div className="flex items-center gap-1.5">
                 {getStatusIcon(offer.status)}
@@ -108,8 +106,8 @@ export const PriceOfferHistory = ({ conversationId }: PriceOfferHistoryProps) =>
               </div>
             </div>
           ))}
-        </CollapsibleContent>
-      </Card>
+        </Card>
+      </CollapsibleContent>
     </Collapsible>
   );
 };

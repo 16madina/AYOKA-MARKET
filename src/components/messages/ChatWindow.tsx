@@ -562,31 +562,50 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
           </DropdownMenu>
         </div>
         
-        {/* Listing Info - Compact Button */}
-        <Button
-          variant="outline"
-          className="mt-2 w-full justify-start h-auto p-2 hover:bg-muted/50"
-          onClick={() => navigate(`/listing/${conversation.listing_id}`)}
-        >
-          {conversation.listing?.images?.[0] && (
-            <img 
-              src={conversation.listing.images[0]} 
-              alt={conversation.listing.title}
-              className="w-10 h-10 object-cover rounded mr-2"
-            />
-          )}
-          <div className="flex-1 min-w-0 text-left">
-            <p className="text-xs font-medium truncate leading-tight">{conversation.listing?.title}</p>
-            <p className="text-xs text-primary font-semibold">
-              {conversation.listing?.price === 0 ? 'Gratuit' : `${conversation.listing?.price.toLocaleString()} FCFA`}
-            </p>
+        {/* Listing Info & History - Compact Layout */}
+        <div className="mt-3 space-y-2">
+          <div className="flex items-start gap-2">
+            {/* Listing Image as clickable link */}
+            <button
+              onClick={() => navigate(`/listing/${conversation.listing_id}`)}
+              className="shrink-0 relative group"
+            >
+              {conversation.listing?.images?.[0] ? (
+                <img 
+                  src={conversation.listing.images[0]} 
+                  alt={conversation.listing.title}
+                  className="w-16 h-16 object-cover rounded border-2 border-border group-hover:border-primary transition-colors"
+                />
+              ) : (
+                <div className="w-16 h-16 bg-muted rounded border-2 border-border flex items-center justify-center">
+                  <ExternalLink className="h-6 w-6 text-muted-foreground" />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded flex items-center justify-center">
+                <ExternalLink className="h-4 w-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </button>
+            
+            {/* Listing Info */}
+            <div className="flex-1 min-w-0">
+              <button
+                onClick={() => navigate(`/listing/${conversation.listing_id}`)}
+                className="text-left w-full group"
+              >
+                <p className="text-sm font-medium truncate group-hover:text-primary transition-colors">
+                  {conversation.listing?.title}
+                </p>
+                <p className="text-sm text-primary font-semibold">
+                  {conversation.listing?.price === 0 ? 'Gratuit' : `${conversation.listing?.price.toLocaleString()} FCFA`}
+                </p>
+              </button>
+              
+              {/* Price Offer History - Inline */}
+              <div className="mt-1">
+                <PriceOfferHistory conversationId={conversationId} />
+              </div>
+            </div>
           </div>
-          <ExternalLink className="h-3 w-3 ml-2 shrink-0 opacity-60" />
-        </Button>
-        
-        {/* Price Offer History */}
-        <div className="mt-2">
-          <PriceOfferHistory conversationId={conversationId} />
         </div>
       </Card>
 
