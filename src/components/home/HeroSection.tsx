@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-marketplace-new.jpg";
-import bazaramMarketLogo from "@/assets/bazaram-market-logo.png";
+import bazaramMarketLogo from "@/assets/bazaram-new-logo.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";

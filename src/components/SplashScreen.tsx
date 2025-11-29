@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import bazaramMarketLogo from "@/assets/bazaram-market-logo.png";
+import bazaramMarketLogo from "@/assets/bazaram-new-logo.png";
 
 interface SplashScreenProps {
   onFinish: () => void;
