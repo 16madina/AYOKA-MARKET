@@ -70,36 +70,36 @@ export const PriceOfferHistory = ({ conversationId }: PriceOfferHistoryProps) =>
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
-      <Card className="p-3 bg-muted/30 border-muted">
+      <Card className="p-2 bg-muted/30 border-muted">
         <CollapsibleTrigger className="flex items-center justify-between w-full hover:opacity-80 transition-opacity">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">📋 Historique des offres ({offers.length})</span>
+            <span className="text-xs font-medium">📋 Historique ({offers.length})</span>
           </div>
-          <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? "rotate-180" : ""}`} />
         </CollapsibleTrigger>
         
-        <CollapsibleContent className="mt-3 space-y-2">
+        <CollapsibleContent className="mt-2 space-y-1.5">
           {offers.map((offer: any) => (
             <div
               key={offer.id}
-              className="flex items-center justify-between p-2 rounded-lg bg-background/50 border border-border/50"
+              className="flex items-center justify-between p-1.5 rounded bg-background/50 border border-border/50"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 {getStatusIcon(offer.status)}
                 <div>
-                  <p className="text-sm font-semibold">
+                  <p className="text-xs font-semibold">
                     {offer.amount.toLocaleString()} FCFA
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    Par {offer.sender?.full_name || "Utilisateur"}
+                  <p className="text-[10px] text-muted-foreground">
+                    {offer.sender?.full_name || "Utilisateur"}
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-1">
-                <Badge variant="outline" className={getStatusColor(offer.status)}>
+              <div className="flex flex-col items-end gap-0.5">
+                <Badge variant="outline" className={`text-[10px] h-4 px-1 ${getStatusColor(offer.status)}`}>
                   {getStatusText(offer.status)}
                 </Badge>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-[10px] text-muted-foreground">
                   {formatDistanceToNow(new Date(offer.created_at), {
                     addSuffix: true,
                     locale: fr,

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Send, MapPin, MoreVertical, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Send, MapPin, MoreVertical, AlertCircle, CheckCircle2, ExternalLink, Flag } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -36,6 +36,8 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
   const [showBlockDialog, setShowBlockDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showReportDialog, setShowReportDialog] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [reportDescription, setReportDescription] = useState("");
   const [isMuted, setIsMuted] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showTransactionDialog, setShowTransactionDialog] = useState(false);
@@ -543,7 +545,8 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setShowReportDialog(true)}>
-                ⚠️ Signaler cette conversation
+                <Flag className="h-4 w-4 mr-2" />
+                Signaler cette conversation
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setShowBlockDialog(true)}>
                 🚫 Bloquer l'utilisateur
@@ -559,25 +562,27 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
           </DropdownMenu>
         </div>
         
-        {/* Listing Info - Compact */}
-        <div 
-          className="mt-2 p-2 bg-muted/20 rounded flex items-center gap-2 cursor-pointer hover:bg-muted/30 transition-colors"
+        {/* Listing Info - Compact Button */}
+        <Button
+          variant="outline"
+          className="mt-2 w-full justify-start h-auto p-2 hover:bg-muted/50"
           onClick={() => navigate(`/listing/${conversation.listing_id}`)}
         >
           {conversation.listing?.images?.[0] && (
             <img 
               src={conversation.listing.images[0]} 
               alt={conversation.listing.title}
-              className="w-10 h-10 object-cover rounded"
+              className="w-10 h-10 object-cover rounded mr-2"
             />
           )}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 text-left">
             <p className="text-xs font-medium truncate leading-tight">{conversation.listing?.title}</p>
             <p className="text-xs text-primary font-semibold">
               {conversation.listing?.price === 0 ? 'Gratuit' : `${conversation.listing?.price.toLocaleString()} FCFA`}
             </p>
           </div>
-        </div>
+          <ExternalLink className="h-3 w-3 ml-2 shrink-0 opacity-60" />
+        </Button>
         
         {/* Price Offer History */}
         <div className="mt-2">
@@ -791,23 +796,87 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       </AlertDialog>
 
       {/* Report Conversation Dialog */}
-      <AlertDialog open={showReportDialog} onOpenChange={setShowReportDialog}>
+      <AlertDialog open={showReportDialog} onOpenChange={(open) => {
+        setShowReportDialog(open);
+        if (!open) {
+          setReportReason("");
+          setReportDescription("");
+        }
+      }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Signaler cette conversation</AlertDialogTitle>
             <AlertDialogDescription>
-              Vous êtes sur le point de signaler cette conversation. Notre équipe examinera le contenu.
+              Aidez-nous à maintenir une communauté sûre en signalant les comportements inappropriés.
             </AlertDialogDescription>
           </AlertDialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Raison *</label>
+              <select
+                className="w-full p-2 rounded-md border border-input bg-background"
+                value={reportReason}
+                onChange={(e) => setReportReason(e.target.value)}
+              >
+                <option value="">Sélectionnez une raison</option>
+                <option value="inappropriate">Comportement inapproprié</option>
+                <option value="scam">Arnaque suspectée</option>
+                <option value="spam">Spam/harcèlement</option>
+                <option value="other">Autre</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Détails *</label>
+              <textarea
+                className="w-full p-2 rounded-md border border-input bg-background min-h-[80px]"
+                placeholder="Décrivez le problème..."
+                value={reportDescription}
+                onChange={(e) => setReportDescription(e.target.value)}
+                maxLength={500}
+              />
+              <p className="text-xs text-muted-foreground">{reportDescription.length}/500</p>
+            </div>
+          </div>
           <AlertDialogFooter>
             <AlertDialogCancel>Annuler</AlertDialogCancel>
-            <AlertDialogAction onClick={() => {
-              toast({
-                title: "Conversation signalée",
-                description: "Merci pour votre signalement. Notre équipe va examiner cette conversation.",
-              });
-              setShowReportDialog(false);
-            }}>
+            <AlertDialogAction 
+              onClick={async () => {
+                if (!reportReason || reportDescription.trim().length < 10) {
+                  toast({
+                    title: "Informations manquantes",
+                    description: "Veuillez sélectionner une raison et fournir au moins 10 caractères de description.",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+                try {
+                  const { error } = await supabase.from("reports").insert({
+                    listing_id: conversation?.listing_id,
+                    reporter_id: userId,
+                    reason: reportReason,
+                    description: `[CONVERSATION] ${reportDescription.trim()}`,
+                  });
+                  
+                  if (error) throw error;
+                  
+                  toast({
+                    title: "Signalement envoyé",
+                    description: "Merci. Notre équipe examinera cette conversation rapidement.",
+                  });
+                  setShowReportDialog(false);
+                  setReportReason("");
+                  setReportDescription("");
+                } catch (error) {
+                  console.error("Error reporting conversation:", error);
+                  toast({
+                    title: "Erreur",
+                    description: "Impossible d'envoyer le signalement",
+                    variant: "destructive",
+                  });
+                }
+              }}
+              disabled={!reportReason || reportDescription.trim().length < 10}
+            >
               Signaler
             </AlertDialogAction>
           </AlertDialogFooter>
