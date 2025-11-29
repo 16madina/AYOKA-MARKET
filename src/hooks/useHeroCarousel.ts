@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
+import heroImage1 from "@/assets/hero-marketplace-new.jpg";
+import heroImage2 from "@/assets/hero-marketplace-1.jpg";
+import heroImage3 from "@/assets/hero-marketplace-2.jpg";
+import heroImage4 from "@/assets/hero-marketplace-3.jpg";
 
 // Liste des images de hero disponibles
 const HERO_IMAGES = [
-  "/hero-marketplace-new.jpg", // Image actuelle
-  // On pourra ajouter plus d'images plus tard
+  heroImage1, // Image originale
+  heroImage2, // Marché africain traditionnel au coucher du soleil
+  heroImage3, // E-commerce moderne africain
+  heroImage4, // Artisanat et produits africains
 ];
 
 /**

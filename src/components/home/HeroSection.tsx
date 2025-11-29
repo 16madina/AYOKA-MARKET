@@ -1,7 +1,6 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import heroImage from "@/assets/hero-marketplace-new.jpg";
 import bazaramMarketLogo from "@/assets/bazaram-new-logo.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
@@ -39,7 +38,7 @@ const HeroSection = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center transition-transform duration-100 ease-out"
         style={{
-          backgroundImage: `url(${heroImage})`,
+          backgroundImage: `url(${currentImage})`,
           backgroundPosition: 'center center',
           backgroundSize: 'cover',
           transform: `translateY(${parallaxOffset}px)`,
