@@ -591,7 +591,7 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
             </button>
             
             {/* Listing Info */}
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 space-y-1">
               <button
                 onClick={() => navigate(`/listing/${conversation.listing_id}`)}
                 className="text-left w-full group"
@@ -604,9 +604,20 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
                 </p>
               </button>
               
-              {/* Price Offer History - Inline */}
-              <div className="mt-1">
+              <div className="flex items-center gap-2">
+                {/* Price Offer History */}
                 <PriceOfferHistory conversationId={conversationId} />
+                
+                {/* Link to listing */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate(`/listing/${conversation.listing_id}`)}
+                  className="h-6 text-xs px-2 gap-1"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  Voir
+                </Button>
               </div>
             </div>
           </div>
@@ -614,7 +625,7 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       </Card>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto overscroll-y-contain p-6 pb-2 space-y-6">
+      <div className="flex-1 overflow-y-auto overscroll-y-contain p-6 pb-6 space-y-6">
         {isLoading ? (
           <div className="text-center text-muted-foreground">Chargement...</div>
         ) : (
