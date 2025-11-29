@@ -1065,8 +1065,8 @@ const Admin = () => {
                         )}
                         <div className="flex-1">
                           <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <h3 className="font-semibold text-lg">{report.listings?.title || "Annonce supprimée"}</h3>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-base truncate max-w-[180px]">{report.listings?.title || "Annonce supprimée"}</h3>
                               {report.listings?.price && (
                                 <p className="text-sm font-medium text-primary mt-1">
                                   {report.listings.price.toLocaleString()} FCFA
@@ -1110,14 +1110,15 @@ const Admin = () => {
                                 </p>
                               </div>
                             </div>
-                            <div className="flex flex-col gap-2 ml-4">
+                            <div className="flex flex-col gap-1.5 ml-4 min-w-[140px]">
                               {report.listings?.id && (
                                 <Button 
                                   size="sm" 
                                   variant="outline" 
                                   onClick={() => navigate(`/listing/${report.listings.id}`)}
+                                  className="h-8 text-xs px-2"
                                 >
-                                  <Eye className="h-4 w-4 mr-1" />
+                                  <Eye className="h-3 w-3 mr-1" />
                                   Voir annonce
                                 </Button>
                               )}
@@ -1125,8 +1126,8 @@ const Admin = () => {
                                 <>
                                   <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                      <Button size="sm" variant="destructive">
-                                        <Ban className="h-4 w-4 mr-1" />
+                                      <Button size="sm" variant="destructive" className="h-8 text-xs px-2">
+                                        <Ban className="h-3 w-3 mr-1" />
                                         Supprimer + Bannir
                                       </Button>
                                     </AlertDialogTrigger>
@@ -1197,15 +1198,16 @@ const Admin = () => {
                                     size="sm" 
                                     variant="outline"
                                     onClick={() => handleResolveReport(report.id)}
+                                    className="h-8 text-xs px-2"
                                   >
-                                    <CheckCircle className="h-4 w-4 mr-1" />
+                                    <CheckCircle className="h-3 w-3 mr-1" />
                                     Résoudre
                                   </Button>
                                   
                                   <Dialog>
                                     <DialogTrigger asChild>
-                                      <Button size="sm" variant="ghost">
-                                        <XCircle className="h-4 w-4 mr-1" />
+                                      <Button size="sm" variant="ghost" className="h-8 text-xs px-2">
+                                        <XCircle className="h-3 w-3 mr-1" />
                                         Rejeter
                                       </Button>
                                     </DialogTrigger>
