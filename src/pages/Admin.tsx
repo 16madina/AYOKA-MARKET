@@ -646,19 +646,20 @@ const Admin = () => {
                               <p>Note: {profile.rating_average || 0}/5 ({profile.rating_count || 0} avis)</p>
                             </div>
                           </div>
-                          <div className="flex flex-col gap-2">
+                          <div className="flex flex-col gap-1.5 min-w-[100px]">
                             {/* User action buttons */}
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => navigate(`/seller/${profile.id}`)}
+                              className="h-8 text-xs px-2"
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               Voir
                             </Button>
                             <Dialog>
                               <DialogTrigger asChild>
-                                <Button size="sm" variant="outline" onClick={() => setSelectedUser(profile)}>
+                                <Button size="sm" variant="outline" onClick={() => setSelectedUser(profile)} className="h-8 text-xs px-2">
                                   <MessageSquare className="h-3 w-3 mr-1" />
                                   Message
                                 </Button>
@@ -684,6 +685,7 @@ const Admin = () => {
                                 size="sm"
                                 variant="outline"
                                 onClick={() => handleSendSMS(profile.phone)}
+                                className="h-8 text-xs px-2"
                               >
                                 SMS
                               </Button>
@@ -700,6 +702,7 @@ const Admin = () => {
                                       setEmailSubject("");
                                       setEmailMessage("");
                                     }}
+                                    className="h-8 text-xs px-2"
                                   >
                                     <Mail className="h-3 w-3 mr-1" />
                                     Email
@@ -779,13 +782,14 @@ const Admin = () => {
                                 size="sm"
                                 variant="default"
                                 onClick={() => handleUnbanUser(profile.id)}
+                                className="h-8 text-xs px-2"
                               >
                                 Débannir
                               </Button>
                             ) : (
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                  <Button size="sm" variant="destructive">
+                                  <Button size="sm" variant="destructive" className="h-8 text-xs px-2">
                                     <Ban className="h-3 w-3 mr-1" />
                                     Bannir
                                   </Button>
