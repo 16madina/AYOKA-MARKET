@@ -15,36 +15,36 @@ All colors MUST be HSL.
     --safe-area-inset-left: env(safe-area-inset-left);
     
     /* Base colors - BAZARAM brand colors */
-    --background: 30 20% 98%;
-    --foreground: 20 20% 12%;
+    --background: 0 0% 100%;
+    --foreground: 20 20% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 20 20% 12%;
+    --card-foreground: 20 20% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 20 20% 12%;
+    --popover-foreground: 20 20% 15%;
 
     /* Primary - Marron BAZARAM profond */
     --primary: 25 45% 35%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary - Marron clair */
-    --secondary: 30 40% 50%;
+    --secondary: 30 40% 55%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Muted - Beige doux */
-    --muted: 35 30% 90%;
-    --muted-foreground: 20 20% 30%;
+    /* Muted - Beige très clair */
+    --muted: 35 20% 95%;
+    --muted-foreground: 20 15% 40%;
 
     /* Accent - Or/Caramel */
-    --accent: 35 55% 55%;
+    --accent: 35 55% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 35 20% 85%;
-    --input: 35 20% 85%;
+    --border: 35 15% 90%;
+    --input: 35 15% 92%;
     --ring: 25 45% 35%;
 
     --radius: 1rem;
