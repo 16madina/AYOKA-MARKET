@@ -527,6 +527,9 @@ const Publish = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2" data-tutorial="price-input">
                   <Label htmlFor="price">Prix ({profile?.currency || "FCFA"}) {!formData.isFree && "*"}</Label>
+                  <p className="text-xs text-muted-foreground">
+                    La devise est affichée en fonction de votre pays d'inscription
+                  </p>
                   <Input
                     id="price"
                     type="number"
