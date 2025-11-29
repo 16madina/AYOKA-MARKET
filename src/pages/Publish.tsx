@@ -61,14 +61,14 @@ const Publish = () => {
     },
   });
 
-  // Fetch user profile to get country, city and phone
+  // Fetch user profile to get country, city, phone and currency
   const { data: profile } = useQuery({
     queryKey: ["profile", user?.id],
     queryFn: async () => {
       if (!user) return null;
       const { data, error } = await supabase
         .from("profiles")
-        .select("country, city, phone")
+        .select("country, city, phone, currency")
         .eq("id", user.id)
         .single();
       if (error) throw error;
@@ -379,6 +379,7 @@ const Publish = () => {
         title: formData.title,
         description: formData.description,
         price: formData.isFree ? 0 : parseFloat(formData.price),
+        currency: profile?.currency || "FCFA",
         category_id: formData.subcategory_id || formData.category_id,
         location: formData.location,
         condition: formData.condition,
@@ -525,7 +526,7 @@ const Publish = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2" data-tutorial="price-input">
-                  <Label htmlFor="price">Prix (FCFA) {!formData.isFree && "*"}</Label>
+                  <Label htmlFor="price">Prix ({profile?.currency || "FCFA"}) {!formData.isFree && "*"}</Label>
                   <Input
                     id="price"
                     type="number"
@@ -650,7 +651,7 @@ const Publish = () => {
                 {formData.delivery_available && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-6">
                     <div className="space-y-2">
-                      <Label htmlFor="delivery_price">Frais de livraison (FCFA)</Label>
+                      <Label htmlFor="delivery_price">Frais de livraison ({profile?.currency || "FCFA"})</Label>
                       <Input
                         id="delivery_price"
                         type="number"
