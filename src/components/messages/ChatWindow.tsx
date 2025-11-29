@@ -534,14 +534,40 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
                 <MoreVertical className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-72">
+              {/* Listing Info */}
+              <div className="px-3 py-2 border-b">
+                <button
+                  onClick={() => navigate(`/listing/${conversation.listing_id}`)}
+                  className="text-left w-full group"
+                >
+                  <p className="text-sm font-medium group-hover:text-primary transition-colors line-clamp-2">
+                    {conversation.listing?.title}
+                  </p>
+                  <p className="text-sm text-primary font-semibold mt-1">
+                    {conversation.listing?.price === 0 ? 'Gratuit' : `${conversation.listing?.price.toLocaleString()} FCFA`}
+                  </p>
+                </button>
+                
+                {/* Buttons Row */}
+                <div className="flex items-center gap-2 mt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate(`/listing/${conversation.listing_id}`)}
+                    className="h-7 text-xs px-3 gap-1.5"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    Voir l'annonce
+                  </Button>
+                  
+                  <PriceOfferHistory conversationId={conversationId} />
+                </div>
+              </div>
+              
               <DropdownMenuItem onClick={() => setShowTransactionDialog(true)}>
                 <CheckCircle2 className="h-4 w-4 mr-2" />
                 Transaction complétée
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate(`/listing/${conversation.listing_id}`)}>
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Voir l'annonce
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => toggleMute.mutate()}>
@@ -564,39 +590,6 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-        
-        {/* Listing Info & History - Compact Layout */}
-        <div className="mt-3">
-          <div className="space-y-2">
-            {/* Listing Title and Price */}
-            <button
-              onClick={() => navigate(`/listing/${conversation.listing_id}`)}
-              className="text-left w-full group"
-            >
-              <p className="text-sm font-medium max-w-[200px] truncate overflow-hidden text-ellipsis whitespace-nowrap group-hover:text-primary transition-colors">
-                {conversation.listing?.title}
-              </p>
-              <p className="text-sm text-primary font-semibold">
-                {conversation.listing?.price === 0 ? 'Gratuit' : `${conversation.listing?.price.toLocaleString()} FCFA`}
-              </p>
-            </button>
-            
-            {/* Buttons Row */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate(`/listing/${conversation.listing_id}`)}
-                className="h-7 text-xs px-3 gap-1.5"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Voir
-              </Button>
-              
-              <PriceOfferHistory conversationId={conversationId} />
-            </div>
-          </div>
         </div>
       </Card>
 
