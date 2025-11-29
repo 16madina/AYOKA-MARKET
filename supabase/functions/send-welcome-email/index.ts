@@ -181,7 +181,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="email-container">
               <div class="header">
                 <div class="logo-container">
-                  <img src="https://bazarammarket.com/bazaram-logo-email.png" alt="BAZARAM" class="logo" />
+                  <img src="https://bazarammarket.com/bazaram-logo-email.png" alt="BAZARAM" class="logo" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<h2 style=\'color: #704214; margin: 0;\'>BAZARAM</h2>';" />
                 </div>
               </div>
               
