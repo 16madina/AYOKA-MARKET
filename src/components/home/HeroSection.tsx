@@ -26,7 +26,7 @@ const HeroSection = () => {
           <h1 className="text-2xl md:text-4xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mb-0">
             Bienvenue sur
           </h1>
-          <div className="bg-gradient-to-b from-black/40 via-black/30 to-transparent dark:from-white/20 dark:via-white/10 dark:to-transparent px-8 py-6 rounded-2xl backdrop-blur-sm">
+          <div className="bg-gradient-to-b from-black/40 via-black/30 to-transparent dark:from-white/20 dark:via-white/10 dark:to-transparent px-4 py-3 rounded-xl backdrop-blur-sm">
             <img 
               src={bazaramMarketLogo} 
               alt="BAZARAM MARKET" 
