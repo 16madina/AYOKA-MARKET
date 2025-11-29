@@ -539,6 +539,10 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
                 <CheckCircle2 className="h-4 w-4 mr-2" />
                 Transaction complétée
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate(`/listing/${conversation.listing_id}`)}>
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Voir l'annonce
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => toggleMute.mutate()}>
                 {isMuted ? "🔔 Activer" : "🔇 Couper"} les notifications
@@ -610,7 +614,7 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
       </Card>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto overscroll-y-contain p-6 pb-24 space-y-6">
+      <div className="flex-1 overflow-y-auto overscroll-y-contain p-6 pb-2 space-y-6">
         {isLoading ? (
           <div className="text-center text-muted-foreground">Chargement...</div>
         ) : (
