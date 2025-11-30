@@ -55,7 +55,7 @@ const HeroSection = () => {
           <div className="bg-gradient-to-b from-black/15 via-black/10 to-transparent dark:from-white/15 dark:via-white/8 dark:to-transparent px-4 py-3 rounded-xl backdrop-blur-sm">
             <div className="flex flex-col items-start">
               <img src={ayokaMarketLogo} alt="AYOKA" className="h-32 md:h-56 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] dark:drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]" />
-              <p className="text-4xl md:text-6xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] -mt-6 md:-mt-10 ml-[23%] mx-[43px]">
+              <p className="text-4xl md:text-6xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] -mt-6 md:-mt-10 ml-[23%] pl-[47px] pr-[14px] pb-0 pt-0 mb-0 mr-[47px] py-0 my-0 mx-[47px] px-[42px] font-serif text-justify">
                 Market
               </p>
             </div>
