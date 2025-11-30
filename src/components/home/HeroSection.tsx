@@ -53,11 +53,16 @@ const HeroSection = () => {
             Bienvenue sur
           </h1>
           <div className="bg-gradient-to-b from-black/15 via-black/10 to-transparent dark:from-white/15 dark:via-white/8 dark:to-transparent px-4 py-3 rounded-xl backdrop-blur-sm">
-            <img 
-              src={ayokaMarketLogo} 
-              alt="AYOKA MARKET" 
-              className="h-32 md:h-56 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] dark:drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
-            />
+            <div className="flex flex-col items-start">
+              <img 
+                src={ayokaMarketLogo} 
+                alt="AYOKA" 
+                className="h-32 md:h-56 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] dark:drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
+              />
+              <p className="text-4xl md:text-6xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] -mt-2 md:-mt-4 ml-[20%]">
+                Market
+              </p>
+            </div>
           </div>
         </div>
         <p className="text-lg md:text-xl text-white font-semibold mb-8 max-w-2xl animate-fade-in bg-warm-earth/50 backdrop-blur-sm px-6 py-3 rounded-lg drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" style={{
