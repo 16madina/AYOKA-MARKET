@@ -13,7 +13,7 @@ import { PrivacyPolicy } from "@/components/auth/PrivacyPolicy";
 import { TermsConditions } from "@/components/auth/TermsConditions";
 import { allCountries } from "@/data/westAfricaData";
 import { Eye, EyeOff, ArrowLeft, MapPin, Chrome } from "lucide-react";
-import bazaramLogo from "@/assets/bazaram-new-logo.png";
+import ayokaLogo from "@/assets/ayoka-logo.png";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -214,7 +214,7 @@ const Auth = () => {
 
         toast({
           title: "Connexion réussie",
-          description: "Bienvenue sur BAZARAM !",
+          description: "Bienvenue sur AYOKA MARKET !",
         });
         navigate("/");
       } else {
@@ -328,8 +328,8 @@ const Auth = () => {
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <img 
-                src={bazaramLogo} 
-                alt="BAZARAM" 
+                src={ayokaLogo} 
+                alt="AYOKA MARKET" 
                 className="h-16 w-auto object-contain"
               />
             </div>
@@ -338,8 +338,8 @@ const Auth = () => {
             </CardTitle>
             <CardDescription>
               {isLogin
-                ? "Connectez-vous à votre compte BAZARAM"
-                : "Rejoignez la communauté BAZARAM"}
+                ? "Connectez-vous à votre compte AYOKA MARKET"
+                : "Rejoignez la communauté AYOKA MARKET"}
             </CardDescription>
           </CardHeader>
           <CardContent>

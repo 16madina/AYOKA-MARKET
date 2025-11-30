@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import bazaramMarketLogo from "@/assets/bazaram-new-logo.png";
+import ayokaMarketLogo from "@/assets/ayoka-logo.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
@@ -54,8 +54,8 @@ const HeroSection = () => {
           </h1>
           <div className="bg-gradient-to-b from-black/15 via-black/10 to-transparent dark:from-white/15 dark:via-white/8 dark:to-transparent px-4 py-3 rounded-xl backdrop-blur-sm">
             <img 
-              src={bazaramMarketLogo} 
-              alt="BAZARAM MARKET" 
+              src={ayokaMarketLogo} 
+              alt="AYOKA MARKET" 
               className="h-32 md:h-56 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] dark:drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
             />
           </div>

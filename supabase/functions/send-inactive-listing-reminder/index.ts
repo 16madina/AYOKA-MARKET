@@ -127,7 +127,7 @@ const handler = async (req: Request): Promise<Response> => {
             <h3 style="color: #704214; margin: 10px 0; font-size: 16px;">${listing.title}</h3>
             <p style="color: #666; margin: 5px 0; font-size: 14px;">${listing.price} ${listing.currency}</p>
             <p style="color: #999; font-size: 12px; font-style: italic;">Dernière mise à jour: il y a ${daysSinceUpdate} jours</p>
-            <a href="https://bazarammarket.com/listing/${listing.id}" style="display: inline-block; background: #704214; color: white; padding: 8px 20px; text-decoration: none; border-radius: 5px; font-size: 14px; margin-top: 10px;">
+            <a href="https://ayokamarket.com/listing/${listing.id}" style="display: inline-block; background: #704214; color: white; padding: 8px 20px; text-decoration: none; border-radius: 5px; font-size: 14px; margin-top: 10px;">
               Mettre à jour l'annonce
             </a>
           </div>
@@ -145,7 +145,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
               <div style="background: linear-gradient(135deg, #704214 0%, #8B5A2B 100%); padding: 40px 30px; text-align: center;">
                 <div style="background-color: white; padding: 20px; border-radius: 15px; display: inline-block;">
-                  <img src="https://bazarammarket.com/bazaram-logo-email.png" alt="BAZARAM" style="max-width: 200px; height: auto;" />
+                  <img src="https://ayokamarket.com/ayoka-logo-email.png" alt="AYOKA MARKET" style="max-width: 200px; height: auto;" />
                 </div>
               </div>
               
@@ -175,7 +175,7 @@ const handler = async (req: Request): Promise<Response> => {
                 ${listingsHtml}
 
                 <div style="text-align: center; margin: 35px 0;">
-                  <a href="https://bazarammarket.com/profile" style="display: inline-block; background: linear-gradient(135deg, #704214 0%, #8B5A2B 100%); color: white; padding: 16px 50px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(112, 66, 20, 0.3);">
+                  <a href="https://ayokamarket.com/profile" style="display: inline-block; background: linear-gradient(135deg, #704214 0%, #8B5A2B 100%); color: white; padding: 16px 50px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(112, 66, 20, 0.3);">
                     Voir toutes mes annonces
                   </a>
                 </div>
@@ -206,7 +206,7 @@ const handler = async (req: Request): Promise<Response> => {
           "Authorization": `Bearer ${RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-          from: "BAZARAM <no-reply@bazarammarket.com>",
+          from: "AYOKA MARKET <no-reply@ayokamarket.com>",
           to: [userEmail],
           subject: `📢 ${listings.length > 1 ? `${listings.length} annonces inactives` : 'Annonce inactive'} - Mettez à jour pour plus de visibilité`,
           html: emailHtml,

@@ -82,9 +82,9 @@ const handler = async (req: Request): Promise<Response> => {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "BAZARAM <no-reply@bazarammarket.com>",
+        from: "AYOKA MARKET <no-reply@ayokamarket.com>",
         to: [email],
-        subject: "Vérifiez votre adresse email - BAZARAM",
+        subject: "Vérifiez votre adresse email - AYOKA MARKET",
         html: `
         <!DOCTYPE html>
         <html>
@@ -207,7 +207,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="email-container">
               <div class="header">
                 <div class="logo-container">
-                  <img src="${appUrl}/bazaram-logo-email.png" alt="BAZARAM" class="logo" />
+                  <img src="${appUrl}/ayoka-logo-email.png" alt="AYOKA MARKET" class="logo" />
                 </div>
               </div>
               
@@ -215,7 +215,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <h1 class="welcome-title">Bienvenue ${userName || ""}! 🎉</h1>
                 
                 <p class="welcome-text">
-                  Merci de vous être inscrit sur <strong style="color: #704214;">BAZARAM</strong>.
+                  Merci de vous être inscrit sur <strong style="color: #704214;">AYOKA MARKET</strong>.
                 </p>
                 
                 <p class="welcome-text">
@@ -241,21 +241,21 @@ const handler = async (req: Request): Promise<Response> => {
                 <div class="divider"></div>
                 
                 <p style="color: #999; font-size: 13px; text-align: center; font-style: italic;">
-                  Si vous n'avez pas créé de compte sur BAZARAM, vous pouvez ignorer cet email en toute sécurité.
+                  Si vous n'avez pas créé de compte sur AYOKA MARKET, vous pouvez ignorer cet email en toute sécurité.
                 </p>
               </div>
               
               <div class="footer">
                 <p class="footer-text">
-                  <strong style="color: #704214;">BAZARAM</strong><br>
+                  <strong style="color: #704214;">AYOKA MARKET</strong><br>
                   Votre marketplace pour l'économie circulaire<br>
                   Ensemble pour un avenir durable 🌍
                 </p>
                 <p class="footer-text" style="margin-top: 15px;">
-                  <a href="https://bazarammarket.com" class="footer-link">bazarammarket.com</a>
+                  <a href="https://ayokamarket.com" class="footer-link">ayokamarket.com</a>
                 </p>
                 <p class="footer-text" style="margin-top: 10px; font-size: 11px;">
-                  © ${new Date().getFullYear()} BAZARAM. Tous droits réservés.
+                  © ${new Date().getFullYear()} AYOKA MARKET. Tous droits réservés.
                 </p>
               </div>
             </div>

@@ -1,10 +1,10 @@
-# BAZARAM - Marketplace de seconde vie
+# AYOKA MARKET - Marketplace de seconde vie
 
-**BAZARAM** est le marketplace de référence en Afrique de l'Ouest dédié à l'économie circulaire. Notre mission : donner une seconde vie à vos articles.
+**AYOKA MARKET** est le marketplace de référence en Afrique de l'Ouest dédié à l'économie circulaire. Notre mission : donner une seconde vie à vos articles.
 
 ## À propos
 
-BAZARAM facilite l'achat et la vente d'articles d'occasion en mettant l'accent sur :
+AYOKA MARKET facilite l'achat et la vente d'articles d'occasion en mettant l'accent sur :
 - 🔄 L'économie circulaire
 - ♻️ La seconde vie des objets
 - 🌍 Le développement durable
@@ -95,7 +95,7 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/c
 
 ## Contact
 
-Pour toute question : support@bazaram.com
+Pour toute question : support@ayokamarket.com
 
 ---
 

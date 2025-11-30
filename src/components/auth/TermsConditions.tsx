@@ -214,7 +214,7 @@ export const TermsConditions = ({ open, onOpenChange }: TermsConditionsProps) =>
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
                 <li>Le centre d'aide dans l'application</li>
-                <li>Email : bazarammarket@gmail.com</li>
+                <li>Email : ayokamarket@gmail.com</li>
                 <li>Les paramètres de votre compte</li>
               </ul>
             </section>

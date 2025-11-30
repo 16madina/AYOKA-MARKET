@@ -37,7 +37,7 @@ const RecentListings = () => {
               `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`,
               {
                 headers: {
-                  'User-Agent': 'BazaramMarket/1.0'
+                  'User-Agent': 'AyokaMarket/1.0'
                 }
               }
             );

@@ -131,8 +131,8 @@ const Settings = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'BAZARAM',
-          text: 'Découvrez BAZARAM - Achetez et vendez facilement !',
+          title: 'AYOKA MARKET',
+          text: 'Découvrez AYOKA MARKET - Achetez et vendez facilement !',
           url: window.location.origin
         });
         toast.success('Application partagée avec succès');

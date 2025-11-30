@@ -89,7 +89,7 @@ const EmailVerified = () => {
             Email vérifié avec succès !
           </h1>
           <p className="text-muted-foreground">
-            Votre adresse email a été confirmée. Vous pouvez maintenant profiter de toutes les fonctionnalités de BAZARAM.
+            Votre adresse email a été confirmée. Vous pouvez maintenant profiter de toutes les fonctionnalités d'AYOKA MARKET.
           </p>
         </div>
 
@@ -109,7 +109,7 @@ const EmailVerified = () => {
 
         <div className="pt-4 border-t">
           <p className="text-xs text-muted-foreground">
-            Merci de faire partie de la communauté BAZARAM
+            Merci de faire partie de la communauté AYOKA MARKET
           </p>
         </div>
       </Card>

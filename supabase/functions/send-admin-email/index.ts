@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
         'Authorization': `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'BAZARAM Admin <no-reply@bazarammarket.com>',
+        from: 'AYOKA MARKET Admin <no-reply@ayokamarket.com>',
         to: [email],
         subject: subject,
         html: `
@@ -148,16 +148,16 @@ Deno.serve(async (req) => {
               <div class="container">
                 <div class="header">
                   <div style="background-color: white; padding: 20px; border-radius: 15px; display: inline-block;">
-                    <img src="https://bazarammarket.com/bazaram-logo-email.png" alt="BAZARAM" style="max-width: 200px; height: auto;" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<h2 style=\'color: #704214; margin: 0;\'>BAZARAM</h2>';" />
+                    <img src="https://ayokamarket.com/ayoka-logo-email.png" alt="AYOKA MARKET" style="max-width: 200px; height: auto;" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<h2 style=\'color: #704214; margin: 0;\'>AYOKA MARKET</h2>';" />
                   </div>
-                  <h1>BAZARAM</h1>
-                  <p style="color: #ffffff; margin: 0; font-size: 14px;">Message de l'équipe BAZARAM</p>
+                  <h1>AYOKA MARKET</h1>
+                  <p style="color: #ffffff; margin: 0; font-size: 14px;">Message de l'équipe AYOKA MARKET</p>
                 </div>
                 <div class="content">
                   ${message.split('\n').map((line: string) => `<p>${line}</p>`).join('')}
                 </div>
                 <div class="footer">
-                  <p>© ${new Date().getFullYear()} BAZARAM. Tous droits réservés.</p>
+                  <p>© ${new Date().getFullYear()} AYOKA MARKET. Tous droits réservés.</p>
                   <p>Ce message vous a été envoyé par l'équipe d'administration de BAZARAM.</p>
                 </div>
               </div>

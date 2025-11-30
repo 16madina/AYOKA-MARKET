@@ -30,9 +30,9 @@ const handler = async (req: Request): Promise<Response> => {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "BAZARAM <no-reply@bazarammarket.com>",
+        from: "AYOKA MARKET <no-reply@ayokamarket.com>",
         to: [email],
-        subject: "Bienvenue sur BAZARAM ! 🎉",
+        subject: "Bienvenue sur AYOKA MARKET ! 🎉",
       html: `
         <!DOCTYPE html>
         <html>
@@ -181,7 +181,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="email-container">
               <div class="header">
                 <div class="logo-container">
-                  <img src="https://bazarammarket.com/bazaram-logo-email.png" alt="BAZARAM" class="logo" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<h2 style=\'color: #704214; margin: 0;\'>BAZARAM</h2>';" />
+                  <img src="https://ayokamarket.com/ayoka-logo-email.png" alt="AYOKA MARKET" class="logo" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<h2 style=\'color: #704214; margin: 0;\'>AYOKA MARKET</h2>';" />
                 </div>
               </div>
               
@@ -189,7 +189,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <h1 class="welcome-title">Félicitations ${userName} ! 🎉</h1>
                 
                 <p class="welcome-text">
-                  Votre compte <strong style="color: #704214;">BAZARAM</strong> est maintenant <strong>vérifié et actif</strong> !
+                  Votre compte <strong style="color: #704214;">AYOKA MARKET</strong> est maintenant <strong>vérifié et actif</strong> !
                 </p>
 
                 <div class="features-box">
@@ -225,7 +225,7 @@ const handler = async (req: Request): Promise<Response> => {
                 </div>
 
                 <div class="button-container">
-                  <a href="https://bazarammarket.com" class="cta-button">
+                  <a href="https://ayokamarket.com" class="cta-button">
                     Commencer à explorer
                   </a>
                 </div>
@@ -247,17 +247,17 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div class="footer">
                 <p class="footer-text">
-                  <strong style="color: #704214;">BAZARAM</strong><br>
+                  <strong style="color: #704214;">AYOKA MARKET</strong><br>
                   Votre marketplace pour l'économie circulaire<br>
                   Ensemble pour un avenir durable 🌍
                 </p>
                 <p class="footer-links">
-                  <a href="https://bazarammarket.com" class="footer-link">Site web</a> • 
-                  <a href="https://bazarammarket.com/help" class="footer-link">Aide</a> • 
-                  <a href="https://bazarammarket.com/settings/terms" class="footer-link">CGU</a>
+                  <a href="https://ayokamarket.com" class="footer-link">Site web</a> • 
+                  <a href="https://ayokamarket.com/help" class="footer-link">Aide</a> • 
+                  <a href="https://ayokamarket.com/settings/terms" class="footer-link">CGU</a>
                 </p>
                 <p class="copyright">
-                  © ${new Date().getFullYear()} BAZARAM. Tous droits réservés.
+                  © ${new Date().getFullYear()} AYOKA MARKET. Tous droits réservés.
                 </p>
               </div>
             </div>

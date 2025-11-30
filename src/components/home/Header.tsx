@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { LogIn, User, Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/hooks/useDarkMode";
 import { SystemNotifications } from "@/components/notifications/SystemNotifications";
-import bazaramLogo from "@/assets/bazaram-new-logo.png";
+import ayokaLogo from "@/assets/ayoka-logo.png";
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -18,8 +18,8 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <img 
-            src={bazaramLogo} 
-            alt="BAZARAM" 
+            src={ayokaLogo} 
+            alt="AYOKA MARKET" 
             className="h-16 w-auto cursor-pointer transition-all duration-300 hover:scale-105 object-contain dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
             onClick={() => navigate("/")}
           />

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import bazaramSplashLogo from "@/assets/bazaram-splash-logo.png";
+import ayokaSplashLogo from "@/assets/ayoka-logo.png";
 import { useHaptics } from "@/hooks/useHaptics";
 import { useSplashSound } from "@/hooks/useSplashSound";
 
@@ -54,8 +54,8 @@ const SplashScreen = ({ onFinish, isShortVersion = false }: SplashScreenProps) =
       >
         <div className="animate-fade-in">
           <img
-            src={bazaramSplashLogo}
-            alt="BAZARAM MARKET"
+            src={ayokaSplashLogo}
+            alt="AYOKA MARKET"
             className="w-64 md:w-80 drop-shadow-2xl object-contain"
             style={{ 
               imageRendering: 'crisp-edges',
@@ -136,8 +136,8 @@ const SplashScreen = ({ onFinish, isShortVersion = false }: SplashScreenProps) =
             />
             
             <img
-              src={bazaramSplashLogo}
-              alt="BAZARAM MARKET"
+              src={ayokaSplashLogo}
+              alt="AYOKA MARKET"
               className="w-full drop-shadow-2xl object-contain relative z-10"
               style={{ 
                 imageRendering: 'crisp-edges',
