@@ -1,6 +1,6 @@
-# Guide de test VoiceOver pour BAZARAM iOS
+# Guide de test VoiceOver pour AYOKA MARKET iOS
 
-Ce guide vous aide à tester l'accessibilité de l'app BAZARAM avec VoiceOver avant la soumission à l'App Store.
+Ce guide vous aide à tester l'accessibilité de l'app AYOKA MARKET avec VoiceOver avant la soumission à l'App Store.
 
 ## Activation de VoiceOver
 
@@ -21,11 +21,11 @@ Ce guide vous aide à tester l'accessibilité de l'app BAZARAM avec VoiceOver av
 - **Tap avec 3 doigts** : Lire toute la page
 - **Glisser vers le haut/bas avec 2 doigts** : Scroller
 
-## Tests critiques pour BAZARAM
+## Tests critiques pour AYOKA MARKET
 
 ### 1. Page d'accueil (/)
 ✅ **À vérifier :**
-- [ ] Le logo BAZARAM est lu comme "BAZARAM"
+- [ ] Le logo AYOKA MARKET est lu comme "AYOKA MARKET"
 - [ ] Le bouton thème est annoncé "Changer de thème"
 - [ ] Les catégories populaires sont toutes cliquables avec leurs noms
 - [ ] Les annonces récentes ont des descriptions complètes (titre, prix, localisation)
@@ -133,7 +133,7 @@ Exemple mauvais : "product" ou "image"
 ✅ **Correct** : Utiliser `rem` au lieu de `px`
 
 ❌ **Contraste insuffisant** : Texte gris clair sur fond blanc
-✅ **Correct** : Contraste ≥4.5:1 (déjà corrigé dans BAZARAM)
+✅ **Correct** : Contraste ≥4.5:1 (déjà corrigé dans AYOKA MARKET)
 
 ## Checklist finale avant soumission
 

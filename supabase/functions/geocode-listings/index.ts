@@ -16,7 +16,7 @@ async function geocodeLocation(location: string): Promise<GeocodingResult | null
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`,
       {
         headers: {
-          'User-Agent': 'BAZARAM-Marketplace/1.0',
+          'User-Agent': 'AyokaMarket/1.0',
         },
       }
     );

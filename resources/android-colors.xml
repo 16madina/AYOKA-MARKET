@@ -4,7 +4,7 @@
   après avoir exécuté 'npx cap add android'
 -->
 <resources>
-    <!-- Couleurs principales de BAZARAM -->
+    <!-- Couleurs principales de AYOKA MARKET -->
     <color name="colorPrimary">#ea384c</color>
     <color name="colorPrimaryDark">#d62d41</color>
     <color name="colorAccent">#ea384c</color>

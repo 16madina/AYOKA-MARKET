@@ -1,6 +1,6 @@
 # Phase 2 - Améliorations iOS Recommandées ✅
 
-Ce document récapitule toutes les améliorations Phase 2 implémentées pour optimiser l'expérience iOS de BAZARAM.
+Ce document récapitule toutes les améliorations Phase 2 implémentées pour optimiser l'expérience iOS de AYOKA MARKET.
 
 ## 1. ✅ Haptic Feedback (Retour Haptique)
 
@@ -51,7 +51,7 @@ Toutes les implémentations respectent les [Human Interface Guidelines d'Apple](
 
 ### Implémentation
 
-BAZARAM utilise **Tailwind CSS** qui génère automatiquement des classes basées sur `rem` plutôt que `px`.
+AYOKA MARKET utilise **Tailwind CSS** qui génère automatiquement des classes basées sur `rem` plutôt que `px`.
 
 #### Vérifications effectuées :
 - ✅ Toutes les tailles de texte utilisent des unités relatives (rem/em)
@@ -126,7 +126,7 @@ Pour tester avec différentes tailles de texte iOS :
 Le guide complet inclut :
 - ✅ Instructions d'activation VoiceOver
 - ✅ Gestes essentiels VoiceOver
-- ✅ Tests critiques pour chaque page BAZARAM
+- ✅ Tests critiques pour chaque page AYOKA MARKET
 - ✅ Checklist de conformité Apple
 - ✅ Points de contrôle obligatoires (contraste, tailles)
 - ✅ Erreurs courantes à éviter
@@ -217,4 +217,4 @@ L'utilisation de Tailwind avec unités `rem` assure automatiquement la compatibi
 
 **Temps total de développement Phase 2 : ~2h**
 
-**Résultat : BAZARAM est maintenant une app iOS premium avec expérience tactile et accessibilité de niveau Apple.**
+**Résultat : AYOKA MARKET est maintenant une app iOS premium avec expérience tactile et accessibilité de niveau Apple.**

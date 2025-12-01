@@ -1,6 +1,6 @@
-# ✅ Checklist complète pour soumettre BAZARAM aux stores
+# ✅ Checklist complète pour soumettre AYOKA MARKET aux stores
 
-Cette checklist vous guide étape par étape pour soumettre BAZARAM sur l'App Store (iOS) et le Play Store (Android).
+Cette checklist vous guide étape par étape pour soumettre AYOKA MARKET sur l'App Store (iOS) et le Play Store (Android).
 
 ## 📋 Pré-requis généraux
 
@@ -66,7 +66,7 @@ Voir `resources/screenshot-guide.md` pour plus de détails.
 ### Android
 
 #### Fichiers de configuration
-- [ ] `android/app/src/main/res/values/strings.xml` mis à jour avec "DJASSA"
+- [ ] `android/app/src/main/res/values/strings.xml` mis à jour avec "AYOKA MARKET"
 - [ ] `android/app/src/main/res/values/colors.xml` avec les couleurs (#ea384c)
 - [ ] `android/app/src/main/AndroidManifest.xml` avec toutes les permissions
 - [ ] `android/app/build.gradle` avec version correcte (1.0.0)
@@ -91,8 +91,8 @@ Voir `resources/screenshot-guide.md` pour plus de détails.
 
 #### Fichiers de configuration
 - [ ] `ios/App/App/Info.plist` avec tous les NSUsageDescription
-- [ ] Display Name défini sur "DJASSA"
-- [ ] Bundle Identifier : app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471
+- [ ] Display Name défini sur "AYOKA MARKET"
+- [ ] Bundle Identifier : com.ayoka.market
 - [ ] Version : 1.0.0, Build : 1
 
 #### Permissions iOS vérifiées
@@ -126,7 +126,7 @@ Dans Android Studio :
 - [ ] Sélectionner "Android App Bundle"
 - [ ] Créer ou sélectionner keystore (GARDER PRÉCIEUSEMENT !)
 - [ ] Build → .aab généré dans `android/app/release/`
-- [ ] Fichier .aab sauvegardé (djassa-release-1.0.0.aab)
+- [ ] Fichier .aab sauvegardé (ayoka-market-release-1.0.0.aab)
 
 **IMPORTANT** : Sauvegardez votre keystore et son mot de passe en lieu sûr !
 
@@ -155,7 +155,7 @@ Dans Xcode :
 ### Métadonnées communes
 
 **Nom de l'app**
-- Nom : DJASSA
+- Nom : AYOKA MARKET
 - Sous-titre iOS (30 char max) : Marketplace seconde main
 - Description courte Android (80 char max) : Achetez et vendez facilement en Afrique de l'Ouest
 
@@ -170,16 +170,16 @@ Dans Xcode :
 - Android : Tags similaires
 
 **Contact**
-- Email support : support@djassamarket.com
-- Site web : https://djassamarket.com (ou votre URL Lovable)
+- Email support : ayokamarket@gmail.com
+- Site web : https://ayokamarket.com
 - Politique de confidentialité : (URL vers votre politique)
 
 ### Description de l'app
 
 ```
-DJASSA - Le marketplace de l'économie circulaire en Afrique de l'Ouest
+AYOKA MARKET - Le marketplace de l'économie circulaire en Afrique de l'Ouest
 
-🌍 DJASSA vous permet d'acheter et de vendre facilement des articles de seconde main dans toute l'Afrique de l'Ouest.
+🌍 AYOKA MARKET vous permet d'acheter et de vendre facilement des articles de seconde main dans toute l'Afrique de l'Ouest.
 
 ✨ FONCTIONNALITÉS PRINCIPALES
 
@@ -221,7 +221,7 @@ DJASSA - Le marketplace de l'économie circulaire en Afrique de l'Ouest
 • Loisirs & Sports
 • Et bien plus encore !
 
-💡 POURQUOI CHOISIR DJASSA ?
+💡 POURQUOI CHOISIR AYOKA MARKET ?
 
 ✓ Gratuit à télécharger et à utiliser
 ✓ Pas de frais cachés
@@ -232,14 +232,14 @@ DJASSA - Le marketplace de l'économie circulaire en Afrique de l'Ouest
 
 🌱 ENGAGÉS POUR L'ÉCONOMIE CIRCULAIRE
 
-Donnez une seconde vie à vos articles et contribuez à une consommation plus responsable. Avec DJASSA, chaque objet trouve un nouveau propriétaire.
+Donnez une seconde vie à vos articles et contribuez à une consommation plus responsable. Avec AYOKA MARKET, chaque objet trouve un nouveau propriétaire.
 
 📞 SUPPORT
 
 Besoin d'aide ? Notre équipe est là pour vous.
-Email : support@djassamarket.com
+Email : ayokamarket@gmail.com
 
-Téléchargez DJASSA maintenant et rejoignez la communauté du marketplace circulaire !
+Téléchargez AYOKA MARKET maintenant et rejoignez la communauté du marketplace circulaire !
 ```
 
 ### Informations légales
@@ -257,10 +257,10 @@ Téléchargez DJASSA maintenant et rejoignez la communauté du marketplace circu
 - [ ] Connexion sur [App Store Connect](https://appstoreconnect.apple.com/)
 - [ ] "Mes Apps" → "+" → Nouvelle app
 - [ ] Plateforme : iOS
-- [ ] Nom : DJASSA
+- [ ] Nom : AYOKA MARKET
 - [ ] Langue principale : Français
-- [ ] Bundle ID : app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471
-- [ ] SKU : djassa-ios-001
+- [ ] Bundle ID : com.ayoka.market
+- [ ] SKU : ayoka-market-ios-001
 
 **Informations de l'app**
 - [ ] Captures d'écran uploadées (toutes tailles requises)
@@ -274,7 +274,7 @@ Téléchargez DJASSA maintenant et rejoignez la communauté du marketplace circu
 **Versions et build**
 - [ ] Sélectionner le build uploadé depuis Xcode
 - [ ] Numéro de version : 1.0.0
-- [ ] Copyright : © 2025 DJASSA
+- [ ] Copyright : © 2025 AYOKA MARKET
 
 **Review Information**
 - [ ] Contact de review (nom, email, téléphone)
@@ -295,7 +295,7 @@ Téléchargez DJASSA maintenant et rejoignez la communauté du marketplace circu
 **Dans Google Play Console**
 - [ ] Connexion sur [Play Console](https://play.google.com/console/)
 - [ ] "Créer une application"
-- [ ] Nom : DJASSA
+- [ ] Nom : AYOKA MARKET
 - [ ] Langue par défaut : Français (France)
 - [ ] Type : Application
 - [ ] Gratuit/Payant : Gratuit
@@ -312,7 +312,7 @@ Téléchargez DJASSA maintenant et rejoignez la communauté du marketplace circu
 - [ ] Politique de confidentialité (URL)
 
 **Configuration de l'app**
-- [ ] Package name : app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471
+- [ ] Package name : com.ayoka.market
 - [ ] Classification du contenu (questionnaire)
 - [ ] Public cible et contenu (âge)
 - [ ] Pays de distribution sélectionnés
@@ -400,4 +400,4 @@ Pour les prochaines versions :
 
 ---
 
-Bonne chance pour la soumission de DJASSA ! 🚀
+Bonne chance pour la soumission de AYOKA MARKET ! 🚀

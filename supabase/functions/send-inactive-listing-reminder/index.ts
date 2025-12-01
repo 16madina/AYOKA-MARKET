@@ -187,11 +187,11 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div style="background: #f9f9f9; padding: 30px; text-align: center; border-top: 2px solid #704214;">
                 <p style="color: #666; font-size: 13px; line-height: 1.6; margin-bottom: 15px;">
-                  <strong style="color: #704214;">BAZARAM</strong><br>
+                  <strong style="color: #704214;">AYOKA MARKET</strong><br>
                   Votre marketplace pour l'économie circulaire
                 </p>
                 <p style="color: #999; font-size: 11px;">
-                  © ${new Date().getFullYear()} BAZARAM. Tous droits réservés.
+                  © ${new Date().getFullYear()} AYOKA MARKET. Tous droits réservés.
                 </p>
               </div>
             </div>

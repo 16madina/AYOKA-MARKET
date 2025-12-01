@@ -158,7 +158,7 @@ Deno.serve(async (req) => {
                 </div>
                 <div class="footer">
                   <p>© ${new Date().getFullYear()} AYOKA MARKET. Tous droits réservés.</p>
-                  <p>Ce message vous a été envoyé par l'équipe d'administration de BAZARAM.</p>
+                  <p>Ce message vous a été envoyé par l'équipe d'administration de AYOKA MARKET.</p>
                 </div>
               </div>
             </body>
