@@ -4,7 +4,7 @@
  * Uses localStorage for persistent cross-session tracking
  */
 
-const SPLASH_SEEN_KEY = 'bazaram_splash_seen';
+const SPLASH_SEEN_KEY = 'ayoka_splash_seen';
 
 export const useSplashPreference = () => {
   const hasSeenFullSplash = localStorage.getItem(SPLASH_SEEN_KEY) === 'true';

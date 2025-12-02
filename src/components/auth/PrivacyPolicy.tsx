@@ -27,7 +27,7 @@ export const PrivacyPolicy = ({ open, onOpenChange }: PrivacyPolicyProps) => {
             <section>
               <h3 className="font-semibold text-base mb-2">1. Collecte des informations</h3>
               <p className="text-muted-foreground">
-                Nous collectons les informations que vous nous fournissez directement lors de votre inscription, notamment votre nom, prénom, email, numéro de téléphone, pays et ville. Ces informations sont nécessaires pour créer et gérer votre compte BAZARAM.
+                Nous collectons les informations que vous nous fournissez directement lors de votre inscription, notamment votre nom, prénom, email, numéro de téléphone, pays et ville. Ces informations sont nécessaires pour créer et gérer votre compte AYOKA MARKET.
               </p>
             </section>
 
@@ -115,7 +115,7 @@ export const PrivacyPolicy = ({ open, onOpenChange }: PrivacyPolicyProps) => {
             <section>
               <h3 className="font-semibold text-base mb-2">9. Protection des mineurs</h3>
               <p className="text-muted-foreground">
-                BAZARAM n'est pas destiné aux personnes de moins de 18 ans. Nous ne collectons pas sciemment d'informations personnelles auprès de mineurs. Si vous pensez qu'un mineur a fourni des informations personnelles, veuillez nous contacter immédiatement.
+                AYOKA MARKET n'est pas destiné aux personnes de moins de 18 ans. Nous ne collectons pas sciemment d'informations personnelles auprès de mineurs. Si vous pensez qu'un mineur a fourni des informations personnelles, veuillez nous contacter immédiatement.
               </p>
             </section>
 
@@ -136,7 +136,7 @@ export const PrivacyPolicy = ({ open, onOpenChange }: PrivacyPolicyProps) => {
             <section>
               <h3 className="font-semibold text-base mb-2">11. Permissions de l'application</h3>
               <p className="text-muted-foreground">
-                BAZARAM peut demander les permissions suivantes :
+                AYOKA MARKET peut demander les permissions suivantes :
               </p>
               <ul className="list-disc list-inside text-muted-foreground mt-2 space-y-1">
                 <li><strong>Appareil photo/Photos :</strong> Pour ajouter des images à vos annonces</li>

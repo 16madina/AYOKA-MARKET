@@ -1,4 +1,4 @@
-# Liste de vérification avant déploiement BAZARAM
+# Liste de vérification avant déploiement AYOKA MARKET
 
 ## ✅ Correctifs appliqués
 
@@ -20,9 +20,8 @@
   - ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION
 
 ### 3. Cohérence de marque
-- [x] "ReVivo" remplacé par "BAZARAM" dans :
-  - Settings.tsx (partage de l'application)
-  - Help.tsx (email de support : support@bazaram.com)
+- [x] "ReVivo" remplacé par "AYOKA MARKET"
+- [x] Email de support : ayokamarket@gmail.com
 
 ### 4. URLs de confirmation email
 - [x] URL de confirmation cohérente : `/email-verified` dans les edge functions et le frontend
@@ -94,7 +93,7 @@ npx cap open android  # Ouvre Android Studio
 ### Politiques et mentions légales
 - [ ] Politique de confidentialité complète et à jour
 - [ ] CGU mentionnant tous les contenus interdits
-- [ ] Coordonnées de contact valides (support@djassamarket.com)
+- [ ] Coordonnées de contact valides (ayokamarket@gmail.com)
 
 ### Performance
 - [ ] Compression des images côté client activée

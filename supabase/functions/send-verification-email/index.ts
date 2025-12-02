@@ -57,10 +57,10 @@ const handler = async (req: Request): Promise<Response> => {
           appUrl = `${url.protocol}//${url.host}`;
         } catch (e) {
           console.error("Error parsing origin:", e);
-          appUrl = 'https://bazarammarket.com'; // Final fallback
+          appUrl = 'https://ayokamarket.com'; // Final fallback
         }
       } else {
-        appUrl = 'https://bazarammarket.com'; // Final fallback
+        appUrl = 'https://ayokamarket.com'; // Final fallback
       }
     }
     

@@ -1,11 +1,11 @@
 # Configuration des métadonnées pour iOS et Android
 
-Ce guide vous aide à configurer toutes les métadonnées nécessaires pour publier BAZARAM sur l'App Store (iOS) et le Play Store (Android).
+Ce guide vous aide à configurer toutes les métadonnées nécessaires pour publier AYOKA MARKET sur l'App Store (iOS) et le Play Store (Android).
 
 ## 📱 Informations de base de l'application
 
-- **Nom de l'app** : BAZARAM
-- **Package ID** : `app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471`
+- **Nom de l'app** : AYOKA MARKET
+- **Package ID** : `com.ayoka.market`
 - **Version** : 1.0.0
 - **Description courte** : Marketplace de petites annonces pour l'Afrique de l'Ouest
 - **Catégorie** : Shopping / Marketplace
@@ -110,17 +110,17 @@ Ou configurez le splash dans `android/app/src/main/res/values/styles.xml` :
 1. Ouvrez `ios/App/App.xcodeproj` dans Xcode
 2. Sélectionnez le projet "App" dans le navigateur
 3. Dans la section "General", modifiez :
-   - **Display Name** : DJASSA
-   - **Bundle Identifier** : app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471
+   - **Display Name** : AYOKA MARKET
+   - **Bundle Identifier** : com.ayoka.market
    - **Version** : 1.0.0
    - **Build** : 1
 
 Ou modifiez directement `ios/App/App/Info.plist` :
 ```xml
 <key>CFBundleDisplayName</key>
-<string>DJASSA</string>
+<string>AYOKA MARKET</string>
 <key>CFBundleName</key>
-<string>DJASSA</string>
+<string>AYOKA MARKET</string>
 ```
 
 ### Android
@@ -129,10 +129,10 @@ Modifiez `android/app/src/main/res/values/strings.xml` :
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DJASSA</string>
-    <string name="title_activity_main">DJASSA</string>
-    <string name="package_name">app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471</string>
-    <string name="custom_url_scheme">app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471</string>
+    <string name="app_name">AYOKA MARKET</string>
+    <string name="title_activity_main">AYOKA MARKET</string>
+    <string name="package_name">com.ayoka.market</string>
+    <string name="custom_url_scheme">com.ayoka.market</string>
 </resources>
 ```
 
@@ -156,9 +156,9 @@ Modifiez `android/app/src/main/res/values/colors.xml` :
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3B82F6</color>
-    <color name="colorPrimaryDark">#2563EB</color>
-    <color name="colorAccent">#3B82F6</color>
+    <color name="colorPrimary">#ea384c</color>
+    <color name="colorPrimaryDark">#d32f3d</color>
+    <color name="colorAccent">#ea384c</color>
     <color name="statusBarColor">#FFFFFF</color>
     <color name="toolbarColor">#FFFFFF</color>
     <color name="navigationBarColor">#FFFFFF</color>
@@ -241,7 +241,7 @@ Vérifiez que `ios/App/App/Info.plist` contient toutes les permissions nécessai
 ```gradle
 android {
     defaultConfig {
-        applicationId "app.lovable.fdde6a57c0ea45b0bd6d4e42d3d22471"
+        applicationId "com.ayoka.market"
         minSdkVersion 22
         targetSdkVersion 34
         versionCode 1
@@ -287,7 +287,7 @@ Format : PNG ou JPEG, 24-bit RGB, pas de transparence
 - [ ] Toutes les icônes générées et placées dans Assets.xcassets
 - [ ] Splash screen configuré
 - [ ] Info.plist avec toutes les permissions et descriptions
-- [ ] Display Name défini sur "DJASSA"
+- [ ] Display Name défini sur "AYOKA MARKET"
 - [ ] Bundle Identifier correct
 - [ ] Version et Build number définis
 - [ ] Captures d'écran préparées (minimum 3)

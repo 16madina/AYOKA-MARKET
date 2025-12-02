@@ -2,7 +2,7 @@
 
 ## 📸 Images générées
 
-Ce dossier contient les captures d'écran et visuels promotionnels pour BAZARAM :
+Ce dossier contient les captures d'écran et visuels promotionnels pour AYOKA MARKET :
 
 ### Captures d'écran disponibles
 

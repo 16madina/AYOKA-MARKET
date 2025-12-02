@@ -40,24 +40,24 @@ const Admin = () => {
       message: ""
     },
     welcome: {
-      subject: "Bienvenue sur BAZARAM !",
-      message: "Bonjour,\n\nNous sommes ravis de vous accueillir sur BAZARAM, votre marketplace pour l'économie circulaire.\n\nN'hésitez pas à explorer nos fonctionnalités et à publier vos premières annonces.\n\nSi vous avez des questions, notre équipe est là pour vous aider.\n\nCordialement,\nL'équipe BAZARAM"
+      subject: "Bienvenue sur AYOKA MARKET !",
+      message: "Bonjour,\n\nNous sommes ravis de vous accueillir sur AYOKA MARKET, votre marketplace pour l'économie circulaire.\n\nN'hésitez pas à explorer nos fonctionnalités et à publier vos premières annonces.\n\nSi vous avez des questions, notre équipe est là pour vous aider.\n\nCordialement,\nL'équipe AYOKA MARKET"
     },
     verification_reminder: {
-      subject: "Vérifiez votre compte BAZARAM",
-      message: "Bonjour,\n\nNous avons remarqué que votre compte n'est pas encore vérifié.\n\nLa vérification de votre compte vous permet de:\n- Publier des annonces\n- Contacter les vendeurs\n- Bénéficier de la confiance des autres utilisateurs\n\nMerci de vérifier votre adresse email dès que possible.\n\nCordialement,\nL'équipe BAZARAM"
+      subject: "Vérifiez votre compte AYOKA MARKET",
+      message: "Bonjour,\n\nNous avons remarqué que votre compte n'est pas encore vérifié.\n\nLa vérification de votre compte vous permet de:\n- Publier des annonces\n- Contacter les vendeurs\n- Bénéficier de la confiance des autres utilisateurs\n\nMerci de vérifier votre adresse email dès que possible.\n\nCordialement,\nL'équipe AYOKA MARKET"
     },
     listing_approved: {
       subject: "Votre annonce a été approuvée",
-      message: "Bonjour,\n\nBonne nouvelle ! Votre annonce a été approuvée par notre équipe de modération.\n\nElle est maintenant visible par tous les utilisateurs de BAZARAM.\n\nNous vous souhaitons une excellente vente !\n\nCordialement,\nL'équipe BAZARAM"
+      message: "Bonjour,\n\nBonne nouvelle ! Votre annonce a été approuvée par notre équipe de modération.\n\nElle est maintenant visible par tous les utilisateurs de AYOKA MARKET.\n\nNous vous souhaitons une excellente vente !\n\nCordialement,\nL'équipe AYOKA MARKET"
     },
     listing_rejected: {
       subject: "Votre annonce nécessite des modifications",
-      message: "Bonjour,\n\nVotre annonce a été examinée par notre équipe de modération.\n\nMalheureusement, elle ne respecte pas certaines de nos conditions d'utilisation.\n\nMerci de la modifier et de la republier.\n\nN'hésitez pas à nous contacter si vous avez des questions.\n\nCordialement,\nL'équipe BAZARAM"
+      message: "Bonjour,\n\nVotre annonce a été examinée par notre équipe de modération.\n\nMalheureusement, elle ne respecte pas certaines de nos conditions d'utilisation.\n\nMerci de la modifier et de la republier.\n\nN'hésitez pas à nous contacter si vous avez des questions.\n\nCordialement,\nL'équipe AYOKA MARKET"
     },
     promotion: {
       subject: "Profitez de nos nouveautés !",
-      message: "Bonjour,\n\nNous avons de grandes nouvelles à partager avec vous !\n\nDécouvrez les dernières fonctionnalités de BAZARAM et profitez d'une expérience encore meilleure.\n\nConnectez-vous dès maintenant pour en savoir plus.\n\nCordialement,\nL'équipe BAZARAM"
+      message: "Bonjour,\n\nNous avons de grandes nouvelles à partager avec vous !\n\nDécouvrez les dernières fonctionnalités de AYOKA MARKET et profitez d'une expérience encore meilleure.\n\nConnectez-vous dès maintenant pour en savoir plus.\n\nCordialement,\nL'équipe AYOKA MARKET"
     },
     inactive_user: {
       subject: "Vous nous manquez sur AYOKA MARKET",
@@ -65,7 +65,7 @@ const Admin = () => {
     },
     warning: {
       subject: "Avertissement concernant votre compte",
-      message: "Bonjour,\n\nNous avons détecté un comportement non conforme à nos conditions d'utilisation sur votre compte.\n\nMerci de prendre connaissance de nos règles et de les respecter.\n\nEn cas de récidive, votre compte pourrait être suspendu.\n\nCordialement,\nL'équipe BAZARAM"
+      message: "Bonjour,\n\nNous avons détecté un comportement non conforme à nos conditions d'utilisation sur votre compte.\n\nMerci de prendre connaissance de nos règles et de les respecter.\n\nEn cas de récidive, votre compte pourrait être suspendu.\n\nCordialement,\nL'équipe AYOKA MARKET"
     }
   };
   
@@ -376,12 +376,12 @@ const Admin = () => {
         .from('system_notifications')
         .insert({
           user_id: userId,
-          title: '📩 Message de l\'équipe BAZARAM',
+          title: '📩 Message de l\'équipe AYOKA MARKET',
           message: messageContent,
           notification_type: 'admin_message',
           is_read: false,
           metadata: {
-            from: 'Admin BAZARAM',
+            from: 'Admin AYOKA MARKET',
             sent_at: new Date().toISOString()
           }
         });
@@ -698,7 +698,7 @@ const Admin = () => {
                                 <DialogHeader>
                                   <DialogTitle>Envoyer un message</DialogTitle>
                                   <DialogDescription>
-                                    Message envoyé par Admin BAZARAM dans les notifications de l'utilisateur
+                                    Message envoyé par Admin AYOKA MARKET dans les notifications de l'utilisateur
                                   </DialogDescription>
                                 </DialogHeader>
                                 <Textarea

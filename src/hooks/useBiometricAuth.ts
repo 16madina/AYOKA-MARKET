@@ -42,7 +42,7 @@ export const useBiometricAuth = () => {
 
     try {
       await NativeBiometric.verifyIdentity({
-        reason: 'Authentifiez-vous pour accéder à BAZARAM',
+        reason: 'Authentifiez-vous pour accéder à AYOKA MARKET',
         title: 'Authentification',
         subtitle: 'Utilisez votre biométrie',
         description: 'Touchez le capteur ou regardez l\'écran',
