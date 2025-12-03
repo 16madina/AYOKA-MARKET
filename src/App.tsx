@@ -43,6 +43,8 @@ import TestCamera from "./pages/TestCamera";
 import AdminPerformance from "./pages/AdminPerformance";
 import EmailVerified from "./pages/EmailVerified";
 import MapView from "./pages/MapView";
+import AdminNotifications from "./pages/AdminNotifications";
+import { NotificationPermissionPrompt } from "./components/notifications/NotificationPermissionPrompt";
 
 const queryClient = new QueryClient();
 
@@ -116,10 +118,12 @@ const App = () => {
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/test-camera" element={<TestCamera />} />
           <Route path="/admin/performance" element={<AdminPerformance />} />
+          <Route path="/admin/notifications" element={<AdminNotifications />} />
           <Route path="/map" element={<MapView />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
             </Routes>
+            <NotificationPermissionPrompt />
           </div>
         </BrowserRouter>
       </TooltipProvider>
