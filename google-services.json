@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "410120109044",
-    "project_id": "bazaram-321cc",
-    "storage_bucket": "bazaram-321cc.firebasestorage.app"
+    "project_number": "198878757338",
+    "project_id": "ayoka-market",
+    "storage_bucket": "ayoka-market.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:410120109044:android:94855d1989c4110025d7a1",
+        "mobilesdk_app_id": "1:198878757338:android:92852e251472f7acd3c0e3",
         "android_client_info": {
           "package_name": "com.ayoka.market"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD74HwegtTuQIptKgc0Tzd6MEuyUiZnSwE"
+          "current_key": "AIzaSyCDYHY9hcv_45bkzs4d6qe7PklCb1vV-48"
         }
       ],
       "services": {
