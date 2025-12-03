@@ -1,6 +1,6 @@
 # Configuration Firebase Cloud Messaging pour Android
 
-Ce guide vous aide à configurer Firebase Cloud Messaging (FCM) pour recevoir des notifications push dans votre application DJASSA.
+Ce guide vous aide à configurer Firebase Cloud Messaging (FCM) pour recevoir des notifications push dans votre application AYOKA MARKET.
 
 ## Prérequis
 
@@ -86,7 +86,7 @@ npx cap open android
 ## Configuration Firebase Console
 
 1. Allez sur [Firebase Console](https://console.firebase.google.com/)
-2. Sélectionnez votre projet "djassa-market"
+2. Sélectionnez votre projet "bazaram-321cc" (AYOKA MARKET)
 3. Dans le menu latéral, cliquez sur **Cloud Messaging**
 4. Notez votre **Server Key** (clé serveur) - vous en aurez besoin pour envoyer des notifications depuis votre backend
 
