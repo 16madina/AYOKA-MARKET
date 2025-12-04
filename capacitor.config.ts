@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.ayoka.market',
-  appName: 'AYOKA MARKET',
+  appName: 'AYOKA',
   webDir: 'dist',
   backgroundColor: '#FFFFFF',
   server: {
