@@ -1,7 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  Copiez ce fichier vers : android/app/src/main/res/values/strings.xml
+  après avoir exécuté 'npx cap add android'
+-->
 <resources>
-    <string name="app_name">AYOKA </string>
-    <string name="title_activity_main">AYOKA MARKET</string>
+    <string name="app_name">AYOKA</string>
+    <string name="title_activity_main">AYOKA</string>
     <string name="package_name">com.ayoka.market</string>
     <string name="custom_url_scheme">com.ayoka.market</string>
 </resources>
