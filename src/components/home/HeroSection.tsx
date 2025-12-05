@@ -49,12 +49,10 @@ const HeroSection = () => {
       
       <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
         <div className="flex flex-col items-center animate-fade-in mb-4">
-          <h1 className="text-2xl md:text-4xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mb-0 mx-[6px] my-0 px-0 py-0 font-serif font-extrabold">
+          <h1 className="text-2xl md:text-4xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mb-1 font-serif font-extrabold">
             Bienvenue sur
           </h1>
-          <div className="flex flex-col items-center">
-            <img src={ayokaMarketLogo} alt="AYOKA Market" className="h-32 md:h-56 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]" />
-          </div>
+          <img src={ayokaMarketLogo} alt="AYOKA Market" className="h-32 md:h-56 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] -mt-2" />
         </div>
         <p className="text-lg md:text-xl text-white font-semibold mb-8 max-w-2xl animate-fade-in bg-warm-earth/50 backdrop-blur-sm px-6 py-3 rounded-lg drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" style={{
         animationDelay: "0.2s"
