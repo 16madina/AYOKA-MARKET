@@ -49,6 +49,11 @@ const config: CapacitorConfig = {
     },
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"]
+    },
+    Keyboard: {
+      resize: 'body',
+      style: 'light',
+      resizeOnFullScreen: true
     }
   },
   ios: {
