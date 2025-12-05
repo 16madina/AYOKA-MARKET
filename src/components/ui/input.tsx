@@ -12,6 +12,17 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
           className,
         )}
         ref={ref}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        data-form-type="other"
+        style={{
+          WebkitUserSelect: 'text',
+          userSelect: 'text',
+          WebkitAppearance: 'none',
+          ...props.style
+        }}
         {...props}
       />
     );

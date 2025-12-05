@@ -106,6 +106,10 @@ All colors MUST be HSL.
     user-select: text !important;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    font-size: 16px !important;
+    caret-color: auto !important;
   }
 
   input:focus,
@@ -113,6 +117,19 @@ All colors MUST be HSL.
   select:focus {
     -webkit-user-select: text !important;
     user-select: text !important;
+    outline: none !important;
+  }
+  
+  /* Force text visibility on Android */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="search"] {
+    color: inherit !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: currentcolor !important;
   }
 
   /* Animations */
