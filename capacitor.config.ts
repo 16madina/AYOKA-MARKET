@@ -69,7 +69,10 @@ const config: CapacitorConfig = {
     // Android specific configuration
     allowMixedContent: true,
     captureInput: true,
-    webContentsDebuggingEnabled: false
+    webContentsDebuggingEnabled: true,
+    useLegacyBridge: false,
+    overrideUserAgent: undefined,
+    backgroundColor: '#FFFFFF'
   }
 };
 
