@@ -46,7 +46,7 @@ export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
 
   return (
     <>
-      <div className="-mx-4 md:mx-0">
+      <div>
         {/* Swipeable carousel */}
         <div className="relative">
           <div className="overflow-hidden md:rounded-2xl shadow-lg" ref={emblaRef}>
