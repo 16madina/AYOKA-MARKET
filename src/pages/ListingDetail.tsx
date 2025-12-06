@@ -224,7 +224,13 @@ const ListingDetail = () => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            if (window.history.length > 1) {
+              navigate(-1);
+            } else {
+              navigate("/");
+            }
+          }}
           className="mb-4 mt-2 min-h-[44px] min-w-[44px]"
           aria-label="Retour"
         >

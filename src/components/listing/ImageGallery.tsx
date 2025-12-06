@@ -54,14 +54,14 @@ export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
               {images.map((image, index) => (
                 <div 
                   key={index} 
-                  className="flex-[0_0_100%] min-w-0"
+                  className="flex-[0_0_100%] min-w-0 overflow-hidden"
                   onClick={() => setIsOpen(true)}
                 >
-                  <div className="aspect-[4/3] relative cursor-pointer">
+                  <div className="aspect-[4/3] relative cursor-pointer group">
                     <img
                       src={image}
                       alt={`${title} - Image ${index + 1}`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                   </div>
                 </div>
