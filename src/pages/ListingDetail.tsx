@@ -234,13 +234,15 @@ const ListingDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Gallery - Full width on mobile */}
-            <div className="-mx-4 md:mx-0">
-              <ImageGallery 
-                images={listing.images || []} 
-                title={`Image de ${listing.title} - ${listing.categories?.name || 'produit'} à ${listing.location}`} 
-              />
-            </div>
+            {/* Gallery */}
+            <Card>
+              <CardContent className="p-4">
+                <ImageGallery 
+                  images={listing.images || []} 
+                  title={`Image de ${listing.title} - ${listing.categories?.name || 'produit'} à ${listing.location}`} 
+                />
+              </CardContent>
+            </Card>
 
             {/* Details */}
             <Card>

@@ -38,7 +38,7 @@ export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
 
   if (!images || images.length === 0) {
     return (
-      <div className="h-[65vh] md:h-[50vh] bg-muted flex items-center justify-center rounded-xl md:rounded-2xl">
+      <div className="aspect-square bg-muted flex items-center justify-center rounded-lg">
         <span className="text-muted-foreground">Pas d'image</span>
       </div>
     );
@@ -46,10 +46,10 @@ export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
 
   return (
     <>
-      <div>
+      <div className="space-y-4">
         {/* Swipeable carousel */}
         <div className="relative">
-          <div className="overflow-hidden md:rounded-2xl shadow-lg" ref={emblaRef}>
+          <div className="overflow-hidden rounded-lg" ref={emblaRef}>
             <div className="flex">
               {images.map((image, index) => (
                 <div 
@@ -57,7 +57,7 @@ export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
                   className="flex-[0_0_100%] min-w-0"
                   onClick={() => setIsOpen(true)}
                 >
-                  <div className="h-[65vh] md:h-[50vh] relative cursor-pointer">
+                  <div className="aspect-square relative cursor-pointer">
                     <img
                       src={image}
                       alt={`${title} - Image ${index + 1}`}
