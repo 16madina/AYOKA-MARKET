@@ -359,6 +359,17 @@ const Settings = () => {
               iconColor="bg-pink-500/10"
               iconTextColor="text-pink-600"
             />
+            <Separator />
+            <SettingItem 
+              icon={Bell} 
+              label="Réactiver le prompt de notifications" 
+              onClick={() => {
+                localStorage.removeItem('ayoka_notification_prompt_seen');
+                toast.success("Prompt de notifications réactivé. Rechargez l'application pour le voir.");
+              }}
+              iconColor="bg-blue-500/10"
+              iconTextColor="text-blue-600"
+            />
           </CardContent>
         </SettingSection>
 
