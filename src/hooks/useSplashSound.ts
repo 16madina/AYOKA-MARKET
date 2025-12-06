@@ -18,25 +18,31 @@ export const useSplashSound = () => {
       const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
       const audioContext = new AudioContextClass();
       
-      // Create an elegant "chime" sound
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
+      // Create a pleasant "welcome" melody with multiple tones
+      const playNote = (frequency: number, startTime: number, duration: number, volume: number = 0.15) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime + startTime);
+        oscillator.type = 'sine';
+        
+        // Smooth attack and release
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime + startTime);
+        gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + startTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + startTime + duration);
+        
+        oscillator.start(audioContext.currentTime + startTime);
+        oscillator.stop(audioContext.currentTime + startTime + duration);
+      };
       
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
+      // Pleasant ascending arpeggio (C-E-G major chord)
+      playNote(523.25, 0, 0.3, 0.12);      // C5
+      playNote(659.25, 0.12, 0.3, 0.12);   // E5
+      playNote(783.99, 0.24, 0.4, 0.15);   // G5
       
-      // Frequency that rises (startup effect)
-      oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.2);
-      oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.4);
-      
-      // Volume that gradually decreases
-      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-      
-      oscillator.type = 'sine';
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.5);
     } catch (error) {
       console.error('Error playing startup sound:', error);
     }
