@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Hand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import useEmblaCarousel from "embla-carousel-react";
@@ -73,9 +73,18 @@ export const ImageGallery = ({ images, title }: ImageGalleryProps) => {
           </div>
 
           {images.length > 1 && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1.5 rounded-full text-sm font-medium z-10">
-              {currentIndex + 1} / {images.length}
-            </div>
+            <>
+              {/* Swipe indicator */}
+              <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/50 text-white px-3 py-1.5 rounded-full text-xs z-10 animate-pulse">
+                <Hand className="h-3 w-3" />
+                <span>Glisser</span>
+              </div>
+              
+              {/* Counter */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1.5 rounded-full text-sm font-medium z-10">
+                {currentIndex + 1} / {images.length}
+              </div>
+            </>
           )}
         </div>
 

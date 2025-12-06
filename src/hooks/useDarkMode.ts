@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 
 export const useDarkMode = () => {
   const [darkMode, setDarkMode] = useState(() => {
-    // Initialize from localStorage or system preference
+    // Initialize from localStorage, default to light mode
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       return savedTheme === 'dark';
     }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // Default to light mode instead of system preference
+    return false;
   });
 
   useEffect(() => {
