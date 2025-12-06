@@ -225,7 +225,7 @@ const ListingDetail = () => {
           variant="ghost"
           size="icon"
           onClick={() => {
-            if (window.history.length > 1) {
+            if (window.history.length > 2) {
               navigate(-1);
             } else {
               navigate("/");
