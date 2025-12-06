@@ -13,16 +13,11 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
         )}
         ref={ref}
         autoCorrect="off"
-        spellCheck={false}
+        spellCheck="false"
+        autoCapitalize="off"
         data-form-type="other"
-        style={{
-          WebkitUserSelect: 'text',
-          userSelect: 'text',
-          WebkitAppearance: 'none',
-          WebkitTapHighlightColor: 'transparent',
-          touchAction: 'manipulation',
-          ...props.style
-        }}
+        data-lpignore="true"
+        data-1p-ignore="true"
         {...props}
       />
     );
