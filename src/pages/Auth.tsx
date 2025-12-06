@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,21 +26,21 @@ const Auth = () => {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const [showTermsConditions, setShowTermsConditions] = useState(false);
-  const [detectedLocation, setDetectedLocation] = useState<{ city: string | null; country: string | null }>({ city: null, country: null });
+  
+  // Use refs for text inputs to avoid re-renders on every keystroke
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const firstNameRef = useRef<HTMLInputElement>(null);
+  const lastNameRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    firstName: "",
-    lastName: "",
-    country: "",
-    city: "",
-    phone: "",
-    avatar_url: null as string | null,
-  });
+  // Keep state only for select fields and avatar (which need to trigger UI updates)
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
-  const selectedCountry = allCountries.find((c) => c.code === formData.country);
+  const selectedCountry = allCountries.find((c) => c.code === country);
   const dialCode = selectedCountry?.dialCode || "";
 
   // Fonction pour détecter la localisation manuellement
@@ -75,11 +75,8 @@ const Auth = () => {
               c.name.toLowerCase() === detectedCountry.toLowerCase()
             );
             if (matchingCountry) {
-              setFormData(prev => ({
-                ...prev,
-                country: matchingCountry.code,
-                city: detectedCity || ""
-              }));
+              setCountry(matchingCountry.code);
+              setCity(detectedCity || "");
               toast({
                 title: "Localisation détectée !",
                 description: `${detectedCity}, ${detectedCountry}`,
@@ -130,19 +127,14 @@ const Auth = () => {
             const detectedCity = data.address?.city || data.address?.town || data.address?.village || null;
             const detectedCountry = data.address?.country || null;
             
-            setDetectedLocation({ city: detectedCity, country: detectedCountry });
-            
             // Pré-remplir le pays si détecté
             if (detectedCountry) {
               const matchingCountry = allCountries.find(c => 
                 c.name.toLowerCase() === detectedCountry.toLowerCase()
               );
               if (matchingCountry) {
-                setFormData(prev => ({
-                  ...prev,
-                  country: matchingCountry.code,
-                  city: detectedCity || ""
-                }));
+                setCountry(matchingCountry.code);
+                setCity(detectedCity || "");
               }
             }
           } catch (error) {
@@ -202,12 +194,20 @@ const Auth = () => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Get values from refs
+    const email = emailRef.current?.value || "";
+    const password = passwordRef.current?.value || "";
+    const confirmPassword = confirmPasswordRef.current?.value || "";
+    const firstName = firstNameRef.current?.value || "";
+    const lastName = lastNameRef.current?.value || "";
+    const phone = phoneRef.current?.value || "";
+
     try {
       if (isLogin) {
         // Login
         const { error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
+          email,
+          password,
         });
 
         if (error) throw error;
@@ -219,7 +219,7 @@ const Auth = () => {
         navigate("/");
       } else {
         // Sign up validation
-        if (formData.password !== formData.confirmPassword) {
+        if (password !== confirmPassword) {
           toast({
             title: "Erreur",
             description: "Les mots de passe ne correspondent pas",
@@ -229,7 +229,7 @@ const Auth = () => {
           return;
         }
 
-        if (formData.password.length < 6) {
+        if (password.length < 6) {
           toast({
             title: "Erreur",
             description: "Le mot de passe doit contenir au moins 6 caractères",
@@ -249,22 +249,22 @@ const Auth = () => {
           return;
         }
 
-        const fullPhone = formData.phone ? `${dialCode}${formData.phone}` : "";
+        const fullPhone = phone ? `${dialCode}${phone}` : "";
 
         // Sign up - Envoyer TOUTES les données dans raw_user_meta_data
         const { error, data } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
+          email,
+          password,
           options: {
             emailRedirectTo: `${window.location.origin}/`,
             data: {
-              first_name: formData.firstName,
-              last_name: formData.lastName,
-              full_name: `${formData.firstName} ${formData.lastName}`,
+              first_name: firstName,
+              last_name: lastName,
+              full_name: `${firstName} ${lastName}`,
               phone: fullPhone,
-              avatar_url: formData.avatar_url,
+              avatar_url: avatarUrl,
               country: selectedCountry?.name,
-              city: formData.city,
+              city: city,
             },
           },
         });
@@ -280,9 +280,9 @@ const Auth = () => {
           const confirmationUrl = `${window.location.origin}/auth/confirm`;
           const emailResult = await supabase.functions.invoke('send-verification-email', {
             body: {
-              email: formData.email,
+              email,
               confirmationUrl,
-              userName: formData.firstName
+              userName: firstName
             }
           });
           if (emailResult.error) {
@@ -312,6 +312,19 @@ const Auth = () => {
     }
   };
 
+  // Clear refs when switching between login/signup
+  const handleModeSwitch = () => {
+    setIsLogin(!isLogin);
+    setAcceptTerms(false);
+    // Clear input values
+    if (emailRef.current) emailRef.current.value = "";
+    if (passwordRef.current) passwordRef.current.value = "";
+    if (confirmPasswordRef.current) confirmPasswordRef.current.value = "";
+    if (firstNameRef.current) firstNameRef.current.value = "";
+    if (lastNameRef.current) lastNameRef.current.value = "";
+    if (phoneRef.current) phoneRef.current.value = "";
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-muted/30">
       <div className="w-full max-w-2xl">
@@ -320,6 +333,7 @@ const Auth = () => {
           size="icon"
           onClick={() => navigate("/")}
           className="mb-4"
+          aria-label="Retour"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -372,8 +386,8 @@ const Auth = () => {
               {!isLogin && (
                 <>
                   <ProfileImageUpload
-                    value={formData.avatar_url}
-                    onChange={(url) => setFormData(prev => ({ ...prev, avatar_url: url }))}
+                    value={avatarUrl}
+                    onChange={setAvatarUrl}
                     disabled={isLoading}
                   />
 
@@ -382,10 +396,8 @@ const Auth = () => {
                       <Label htmlFor="firstName">Prénom *</Label>
                       <Input
                         id="firstName"
-                        value={formData.firstName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, firstName: e.target.value })
-                        }
+                        ref={firstNameRef}
+                        defaultValue=""
                         placeholder="Jean"
                         required
                         disabled={isLoading}
@@ -396,10 +408,8 @@ const Auth = () => {
                       <Label htmlFor="lastName">Nom *</Label>
                       <Input
                         id="lastName"
-                        value={formData.lastName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, lastName: e.target.value })
-                        }
+                        ref={lastNameRef}
+                        defaultValue=""
                         placeholder="Dupont"
                         required
                         disabled={isLoading}
@@ -423,10 +433,11 @@ const Auth = () => {
                       </Button>
                     </div>
                     <Select
-                      value={formData.country}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, country: value, city: "" })
-                      }
+                      value={country}
+                      onValueChange={(value) => {
+                        setCountry(value);
+                        setCity("");
+                      }}
                       required
                       disabled={isLoading}
                     >
@@ -434,11 +445,11 @@ const Auth = () => {
                         <SelectValue placeholder="Sélectionner un pays" />
                       </SelectTrigger>
                       <SelectContent>
-                        {allCountries.map((country) => (
-                          <SelectItem key={country.code} value={country.code}>
+                        {allCountries.map((c) => (
+                          <SelectItem key={c.code} value={c.code}>
                             <span className="flex items-center gap-2">
-                              <span className="text-xl">{country.flag}</span>
-                              {country.name}
+                              <span className="text-xl">{c.flag}</span>
+                              {c.name}
                             </span>
                           </SelectItem>
                         ))}
@@ -446,14 +457,12 @@ const Auth = () => {
                     </Select>
                   </div>
 
-                  {formData.country && (
+                  {country && (
                     <div className="space-y-2">
                       <Label htmlFor="city">Ville *</Label>
                       <Select
-                        value={formData.city}
-                        onValueChange={(value) =>
-                          setFormData({ ...formData, city: value })
-                        }
+                        value={city}
+                        onValueChange={setCity}
                         required
                         disabled={isLoading}
                       >
@@ -461,9 +470,9 @@ const Auth = () => {
                           <SelectValue placeholder="Sélectionner une ville" />
                         </SelectTrigger>
                         <SelectContent>
-                          {selectedCountry?.cities.map((city) => (
-                            <SelectItem key={city} value={city}>
-                              {city}
+                          {selectedCountry?.cities.map((c) => (
+                            <SelectItem key={c} value={c}>
+                              {c}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -482,13 +491,16 @@ const Auth = () => {
                       <Input
                         id="phone"
                         type="tel"
-                        value={formData.phone}
-                        onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value.replace(/\D/g, "") })
-                        }
+                        ref={phoneRef}
+                        defaultValue=""
                         placeholder="771234567"
                         required
-                        disabled={isLoading || !formData.country}
+                        disabled={isLoading || !country}
+                        onInput={(e) => {
+                          // Only allow digits
+                          const target = e.target as HTMLInputElement;
+                          target.value = target.value.replace(/\D/g, "");
+                        }}
                       />
                     </div>
                   </div>
@@ -500,10 +512,8 @@ const Auth = () => {
                 <Input
                   id="email"
                   type="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  ref={emailRef}
+                  defaultValue=""
                   placeholder="exemple@email.com"
                   required
                   disabled={isLoading}
@@ -516,10 +526,8 @@ const Auth = () => {
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
+                    ref={passwordRef}
+                    defaultValue=""
                     placeholder="••••••••"
                     required
                     disabled={isLoading}
@@ -532,6 +540,7 @@ const Auth = () => {
                     className="absolute right-0 top-0 h-full"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={isLoading}
+                    aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -549,10 +558,8 @@ const Auth = () => {
                     <Input
                       id="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
-                      value={formData.confirmPassword}
-                      onChange={(e) =>
-                        setFormData({ ...formData, confirmPassword: e.target.value })
-                      }
+                      ref={confirmPasswordRef}
+                      defaultValue=""
                       placeholder="••••••••"
                       required
                       disabled={isLoading}
@@ -565,6 +572,7 @@ const Auth = () => {
                       className="absolute right-0 top-0 h-full"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       disabled={isLoading}
+                      aria-label={showConfirmPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -634,10 +642,7 @@ const Auth = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => {
-                    setIsLogin(!isLogin);
-                    setAcceptTerms(false);
-                  }}
+                  onClick={handleModeSwitch}
                   disabled={isLoading}
                   className="w-full"
                 >
