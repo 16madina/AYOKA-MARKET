@@ -89,13 +89,38 @@ const CategoryDetail = () => {
     enabled: !!session?.user,
   });
 
+  // Check if this is the "Gratuit" category (special handling for free items)
+  const isGratuitCategory = slug === "gratuit";
+
   // Get listings for selected subcategory or parent
   const { data: listings, isLoading: listingsLoading } = useQuery({
-    queryKey: ["category-listings", activeTab === "all" ? parentCategory?.id : activeTab],
+    queryKey: ["category-listings", activeTab === "all" ? parentCategory?.id : activeTab, isGratuitCategory],
     queryFn: async () => {
       const categoryId = activeTab === "all" ? parentCategory?.id : activeTab;
       if (!categoryId) return [];
       
+      // Special case: "Gratuit" category shows ALL listings with price = 0
+      if (isGratuitCategory && activeTab === "all") {
+        const { data, error } = await supabase
+          .from("listings")
+          .select(`
+            *,
+            profiles (
+              id,
+              full_name,
+              avatar_url,
+              city
+            )
+          `)
+          .eq("price", 0)
+          .eq("status", "active")
+          .order("created_at", { ascending: false });
+        
+        if (error) throw error;
+        return data;
+      }
+      
+      // Normal case: filter by category
       const { data, error } = await supabase
         .from("listings")
         .select(`
