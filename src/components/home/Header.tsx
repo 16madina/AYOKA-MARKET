@@ -72,28 +72,88 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-safe">
-      <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-3">
+      <div className="container flex flex-col sm:flex-row sm:h-16 items-center justify-between px-4 py-2 sm:py-0 gap-1 sm:gap-0">
+        {/* Top row: Logo + Actions */}
+        <div className="flex items-center justify-between w-full sm:w-auto">
+          <img 
+            src={ayokaLogo} 
+            alt="AYOKA MARKET" 
+            className="h-10 sm:h-14 w-auto cursor-pointer transition-all duration-300 hover:scale-105 object-contain dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+            onClick={() => navigate("/")}
+          />
+          
+          {/* Actions on mobile - shown inline with logo */}
+          <nav className="flex sm:hidden items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleDarkMode}
+              className="gap-2 min-h-[44px] min-w-[44px] p-2"
+              aria-label="Changer de thème"
+            >
+              {darkMode ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+            </Button>
+            {isAuthenticated && <SystemNotifications />}
+            {isAuthenticated ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/profile")}
+                className="gap-2 p-2"
+              >
+                <User className="h-4 w-4" />
+              </Button>
+            ) : (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => navigate("/auth", { state: { mode: 'login' } })}
+                className="gap-2 text-xs px-3"
+              >
+                <LogIn className="h-4 w-4" />
+                Se connecter
+              </Button>
+            )}
+          </nav>
+        </div>
+        
+        {/* Location below logo on mobile */}
+        {(userLocation || isLoadingLocation) && (
+          <div className="flex items-center gap-1 text-xs text-muted-foreground sm:hidden">
+            <MapPin className="h-3 w-3" />
+            {isLoadingLocation ? (
+              <Loader2 className="h-3 w-3 animate-spin" />
+            ) : (
+              <span className="truncate max-w-[200px]">{userLocation}</span>
+            )}
+          </div>
+        )}
+
+        {/* Desktop layout */}
+        <div className="hidden sm:flex items-center gap-3">
           <img 
             src={ayokaLogo} 
             alt="AYOKA MARKET" 
             className="h-14 w-auto cursor-pointer transition-all duration-300 hover:scale-105 object-contain dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
             onClick={() => navigate("/")}
           />
-          {/* User location display - visible on all screens */}
           {(userLocation || isLoadingLocation) && (
-            <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
-              <MapPin className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <MapPin className="h-3.5 w-3.5" />
               {isLoadingLocation ? (
-                <Loader2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 animate-spin" />
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
               ) : (
-                <span className="truncate max-w-[100px] sm:max-w-[150px]">{userLocation}</span>
+                <span className="truncate max-w-[150px]">{userLocation}</span>
               )}
             </div>
           )}
         </div>
 
-        <nav className="flex items-center gap-3">
+        <nav className="hidden sm:flex items-center gap-3">
           <Button
             variant="ghost"
             size="sm"
@@ -116,7 +176,7 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
               className="gap-2"
             >
               <User className="h-4 w-4" />
-              <span className="hidden sm:inline">Mon profil</span>
+              <span>Mon profil</span>
             </Button>
           ) : (
           <Button
