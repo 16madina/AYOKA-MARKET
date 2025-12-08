@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Image, Loader2 } from 'lucide-react';
+import { Image, Camera, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useCamera } from '@/hooks/useCamera';
 import { errorTracker } from '@/utils/errorTracking';
@@ -14,7 +14,7 @@ interface MediaUploadProps {
 export const MediaUpload = ({ onUpload, userId }: MediaUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
-  const { pickFromGallery, isLoading: cameraLoading } = useCamera();
+  const { pickFromGallery, takePhoto, isLoading: cameraLoading, isNative } = useCamera();
 
   const uploadImage = async (file: File) => {
     try {
@@ -61,7 +61,7 @@ export const MediaUpload = ({ onUpload, userId }: MediaUploadProps) => {
     }
   };
 
-  const handleCameraUpload = async () => {
+  const handleGalleryUpload = async () => {
     try {
       const file = await pickFromGallery();
       if (file) {
@@ -77,14 +77,32 @@ export const MediaUpload = ({ onUpload, userId }: MediaUploadProps) => {
     }
   };
 
+  const handleCameraCapture = async () => {
+    try {
+      const file = await takePhoto();
+      if (file) {
+        await uploadImage(file);
+      }
+    } catch (error: any) {
+      errorTracker.logError('camera', 'Failed to take photo', error);
+      toast({
+        title: 'Erreur',
+        description: 'Impossible d\'accéder à l\'appareil photo',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     await uploadImage(file);
   };
 
+  const isDisabled = uploading || cameraLoading;
+
   return (
-    <div>
+    <div className="flex items-center gap-1">
       <input
         type="file"
         accept="image/*"
@@ -93,18 +111,31 @@ export const MediaUpload = ({ onUpload, userId }: MediaUploadProps) => {
         onChange={handleFileUpload}
         disabled={uploading}
       />
+      {/* Camera button - take photo directly */}
       <Button
         variant="ghost"
         size="icon"
-        onClick={handleCameraUpload}
-        disabled={uploading || cameraLoading}
+        onClick={handleCameraCapture}
+        disabled={isDisabled}
         type="button"
+        aria-label="Prendre une photo"
       >
         {uploading || cameraLoading ? (
           <Loader2 className="h-5 w-5 animate-spin" />
         ) : (
-          <Image className="h-5 w-5" />
+          <Camera className="h-5 w-5" />
         )}
+      </Button>
+      {/* Gallery button - select from gallery */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleGalleryUpload}
+        disabled={isDisabled}
+        type="button"
+        aria-label="Choisir une image"
+      >
+        <Image className="h-5 w-5" />
       </Button>
     </div>
   );
