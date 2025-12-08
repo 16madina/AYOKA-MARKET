@@ -13,7 +13,7 @@ const Privacy = () => {
   const sections = [
     {
       title: "1. Introduction",
-      content: "BAZARAM s'engage à protéger votre vie privée. Cette politique explique comment nous collectons, utilisons et protégeons vos données personnelles conformément au RGPD (Règlement Général sur la Protection des Données)."
+      content: "AYOKA MARKET s'engage à protéger votre vie privée. Cette politique explique comment nous collectons, utilisons et protégeons vos données personnelles conformément au RGPD (Règlement Général sur la Protection des Données)."
     },
     {
       title: "2. Données collectées et géolocalisation",
