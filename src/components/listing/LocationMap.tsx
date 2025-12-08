@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, Navigation, Clock, Car, Loader2 } from 'lucide-react';
+import { MapPin, Clock, Car, Loader2, LocateFixed } from 'lucide-react';
 import { geocodeLocation } from '@/utils/distanceCalculation';
+import { Button } from '@/components/ui/button';
 
 interface LocationMapProps {
   location: string;
@@ -23,10 +24,12 @@ const LocationMap = ({ location, latitude, longitude }: LocationMapProps) => {
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
   const [travelInfo, setTravelInfo] = useState<TravelInfo | null>(null);
   const [isLoadingTravel, setIsLoadingTravel] = useState(false);
+  const [locationError, setLocationError] = useState(false);
   const mapboxToken = 'pk.eyJ1IjoibWFkaW5hZGlhbGxvIiwiYSI6ImNtaTk0eGZ0dDBqb2cya3B6MnFhMHJmODAifQ.zBKszfc8fyp-K-o6lJpymg';
 
-  // Get user's location
-  useEffect(() => {
+  // Request user's location
+  const requestLocation = () => {
+    setLocationError(false);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -34,9 +37,17 @@ const LocationMap = ({ location, latitude, longitude }: LocationMapProps) => {
         },
         (error) => {
           console.log('Geolocation not available:', error);
+          setLocationError(true);
         }
       );
+    } else {
+      setLocationError(true);
     }
+  };
+
+  // Get user's location on mount
+  useEffect(() => {
+    requestLocation();
   }, []);
 
   // Get listing coordinates - prioritize stored GPS, fallback to geocoding
@@ -145,6 +156,7 @@ const LocationMap = ({ location, latitude, longitude }: LocationMapProps) => {
             Localisation
           </div>
         </CardTitle>
+        
         {/* Travel info display */}
         {isLoadingTravel && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
@@ -152,22 +164,37 @@ const LocationMap = ({ location, latitude, longitude }: LocationMapProps) => {
             <span>Calcul du trajet...</span>
           </div>
         )}
+        
         {travelInfo && !isLoadingTravel && (
-          <div className="flex flex-wrap items-center gap-4 text-sm mt-2">
+          <div className="flex flex-wrap items-center gap-4 text-sm mt-2 p-2 bg-primary/10 rounded-lg">
             <div className="flex items-center gap-1.5 text-primary font-medium">
               <Car className="h-4 w-4" />
               <span>{formatDistance(travelInfo.distance)}</span>
             </div>
             <div className="flex items-center gap-1.5 text-muted-foreground">
               <Clock className="h-4 w-4" />
-              <span>~{formatDuration(travelInfo.duration)}</span>
+              <span>~{formatDuration(travelInfo.duration)} en voiture</span>
             </div>
           </div>
         )}
+        
         {!userLocation && !isLoadingTravel && (
-          <p className="text-xs text-muted-foreground mt-2">
-            Activez la géolocalisation pour voir la distance
-          </p>
+          <div className="mt-2 p-3 bg-muted/50 rounded-lg">
+            <p className="text-xs text-muted-foreground mb-2">
+              {locationError 
+                ? "Impossible d'accéder à votre position" 
+                : "Activez la localisation pour voir la distance"}
+            </p>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={requestLocation}
+              className="w-full gap-2"
+            >
+              <LocateFixed className="h-4 w-4" />
+              Activer ma position
+            </Button>
+          </div>
         )}
       </CardHeader>
       <CardContent className="p-4 pt-2">
