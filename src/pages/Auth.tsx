@@ -12,8 +12,9 @@ import { ProfileImageUpload } from "@/components/auth/ProfileImageUpload";
 import { PrivacyPolicy } from "@/components/auth/PrivacyPolicy";
 import { TermsConditions } from "@/components/auth/TermsConditions";
 import { allCountries } from "@/data/westAfricaData";
-import { Eye, EyeOff, ArrowLeft, MapPin, Chrome } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft, MapPin, Chrome, Apple } from "lucide-react";
 import ayokaLogo from "@/assets/ayoka-logo.png";
+import { Capacitor } from '@capacitor/core';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -146,6 +147,59 @@ const Auth = () => {
         description: error.message || "Erreur lors de la connexion",
         variant: "destructive",
       });
+      setIsLoading(false);
+    }
+  };
+
+  const handleAppleSignIn = async () => {
+    setIsLoading(true);
+    try {
+      if (Capacitor.isNativePlatform()) {
+        // Native iOS Sign in with Apple
+        const { SignInWithApple } = await import('@capacitor-community/apple-sign-in');
+        
+        const result = await SignInWithApple.authorize({
+          clientId: 'com.ayoka.market',
+          redirectURI: 'https://lczzyelucnfvkicwdbbe.supabase.co/auth/v1/callback',
+          scopes: 'email name',
+          state: '12345',
+          nonce: 'nonce',
+        });
+
+        if (result.response && result.response.identityToken) {
+          // Sign in to Supabase with the Apple ID token
+          const { error } = await supabase.auth.signInWithIdToken({
+            provider: 'apple',
+            token: result.response.identityToken,
+          });
+
+          if (error) throw error;
+
+          toast({
+            title: "Connexion réussie",
+            description: "Bienvenue sur AYOKA MARKET !",
+          });
+          navigate("/");
+        }
+      } else {
+        // Web fallback - use OAuth flow
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'apple',
+          options: {
+            redirectTo: `${window.location.origin}/`,
+          },
+        });
+
+        if (error) throw error;
+      }
+    } catch (error: any) {
+      console.error("Apple Sign In error:", error);
+      toast({
+        title: "Erreur",
+        description: error.message || "Erreur lors de la connexion avec Apple",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -317,8 +371,8 @@ const Auth = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {/* OAuth Button */}
-            <div className="mb-6">
+            {/* OAuth Buttons */}
+            <div className="space-y-3 mb-6">
               <Button
                 type="button"
                 variant="outline"
@@ -328,6 +382,17 @@ const Auth = () => {
               >
                 <Chrome className="h-5 w-5" />
                 Continuer avec Google
+              </Button>
+              
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full gap-2 bg-black text-white hover:bg-black/90 hover:text-white border-black"
+                onClick={handleAppleSignIn}
+                disabled={isLoading}
+              >
+                <Apple className="h-5 w-5" />
+                Continuer avec Apple
               </Button>
             </div>
 
