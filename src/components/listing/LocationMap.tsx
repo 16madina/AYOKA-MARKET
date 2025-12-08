@@ -164,6 +164,11 @@ const LocationMap = ({ location, latitude, longitude }: LocationMapProps) => {
             </div>
           </div>
         )}
+        {!userLocation && !isLoadingTravel && (
+          <p className="text-xs text-muted-foreground mt-2">
+            Activez la géolocalisation pour voir la distance
+          </p>
+        )}
       </CardHeader>
       <CardContent className="p-4 pt-2">
         <div ref={mapContainer} className="h-64 w-full rounded-lg" />
