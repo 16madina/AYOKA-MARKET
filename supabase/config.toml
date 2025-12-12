@@ -35,3 +35,6 @@ verify_jwt = false
 
 [functions.notify-price-offer]
 verify_jwt = false
+
+[functions.notify-new-listing]
+verify_jwt = false
