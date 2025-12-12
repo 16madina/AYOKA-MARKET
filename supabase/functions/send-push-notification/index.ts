@@ -101,20 +101,52 @@ serve(async (req) => {
           title,
           body,
         },
-        data,
+        data: {
+          ...data,
+          // Add click action for proper handling
+          click_action: 'OPEN_APP',
+        },
         android: {
           priority: 'high',
           notification: {
             sound: 'default',
-            click_action: 'FLUTTER_NOTIFICATION_CLICK',
+            default_sound: true,
+            default_vibrate_timings: true,
+            notification_priority: 'PRIORITY_HIGH',
+            visibility: 'PUBLIC',
+            channel_id: 'ayoka_notifications',
           },
         },
         apns: {
+          headers: {
+            'apns-priority': '10',
+            'apns-push-type': 'alert',
+          },
           payload: {
             aps: {
               sound: 'default',
               badge: 1,
+              'mutable-content': 1,
+              'content-available': 1,
+              alert: {
+                title,
+                body,
+              },
             },
+          },
+        },
+        webpush: {
+          notification: {
+            title,
+            body,
+            icon: '/icon-192.png',
+            badge: '/icon-192.png',
+            vibrate: [200, 100, 200],
+            requireInteraction: true,
+            silent: false,
+          },
+          fcm_options: {
+            link: '/',
           },
         },
       },
