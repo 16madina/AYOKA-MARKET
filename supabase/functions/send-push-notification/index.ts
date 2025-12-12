@@ -60,7 +60,33 @@ serve(async (req) => {
     }
 
     // Parse Firebase service account from environment
-    const firebaseServiceAccount = JSON.parse(Deno.env.get('FIREBASE_SERVICE_ACCOUNT')!);
+    const firebaseServiceAccountRaw = Deno.env.get('FIREBASE_SERVICE_ACCOUNT');
+    if (!firebaseServiceAccountRaw) {
+      throw new Error('FIREBASE_SERVICE_ACCOUNT secret is not configured');
+    }
+    
+    console.log('Firebase service account raw length:', firebaseServiceAccountRaw.length);
+    
+    let firebaseServiceAccount;
+    try {
+      firebaseServiceAccount = JSON.parse(firebaseServiceAccountRaw);
+    } catch (parseError) {
+      console.error('Failed to parse FIREBASE_SERVICE_ACCOUNT as JSON:', parseError);
+      throw new Error('FIREBASE_SERVICE_ACCOUNT is not valid JSON');
+    }
+    
+    // Validate required fields in service account
+    if (!firebaseServiceAccount.project_id || !firebaseServiceAccount.private_key || !firebaseServiceAccount.client_email) {
+      console.error('Missing required fields in service account:', {
+        hasProjectId: !!firebaseServiceAccount.project_id,
+        hasPrivateKey: !!firebaseServiceAccount.private_key,
+        hasClientEmail: !!firebaseServiceAccount.client_email
+      });
+      throw new Error('FIREBASE_SERVICE_ACCOUNT is missing required fields');
+    }
+    
+    console.log('Service account project_id:', firebaseServiceAccount.project_id);
+    console.log('Service account client_email:', firebaseServiceAccount.client_email);
 
     // Get access token for Firebase Admin
     const accessToken = await getFirebaseAccessToken(firebaseServiceAccount);
@@ -94,7 +120,8 @@ serve(async (req) => {
       },
     };
 
-    console.log('Sending FCM request...');
+    console.log('Sending FCM request to:', fcmUrl);
+    console.log('Using push token:', profile.push_token?.substring(0, 30) + '...');
     const fcmResponse = await fetch(fcmUrl, {
       method: 'POST',
       headers: {
@@ -187,16 +214,23 @@ async function getFirebaseAccessToken(serviceAccount: any): Promise<string> {
   
   if (!tokenResponse.ok) {
     console.error('Token exchange error:', tokenData);
-    throw new Error('Failed to get access token');
+    throw new Error(`Failed to get access token: ${JSON.stringify(tokenData)}`);
   }
 
+  console.log('Successfully obtained access token, length:', tokenData.access_token?.length);
   return tokenData.access_token;
 }
 
 // Helper function to sign with RSA private key
 async function signWithPrivateKey(data: string, privateKeyPem: string): Promise<string> {
+  // Normalize the private key - replace literal \n with actual newlines
+  let normalizedKey = privateKeyPem;
+  if (privateKeyPem.includes('\\n')) {
+    normalizedKey = privateKeyPem.replace(/\\n/g, '\n');
+  }
+  
   // Remove PEM headers and newlines
-  const pemContent = privateKeyPem
+  const pemContent = normalizedKey
     .replace('-----BEGIN PRIVATE KEY-----', '')
     .replace('-----END PRIVATE KEY-----', '')
     .replace(/\s/g, '');
