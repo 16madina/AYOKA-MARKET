@@ -3,7 +3,11 @@
 <!--
   Fichier de référence pour iOS Info.plist
   Après avoir exécuté 'npx cap add ios', modifiez ios/App/App/Info.plist
-  et ajoutez la clé CFBundleDisplayName si elle n'existe pas
+  et ajoutez ces clés si elles n'existent pas
+  
+  IMPORTANT: Dans Xcode, ouvrez Info.plist et ajoutez ces clés manuellement:
+  - Clic droit > Add Row
+  - Tapez le nom de la clé (ex: "Privacy - Camera Usage Description")
 -->
 <plist version="1.0">
 <dict>
@@ -27,17 +31,32 @@
     <key>CFBundleVersion</key>
     <string>1</string>
     
-    <!-- Permissions requises -->
+    <!-- ============================================ -->
+    <!-- PERMISSIONS PRIVACY REQUISES - À AJOUTER DANS XCODE -->
+    <!-- ============================================ -->
+    
+    <!-- 1. CAMERA - Pour prendre des photos d'articles -->
     <key>NSCameraUsageDescription</key>
-    <string>Nous avons besoin d'accéder à votre appareil photo pour prendre des photos de vos articles à vendre</string>
+    <string>AYOKA utilise votre appareil photo pour prendre des photos de vos articles à vendre</string>
     
+    <!-- 2. PHOTO LIBRARY - Pour sélectionner des photos existantes -->
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Nous avons besoin d'accéder à votre galerie pour sélectionner des photos de vos articles</string>
+    <string>AYOKA accède à votre galerie pour sélectionner des photos de vos articles</string>
     
+    <!-- 3. PHOTO LIBRARY ADD - Pour sauvegarder des photos -->
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>AYOKA peut sauvegarder des photos dans votre galerie</string>
+    
+    <!-- 4. LOCATION WHEN IN USE - Pour la géolocalisation -->
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Nous utilisons votre position pour estimer la distance avec les annonceurs et améliorer vos résultats de recherche</string>
+    <string>AYOKA utilise votre position pour afficher les annonces près de chez vous et calculer les distances</string>
     
+    <!-- 5. FACE ID - Pour l'authentification biométrique -->
     <key>NSFaceIDUsageDescription</key>
-    <string>Utilisez Face ID pour vous authentifier rapidement et en toute sécurité</string>
+    <string>AYOKA utilise Face ID pour vous authentifier rapidement et en toute sécurité</string>
+    
+    <!-- 6. MICROPHONE - Si utilisation audio/vidéo future -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>AYOKA peut utiliser votre microphone pour enregistrer des vidéos de vos articles</string>
 </dict>
 </plist>
