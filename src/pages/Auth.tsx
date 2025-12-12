@@ -472,7 +472,7 @@ const Auth = () => {
                     type={showPassword ? "text" : "password"}
                     ref={passwordRef}
                     defaultValue=""
-                    placeholder="••••••••"
+                    placeholder="Votre mot de passe"
                     required
                     disabled={isLoading}
                     minLength={6}
@@ -506,7 +506,7 @@ const Auth = () => {
                       type={showConfirmPassword ? "text" : "password"}
                       ref={confirmPasswordRef}
                       defaultValue=""
-                      placeholder="••••••••"
+                      placeholder="Confirmez le mot de passe"
                       required
                       disabled={isLoading}
                       minLength={6}
