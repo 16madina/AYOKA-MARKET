@@ -43,8 +43,18 @@ export const usePushNotifications = () => {
 
     const initializePushNotifications = async () => {
       try {
+        // Attendre qu'un utilisateur soit connecté avant d'initialiser
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          console.log('No user logged in, waiting for auth before requesting push permissions');
+          return;
+        }
+
+        console.log('User logged in, initializing push notifications for:', user.email);
+
         // Vérifier le statut actuel des permissions
         const permStatus = await FirebaseMessaging.checkPermissions();
+        console.log('Current permission status:', permStatus.receive);
         
         if (permStatus.receive === 'denied') {
           setPermissionStatus('denied');
@@ -52,8 +62,10 @@ export const usePushNotifications = () => {
         }
 
         if (permStatus.receive === 'prompt') {
+          console.log('Requesting notification permissions...');
           // Demander la permission pour les notifications
           const permission = await FirebaseMessaging.requestPermissions();
+          console.log('Permission result:', permission.receive);
           
           if (permission.receive !== 'granted') {
             setPermissionStatus('denied');
@@ -123,6 +135,7 @@ export const usePushNotifications = () => {
         });
 
         // Obtenir le token FCM (ceci déclenche automatiquement la conversion APNs -> FCM sur iOS)
+        console.log('Getting FCM token...');
         const tokenResult = await FirebaseMessaging.getToken();
         console.log(`FCM Token obtained (${platform}):`, tokenResult.token);
         setPushToken(tokenResult.token);
@@ -134,10 +147,20 @@ export const usePushNotifications = () => {
       }
     };
 
+    // Écouter les changements d'auth pour initialiser les notifications après connexion
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        console.log('User signed in, initializing push notifications');
+        initializePushNotifications();
+      }
+    });
+
+    // Aussi essayer d'initialiser immédiatement si déjà connecté
     initializePushNotifications();
 
     // Cleanup
     return () => {
+      subscription.unsubscribe();
       FirebaseMessaging.removeAllListeners();
     };
   }, [isNative, platform, saveTokenToDatabase]);
