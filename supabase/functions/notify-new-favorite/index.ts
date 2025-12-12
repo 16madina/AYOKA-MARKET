@@ -172,10 +172,16 @@ async function getFirebaseAccessToken(serviceAccount: any): Promise<string> {
 }
 
 async function signWithPrivateKey(data: string, privateKeyPem: string): Promise<string> {
-  const pemContents = privateKeyPem
+  // Normalize the private key - replace literal \n with actual newlines
+  let normalizedKey = privateKeyPem;
+  if (privateKeyPem.includes('\\n')) {
+    normalizedKey = privateKeyPem.replace(/\\n/g, '\n');
+  }
+  
+  const pemContents = normalizedKey
     .replace('-----BEGIN PRIVATE KEY-----', '')
     .replace('-----END PRIVATE KEY-----', '')
-    .replace(/\n/g, '');
+    .replace(/\s/g, '');
 
   const binaryKey = Uint8Array.from(atob(pemContents), (c) => c.charCodeAt(0));
   const cryptoKey = await crypto.subtle.importKey(

@@ -234,7 +234,13 @@ async function getFirebaseAccessToken(serviceAccount: any): Promise<string> {
 }
 
 async function signWithPrivateKey(data: string, privateKeyPem: string): Promise<string> {
-  const pemContent = privateKeyPem
+  // Normalize the private key - replace literal \n with actual newlines
+  let normalizedKey = privateKeyPem;
+  if (privateKeyPem.includes('\\n')) {
+    normalizedKey = privateKeyPem.replace(/\\n/g, '\n');
+  }
+  
+  const pemContent = normalizedKey
     .replace('-----BEGIN PRIVATE KEY-----', '')
     .replace('-----END PRIVATE KEY-----', '')
     .replace(/\s/g, '');
