@@ -66,12 +66,17 @@ export const LocationAutocomplete = ({
         
         // Formater les suggestions pour n'afficher que ville, pays
         const formatted = data.map((item: any) => ({
-          display_name: `${item.address?.city || item.address?.town || item.address?.village || item.display_name.split(',')[0]}, ${item.address?.country || ''}`,
+          display_name: `${item.address?.city || item.address?.town || item.address?.village || item.display_name.split(',')[0]}, ${item.address?.country || ''}`.trim(),
           lat: item.lat,
           lon: item.lon,
         }));
         
-        setSuggestions(formatted);
+        // Dédupliquer les suggestions par display_name
+        const uniqueSuggestions = formatted.filter((suggestion: LocationSuggestion, index: number, self: LocationSuggestion[]) =>
+          index === self.findIndex((s) => s.display_name === suggestion.display_name)
+        );
+        
+        setSuggestions(uniqueSuggestions);
         setShowSuggestions(true);
       } catch (error) {
         console.error("Error fetching location suggestions:", error);

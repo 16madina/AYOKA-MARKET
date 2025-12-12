@@ -227,16 +227,6 @@ const EditProfile = () => {
               </p>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="location">Adresse (optionnel)</Label>
-              <Input
-                id="location"
-                value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                placeholder="Votre adresse complète"
-              />
-            </div>
-
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Enregistrement..." : "Enregistrer les modifications"}
             </Button>
