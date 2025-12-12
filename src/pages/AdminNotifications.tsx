@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Send, Users, Bell, Loader2 } from 'lucide-react';
+import { ArrowLeft, Send, Users, Bell, Loader2, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -19,6 +19,82 @@ interface UserWithToken {
   push_token: string | null;
 }
 
+interface NotificationTemplate {
+  id: string;
+  name: string;
+  title: string;
+  body: string;
+  type: NotificationType;
+  emoji: string;
+}
+
+const notificationTemplates: NotificationTemplate[] = [
+  {
+    id: 'welcome',
+    name: 'Bienvenue',
+    title: '👋 Bienvenue sur AYOKA !',
+    body: 'Merci de rejoindre notre communauté. Découvrez des milliers d\'annonces près de chez vous !',
+    type: 'promo',
+    emoji: '👋'
+  },
+  {
+    id: 'promo_weekend',
+    name: 'Promo Weekend',
+    title: '🔥 Offre spéciale weekend !',
+    body: 'Profitez de promotions exceptionnelles ce weekend. Ne manquez pas ces bonnes affaires !',
+    type: 'promo',
+    emoji: '🔥'
+  },
+  {
+    id: 'new_feature',
+    name: 'Nouvelle fonctionnalité',
+    title: '✨ Nouvelle fonctionnalité disponible',
+    body: 'Découvrez notre nouvelle fonctionnalité pour améliorer votre expérience sur AYOKA !',
+    type: 'promo',
+    emoji: '✨'
+  },
+  {
+    id: 'flash_sale',
+    name: 'Vente Flash',
+    title: '⚡ Vente Flash - 24h seulement !',
+    body: 'Des offres incroyables vous attendent. Dépêchez-vous, les stocks sont limités !',
+    type: 'promo',
+    emoji: '⚡'
+  },
+  {
+    id: 'reminder_publish',
+    name: 'Rappel publication',
+    title: '📸 Publiez votre première annonce',
+    body: 'Vous avez des objets à vendre ? Publiez votre annonce en quelques clics et touchez des milliers d\'acheteurs !',
+    type: 'promo',
+    emoji: '📸'
+  },
+  {
+    id: 'seasonal',
+    name: 'Offre saisonnière',
+    title: '🎉 Offre spéciale du moment',
+    body: 'Célébrez avec nous ! Découvrez des offres exclusives pour cette occasion spéciale.',
+    type: 'promo',
+    emoji: '🎉'
+  },
+  {
+    id: 'thank_you',
+    name: 'Remerciement',
+    title: '💚 Merci pour votre fidélité',
+    body: 'Merci de faire partie de la communauté AYOKA. Votre confiance nous motive chaque jour !',
+    type: 'promo',
+    emoji: '💚'
+  },
+  {
+    id: 'maintenance',
+    name: 'Maintenance',
+    title: '🔧 Maintenance prévue',
+    body: 'Une maintenance est prévue prochainement pour améliorer nos services. Merci de votre patience.',
+    type: 'promo',
+    emoji: '🔧'
+  }
+];
+
 const AdminNotifications = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -33,6 +109,7 @@ const AdminNotifications = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>('promo');
   const [targetType, setTargetType] = useState<'all' | 'specific'>('all');
   const [selectedUserId, setSelectedUserId] = useState<string>('');
+  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
 
   // Check admin access
   useEffect(() => {
@@ -267,6 +344,39 @@ const AdminNotifications = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Templates */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Modèles prédéfinis
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {notificationTemplates.map((template) => (
+                <button
+                  key={template.id}
+                  onClick={() => {
+                    setSelectedTemplate(template.id);
+                    setTitle(template.title);
+                    setBody(template.body);
+                    setNotificationType(template.type);
+                  }}
+                  className={`p-3 rounded-lg border text-left transition-all hover:scale-[1.02] ${
+                    selectedTemplate === template.id
+                      ? 'border-primary bg-primary/10'
+                      : 'border-border bg-card hover:border-primary/50'
+                  }`}
+                >
+                  <span className="text-xl">{template.emoji}</span>
+                  <p className="text-xs font-medium mt-1 truncate">{template.name}</p>
+                </button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Send Notification Form */}
         <Card>
