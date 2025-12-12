@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Capacitor } from '@capacitor/core';
-import { FirebaseMessaging } from '@capacitor-firebase/messaging';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+
+// Dynamically import FirebaseMessaging only on native platforms
+let FirebaseMessaging: any = null;
 
 export const usePushNotifications = () => {
   const [pushToken, setPushToken] = useState<string | null>(null);
@@ -41,20 +43,28 @@ export const usePushNotifications = () => {
       return;
     }
 
+    let unsubscribeAuth: (() => void) | null = null;
+
     const initializePushNotifications = async () => {
       try {
-        // Attendre qu'un utilisateur soit connecté avant d'initialiser
+        // Dynamically import FirebaseMessaging
+        if (!FirebaseMessaging) {
+          const module = await import('@capacitor-firebase/messaging');
+          FirebaseMessaging = module.FirebaseMessaging;
+        }
+
+        // Wait for user to be logged in
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
           console.log('No user logged in, waiting for auth before requesting push permissions');
           return;
         }
 
-        console.log('User logged in, initializing push notifications for:', user.email);
+        console.log('User logged in, initializing FCM push notifications for:', user.email);
 
-        // Vérifier le statut actuel des permissions
+        // Check current permission status
         const permStatus = await FirebaseMessaging.checkPermissions();
-        console.log('Current permission status:', permStatus.receive);
+        console.log('FCM permission status:', permStatus.receive);
         
         if (permStatus.receive === 'denied') {
           setPermissionStatus('denied');
@@ -62,10 +72,9 @@ export const usePushNotifications = () => {
         }
 
         if (permStatus.receive === 'prompt') {
-          console.log('Requesting notification permissions...');
-          // Demander la permission pour les notifications
+          console.log('Requesting FCM notification permissions...');
           const permission = await FirebaseMessaging.requestPermissions();
-          console.log('Permission result:', permission.receive);
+          console.log('FCM permission result:', permission.receive);
           
           if (permission.receive !== 'granted') {
             setPermissionStatus('denied');
@@ -75,19 +84,17 @@ export const usePushNotifications = () => {
 
         setPermissionStatus('granted');
 
-        // Écouter les changements de token FCM
-        await FirebaseMessaging.addListener('tokenReceived', async (event) => {
+        // Listen for FCM token changes
+        await FirebaseMessaging.addListener('tokenReceived', async (event: { token: string }) => {
           console.log(`FCM Token received (${platform}):`, event.token);
           setPushToken(event.token);
           setIsRegistered(true);
-          
-          // Sauvegarder le token FCM dans la base de données
           await saveTokenToDatabase(event.token);
         });
 
-        // Écouter les notifications reçues (foreground)
-        await FirebaseMessaging.addListener('notificationReceived', (event) => {
-          console.log('Push notification received (foreground):', event.notification);
+        // Listen for foreground notifications
+        await FirebaseMessaging.addListener('notificationReceived', (event: { notification: { title?: string; body?: string } }) => {
+          console.log('FCM notification received (foreground):', event.notification);
           
           const notification = event.notification;
           toast({
@@ -96,16 +103,14 @@ export const usePushNotifications = () => {
           });
         });
 
-        // Écouter les actions sur les notifications (background/killed)
-        await FirebaseMessaging.addListener('notificationActionPerformed', (event) => {
-          console.log('Push notification action performed:', event);
+        // Listen for notification actions (background/killed)
+        await FirebaseMessaging.addListener('notificationActionPerformed', (event: { notification: { data?: Record<string, string> } }) => {
+          console.log('FCM notification action performed:', event);
           
-          // Gérer la navigation en fonction de la notification
-          const data = event.notification.data as Record<string, string>;
+          const data = event.notification.data;
           if (data?.route) {
             window.location.href = data.route;
           } else if (data?.type) {
-            // Navigation basée sur le type de notification
             switch (data.type) {
               case 'message':
                 window.location.href = data.conversationId 
@@ -134,7 +139,7 @@ export const usePushNotifications = () => {
           }
         });
 
-        // Obtenir le token FCM (ceci déclenche automatiquement la conversion APNs -> FCM sur iOS)
+        // Get FCM token (this automatically handles APNs -> FCM conversion on iOS)
         console.log('Getting FCM token...');
         const tokenResult = await FirebaseMessaging.getToken();
         console.log(`FCM Token obtained (${platform}):`, tokenResult.token);
@@ -143,46 +148,52 @@ export const usePushNotifications = () => {
         await saveTokenToDatabase(tokenResult.token);
 
       } catch (error) {
-        console.error('Error initializing push notifications:', error);
+        console.error('Error initializing FCM push notifications:', error);
       }
     };
 
-    // Écouter les changements d'auth pour initialiser les notifications après connexion
+    // Listen for auth changes to initialize notifications after login
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
-        console.log('User signed in, initializing push notifications');
+        console.log('User signed in, initializing FCM push notifications');
         initializePushNotifications();
       }
     });
+    unsubscribeAuth = () => subscription.unsubscribe();
 
-    // Aussi essayer d'initialiser immédiatement si déjà connecté
+    // Also try to initialize immediately if already logged in
     initializePushNotifications();
 
     // Cleanup
     return () => {
-      subscription.unsubscribe();
-      FirebaseMessaging.removeAllListeners();
+      unsubscribeAuth?.();
+      if (FirebaseMessaging) {
+        FirebaseMessaging.removeAllListeners();
+      }
     };
   }, [isNative, platform, saveTokenToDatabase]);
 
   const unregisterNotifications = async () => {
     try {
+      if (!FirebaseMessaging) {
+        const module = await import('@capacitor-firebase/messaging');
+        FirebaseMessaging = module.FirebaseMessaging;
+      }
+
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        // Supprimer le token de la base de données
         await supabase
           .from('profiles')
           .update({ push_token: null })
           .eq('id', user.id);
       }
 
-      // Supprimer le token FCM
       await FirebaseMessaging.deleteToken();
       await FirebaseMessaging.removeAllListeners();
       setIsRegistered(false);
       setPushToken(null);
     } catch (error) {
-      console.error('Error unregistering notifications:', error);
+      console.error('Error unregistering FCM notifications:', error);
     }
   };
 
@@ -190,6 +201,11 @@ export const usePushNotifications = () => {
     if (!isNative) return false;
 
     try {
+      if (!FirebaseMessaging) {
+        const module = await import('@capacitor-firebase/messaging');
+        FirebaseMessaging = module.FirebaseMessaging;
+      }
+
       const permission = await FirebaseMessaging.requestPermissions();
       const granted = permission.receive === 'granted';
       setPermissionStatus(granted ? 'granted' : 'denied');
@@ -204,7 +220,7 @@ export const usePushNotifications = () => {
       
       return granted;
     } catch (error) {
-      console.error('Error requesting permission:', error);
+      console.error('Error requesting FCM permission:', error);
       return false;
     }
   };
