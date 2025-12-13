@@ -156,23 +156,10 @@ export const usePushNotifications = () => {
           
           const route = getRouteFromNotificationData(event.notification.data);
           if (route) {
-            console.log('📍 Notification tap - navigating to:', route);
-            // Store the route for later navigation (after app is fully loaded)
+            console.log('📍 Notification tap - storing route for navigation:', route);
+            // Store the route in sessionStorage for App.tsx to handle after full load
+            sessionStorage.setItem('pendingNotificationRoute', route);
             pendingNotificationRoute = route;
-            
-            // Try to navigate - if React Router is ready, this will work
-            // If not, the route is stored and will be handled by App.tsx
-            try {
-              // Small delay to ensure the app is loaded
-              setTimeout(() => {
-                if (pendingNotificationRoute) {
-                  window.location.href = pendingNotificationRoute;
-                  pendingNotificationRoute = null;
-                }
-              }, 500);
-            } catch (e) {
-              console.log('Navigation will be handled after app loads');
-            }
           }
         });
 

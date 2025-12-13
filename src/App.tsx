@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import SplashScreen from "./components/SplashScreen";
 import { ScrollToTop } from "./components/ScrollToTop";
-import { usePushNotifications } from "./hooks/usePushNotifications";
+import { usePushNotifications, getPendingNotificationRoute } from "./hooks/usePushNotifications";
 import { useSplashPreference } from "./hooks/useSplashPreference";
 import { useAppRatingPrompt } from "./hooks/useAppRatingPrompt";
 import Index from "./pages/Index";
@@ -51,6 +51,35 @@ import { AppRatingPrompt } from "./components/AppRatingPrompt";
 
 const queryClient = new QueryClient();
 
+// Component to handle pending notification navigation
+const NotificationNavigationHandler = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [hasHandledNotification, setHasHandledNotification] = useState(false);
+
+  useEffect(() => {
+    if (hasHandledNotification) return;
+
+    // Check for pending notification route after a short delay to ensure app is ready
+    const checkPendingRoute = () => {
+      const pendingRoute = sessionStorage.getItem('pendingNotificationRoute') || getPendingNotificationRoute();
+      
+      if (pendingRoute && pendingRoute !== location.pathname) {
+        console.log('📍 Handling pending notification navigation to:', pendingRoute);
+        sessionStorage.removeItem('pendingNotificationRoute');
+        setHasHandledNotification(true);
+        navigate(pendingRoute);
+      }
+    };
+
+    // Wait for app to be fully loaded before navigating
+    const timer = setTimeout(checkPendingRoute, 300);
+    return () => clearTimeout(timer);
+  }, [navigate, location.pathname, hasHandledNotification]);
+
+  return null;
+};
+
 const App = () => {
   const { isReturningUser, markFullSplashSeen } = useSplashPreference();
   const [showSplash, setShowSplash] = useState(() => {
@@ -90,6 +119,7 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <ScrollToTop />
+          <NotificationNavigationHandler />
           <div className="animate-fade-in">
             <Routes>
           <Route path="/" element={<Index />} />
