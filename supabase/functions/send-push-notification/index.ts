@@ -94,6 +94,13 @@ serve(async (req) => {
     // Send notification using Firebase Cloud Messaging REST API
     const fcmUrl = `https://fcm.googleapis.com/v1/projects/${firebaseServiceAccount.project_id}/messages:send`;
     
+    // Ensure all data values are strings (FCM requirement)
+    const stringifiedData: Record<string, string> = {};
+    for (const [key, value] of Object.entries(data)) {
+      stringifiedData[key] = String(value);
+    }
+    stringifiedData.click_action = 'OPEN_APP';
+
     const message = {
       message: {
         token: profile.push_token,
@@ -101,11 +108,7 @@ serve(async (req) => {
           title,
           body,
         },
-        data: {
-          ...data,
-          // Add click action for proper handling
-          click_action: 'OPEN_APP',
-        },
+        data: stringifiedData,
         android: {
           priority: 'high',
           notification: {
@@ -115,6 +118,7 @@ serve(async (req) => {
             notification_priority: 'PRIORITY_HIGH',
             visibility: 'PUBLIC',
             channel_id: 'ayoka_notifications',
+            click_action: 'FCM_PLUGIN_ACTIVITY',
           },
         },
         apns: {
@@ -133,6 +137,8 @@ serve(async (req) => {
                 body,
               },
             },
+            // Data must be at payload root level for iOS to access it on notification tap
+            ...stringifiedData,
           },
         },
         webpush: {
@@ -148,6 +154,7 @@ serve(async (req) => {
           fcm_options: {
             link: '/',
           },
+          data: stringifiedData,
         },
       },
     };
