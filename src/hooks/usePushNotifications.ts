@@ -163,6 +163,14 @@ export const usePushNotifications = () => {
           }
         });
 
+        // Check for notification that launched the app (Android cold start)
+        try {
+          const launchNotification = await FirebaseMessaging.getDeliveredNotifications();
+          console.log('📬 Delivered notifications on launch:', launchNotification?.notifications?.length || 0);
+        } catch (e) {
+          console.log('Could not check delivered notifications');
+        }
+
         // Get FCM token (this automatically handles APNs -> FCM conversion on iOS)
         console.log('🔑 Getting FCM token via FirebaseMessaging.getToken()...');
         const tokenResult = await FirebaseMessaging.getToken();
