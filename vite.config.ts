@@ -15,4 +15,14 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      external: [
+        '@capacitor-firebase/messaging'
+      ]
+    }
+  },
+  optimizeDeps: {
+    exclude: ['@capacitor-firebase/messaging']
+  }
 }));
