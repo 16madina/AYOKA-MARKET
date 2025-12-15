@@ -196,7 +196,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="email-container">
               <div class="header">
                 <div class="logo-container">
-                  <h2 style="color: #704214; margin: 0; font-size: 28px; font-weight: bold; letter-spacing: 1px;">AYOKA MARKET</h2>
+                  <img src="https://ayokamarket.com/ayoka-logo-email.png" alt="AYOKA MARKET" style="max-width: 180px; height: auto; display: block;">
                 </div>
               </div>
               
