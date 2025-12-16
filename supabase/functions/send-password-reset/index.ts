@@ -13,7 +13,7 @@ const corsHeaders = {
 
 interface PasswordResetRequest {
   email: string;
-  redirectUrl: string;
+  redirectUrl?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -23,8 +23,45 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const { email, redirectUrl }: PasswordResetRequest = await req.json();
-    
+
     console.log("Processing password reset for:", email);
+
+    // Determine the redirect URL (prefer configured APP_URL to avoid redirecting to the editor domain)
+    let appUrl = Deno.env.get("APP_URL");
+
+    // If APP_URL is not set, infer from redirectUrl or request origin/referer
+    if (!appUrl) {
+      if (redirectUrl) {
+        try {
+          const u = new URL(redirectUrl);
+          appUrl = `${u.protocol}//${u.host}`;
+        } catch {
+          // ignore
+        }
+      }
+
+      if (!appUrl) {
+        const origin = req.headers.get("origin") || req.headers.get("referer");
+        if (origin) {
+          try {
+            const u = new URL(origin);
+            appUrl = `${u.protocol}//${u.host}`;
+          } catch {
+            // ignore
+          }
+        }
+      }
+    }
+
+    // Final fallback
+    if (!appUrl) appUrl = "https://ayokamarket.com";
+
+    // Ensure protocol
+    if (!appUrl.startsWith("http://") && !appUrl.startsWith("https://")) {
+      appUrl = `https://${appUrl}`;
+    }
+
+    const finalRedirectUrl = `${appUrl.replace(/\/$/, "")}/reset-password`;
 
     // Create Supabase admin client
     const supabaseAdmin = createClient(
@@ -43,7 +80,7 @@ const handler = async (req: Request): Promise<Response> => {
       type: 'recovery',
       email: email,
       options: {
-        redirectTo: redirectUrl,
+        redirectTo: finalRedirectUrl,
       },
     });
 
