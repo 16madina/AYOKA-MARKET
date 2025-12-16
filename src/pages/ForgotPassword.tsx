@@ -46,13 +46,12 @@ const ForgotPassword = () => {
     setIsLoading(true);
     
     try {
-      // Use only our Edge Function to send custom styled email via Resend
-      const redirectUrl = `${window.location.origin}/reset-password`;
-      
+      // Use only our Edge Function to send custom styled email via Resend.
+      // Redirect URL is resolved server-side (APP_URL) to avoid redirecting to the editor domain.
       const { error } = await supabase.functions.invoke('send-password-reset', {
-        body: { email, redirectUrl }
+        body: { email }
       });
-      
+
       if (error) {
         console.error("Error from edge function:", error);
       }
