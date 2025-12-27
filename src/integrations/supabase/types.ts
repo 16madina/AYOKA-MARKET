@@ -581,6 +581,7 @@ export type Database = {
           last_name: string | null
           last_seen: string | null
           location: string | null
+          notification_preferences: Json | null
           phone: string | null
           push_token: string | null
           rating_average: number | null
@@ -614,6 +615,7 @@ export type Database = {
           last_name?: string | null
           last_seen?: string | null
           location?: string | null
+          notification_preferences?: Json | null
           phone?: string | null
           push_token?: string | null
           rating_average?: number | null
@@ -647,6 +649,7 @@ export type Database = {
           last_name?: string | null
           last_seen?: string | null
           location?: string | null
+          notification_preferences?: Json | null
           phone?: string | null
           push_token?: string | null
           rating_average?: number | null
