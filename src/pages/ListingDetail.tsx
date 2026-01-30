@@ -17,7 +17,7 @@ import { fr } from "date-fns/locale";
 import BottomNav from "@/components/BottomNav";
 import { addToRecentlyViewed } from "@/utils/recentlyViewed";
 import { translateCondition } from "@/utils/translations";
-import { formatPrice } from "@/utils/currency";
+import { formatPrice, convertPrice } from "@/utils/currency";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useNativeShare } from "@/hooks/useNativeShare";
@@ -335,13 +335,23 @@ const ListingDetail = () => {
                 )}
 
                 <div className="pt-4 border-t">
-                  <div className="text-2xl font-bold mb-4">
+                  <div className="mb-4">
                     {listing.price === 0 ? (
-                      <span className="text-green-600">Gratuit</span>
+                      <span className="text-2xl font-bold text-green-600">Gratuit</span>
                     ) : (
-                      <span className="text-primary">
-                        {formatPrice(listing.price, listing.currency || "FCFA")}
-                      </span>
+                      <div>
+                        <span className="text-2xl font-bold text-primary">
+                          {formatPrice(listing.price, listing.currency || "FCFA")}
+                        </span>
+                        {userProfile?.currency && userProfile.currency !== (listing.currency || "FCFA") && (
+                          <div className="text-sm text-muted-foreground mt-1">
+                            ≈ {formatPrice(
+                              convertPrice(listing.price, listing.currency || "FCFA", userProfile.currency),
+                              userProfile.currency
+                            )}
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
                   <Button
