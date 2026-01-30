@@ -185,11 +185,17 @@ export const usePushNotifications = () => {
             }
             pendingNotificationRoute = route;
             
-            // Also try immediate navigation via window.location for cold start
-            if (typeof window !== 'undefined' && window.location.pathname !== route) {
-              console.log('📍 Immediate navigation to:', route);
-              window.location.href = route;
-            }
+            // Use a small delay to let the app fully initialize before navigation
+            // This prevents infinite loop issues on iOS
+            setTimeout(() => {
+              if (typeof window !== 'undefined') {
+                const currentPath = window.location.pathname + window.location.search;
+                if (currentPath !== route) {
+                  console.log('📍 Delayed navigation to:', route);
+                  window.location.href = route;
+                }
+              }
+            }, 500);
           }
         });
 

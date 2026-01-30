@@ -100,6 +100,27 @@ serve(async (req) => {
       console.log('Followed user has no push token');
     }
 
+    // Create system notification for in-app display (always, regardless of push token)
+    const { error: notifError } = await supabase
+      .from('system_notifications')
+      .insert({
+        user_id: follow.followed_id,
+        title: '👤 Nouvel abonné',
+        message: `${followerName} a commencé à vous suivre`,
+        notification_type: 'follower',
+        metadata: {
+          follower_id: follow.follower_id,
+          follow_id: follow.id,
+          route: `/seller/${follow.follower_id}`
+        }
+      });
+
+    if (notifError) {
+      console.error('Error creating system notification:', notifError);
+    } else {
+      console.log('System notification created for follower');
+    }
+
     return new Response(
       JSON.stringify({ success: true }),
       { 
