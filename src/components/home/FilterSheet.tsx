@@ -4,21 +4,33 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SlidersHorizontal, Package, Smartphone, Sofa, Shirt, Car, Home, Briefcase, Dumbbell, Book, Gamepad2, Wrench, X } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { 
+  SlidersHorizontal, Package, Smartphone, Sofa, Shirt, Car, Home, Briefcase, 
+  Dumbbell, Wrench, X, Apple, Dog, Palette, Sparkles, Heart, Monitor, 
+  Users, Gift, Gamepad2, TreePine, Cog
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const categories = [
   { name: "Tout", icon: Package, slug: "" },
+  { name: "Alimentation", icon: Apple, slug: "alimentation" },
+  { name: "Animaux", icon: Dog, slug: "animaux" },
+  { name: "Art & Collection", icon: Palette, slug: "art-collection" },
+  { name: "Beauté & Santé", icon: Heart, slug: "beaute-sante" },
+  { name: "Bricolage", icon: Wrench, slug: "bricolage" },
   { name: "Électronique", icon: Smartphone, slug: "electronique" },
+  { name: "Emploi & Services", icon: Users, slug: "emploi-services" },
+  { name: "Gratuit", icon: Gift, slug: "gratuit" },
+  { name: "Informatique", icon: Monitor, slug: "informatique" },
+  { name: "Loisirs", icon: Gamepad2, slug: "loisirs" },
+  { name: "Maison & Jardin", icon: TreePine, slug: "maison-jardin" },
   { name: "Meubles", icon: Sofa, slug: "meubles" },
-  { name: "Vêtements", icon: Shirt, slug: "pret-porter-homme" },
-  { name: "Véhicules", icon: Car, slug: "pieces-auto" },
-  { name: "Immobilier", icon: Home, slug: "maison-cuisine" },
-  { name: "Services", icon: Briefcase, slug: "autres" },
-  { name: "Sport", icon: Dumbbell, slug: "articles-sport" },
-  { name: "Livres", icon: Book, slug: "livres-films-musique" },
-  { name: "Jouets", icon: Gamepad2, slug: "jeux-jouets" },
-  { name: "Outils", icon: Wrench, slug: "bricolage" },
+  { name: "Mode", icon: Shirt, slug: "mode" },
+  { name: "Pièces Auto", icon: Cog, slug: "pieces-auto" },
+  { name: "Services", icon: Briefcase, slug: "services" },
+  { name: "Sports & Loisirs", icon: Dumbbell, slug: "sports-loisirs" },
+  { name: "Autres", icon: Package, slug: "autres" },
 ];
 
 const FilterSheet = () => {
@@ -116,24 +128,26 @@ const FilterSheet = () => {
           
           <div>
             <h3 className="text-lg font-semibold mb-4">Catégories</h3>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => {
-                const Icon = category.icon;
-                const isSelected = selectedCategory === category.slug;
-                return (
-                  <Button
-                    key={category.name}
-                    variant={isSelected ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedCategory(category.slug)}
-                    className="gap-2"
-                  >
-                    <Icon className="h-4 w-4" />
-                    {category.name}
-                  </Button>
-                );
-              })}
-            </div>
+            <ScrollArea className="h-48">
+              <div className="flex flex-wrap gap-2 pr-4">
+                {categories.map((category) => {
+                  const Icon = category.icon;
+                  const isSelected = selectedCategory === category.slug;
+                  return (
+                    <Button
+                      key={category.name}
+                      variant={isSelected ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category.slug)}
+                      className="gap-2"
+                    >
+                      <Icon className="h-4 w-4" />
+                      {category.name}
+                    </Button>
+                  );
+                })}
+              </div>
+            </ScrollArea>
           </div>
 
           <div>
