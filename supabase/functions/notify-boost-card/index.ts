@@ -178,6 +178,28 @@ Deno.serve(async (req) => {
     const fcmResult = await fcmResponse.json();
     console.log("FCM Response:", fcmResult);
 
+    // Create system notification for in-app display (always, regardless of push success)
+    const { error: notifError } = await supabase
+      .from("system_notifications")
+      .insert({
+        user_id: record.user_id,
+        title: "🎉 Nouvelle carte boost !",
+        message: `Félicitations ! Vous avez débloqué une carte ${tierLabel} de ${record.duration_days} jours grâce à vos parrainages !`,
+        notification_type: "boost_card",
+        metadata: {
+          tier: record.tier,
+          duration_days: record.duration_days,
+          referral_count: record.referral_count,
+          route: "/referral"
+        }
+      });
+
+    if (notifError) {
+      console.error("Error creating system notification:", notifError);
+    } else {
+      console.log("System notification created for boost card");
+    }
+
     return new Response(
       JSON.stringify({ success: true, fcmResult }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
