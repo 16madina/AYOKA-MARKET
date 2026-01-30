@@ -131,6 +131,16 @@ export const SystemNotifications = () => {
         return <span className="text-lg">⭐</span>;
       case 'follower':
         return <span className="text-lg">👤</span>;
+      case 'like':
+        return <span className="text-lg">❤️</span>;
+      case 'offer':
+        return <span className="text-lg">💰</span>;
+      case 'boost':
+        return <span className="text-lg">🚀</span>;
+      case 'listing':
+        return <span className="text-lg">📦</span>;
+      case 'welcome':
+        return <span className="text-lg">🎉</span>;
       case 'success':
         return <CheckCircle className="h-5 w-5 text-green-500" />;
       case 'warning':
@@ -145,16 +155,56 @@ export const SystemNotifications = () => {
       markAsReadMutation.mutate(notification.id);
     }
 
+    const metadata = notification.metadata;
+    let targetRoute: string | null = null;
+
     // Naviguer vers la page appropriée selon le type de notification
-    if (notification.notification_type === 'message' && notification.metadata?.conversation_id) {
-      window.location.href = `/messages?conversation=${notification.metadata.conversation_id}`;
-    } else if (notification.notification_type === 'review' && notification.metadata?.listing_id) {
-      window.location.href = `/listing/${notification.metadata.listing_id}`;
-    } else if (notification.notification_type === 'follower' && notification.metadata?.follower_id) {
-      window.location.href = `/seller/${notification.metadata.follower_id}`;
+    switch (notification.notification_type) {
+      case 'message':
+        if (metadata?.conversation_id) {
+          targetRoute = `/messages?conversation=${metadata.conversation_id}`;
+        } else {
+          targetRoute = '/messages';
+        }
+        break;
+      case 'review':
+      case 'like':
+      case 'listing':
+        if (metadata?.listing_id) {
+          targetRoute = `/listing/${metadata.listing_id}`;
+        }
+        break;
+      case 'offer':
+        if (metadata?.conversation_id) {
+          targetRoute = `/messages?conversation=${metadata.conversation_id}`;
+        } else if (metadata?.listing_id) {
+          targetRoute = `/listing/${metadata.listing_id}`;
+        }
+        break;
+      case 'follower':
+        if (metadata?.follower_id) {
+          targetRoute = `/seller/${metadata.follower_id}`;
+        }
+        break;
+      case 'boost':
+        targetRoute = '/referral';
+        break;
+      case 'welcome':
+        targetRoute = metadata?.route || '/publish';
+        break;
+      default:
+        // Pour les types inconnus, vérifier si un route est spécifié dans metadata
+        if (metadata?.route) {
+          targetRoute = metadata.route;
+        }
+        break;
     }
-    
+
     setIsOpen(false);
+    
+    if (targetRoute) {
+      window.location.href = targetRoute;
+    }
   };
 
   if (!user) return null;
