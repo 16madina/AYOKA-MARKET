@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Users, FileText, ShieldAlert, Mail, MessageSquare, Ban, CheckCircle, XCircle, Eye, Phone, Search, Filter, Bell, ImageOff } from "lucide-react";
+import { Users, FileText, ShieldAlert, Mail, MessageSquare, Ban, CheckCircle, XCircle, Eye, Phone, Search, Filter, Bell, ImageOff, Trash2 } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import BottomNav from "@/components/BottomNav";
 import { InactiveListingsReminder } from "@/components/admin/InactiveListingsReminder";
@@ -362,6 +362,22 @@ const Admin = () => {
     }
 
     toast.success("Annonce rejetée");
+    refetchListings();
+  };
+
+  // Delete listing (admin only)
+  const handleDeleteListing = async (listingId: string) => {
+    const { error } = await supabase
+      .from("listings")
+      .delete()
+      .eq("id", listingId);
+
+    if (error) {
+      toast.error("Erreur lors de la suppression");
+      return;
+    }
+
+    toast.success("Annonce supprimée définitivement");
     refetchListings();
   };
 
@@ -1001,66 +1017,112 @@ const Admin = () => {
                 ) : (
                   filteredListings.map(listing => (
                     <Card key={listing.id} className="p-3 sm:p-4">
-                      <div className="flex flex-col sm:flex-row sm:items-start gap-3">
+                      <div className="flex gap-3">
+                        {/* Thumbnail */}
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
+                          {listing.images?.[0] ? (
+                            <img 
+                              src={listing.images[0]} 
+                              alt={listing.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = '/placeholder.svg';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <ImageOff className="h-6 w-6 text-muted-foreground" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Content */}
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold text-sm sm:text-base truncate">{listing.title}</h3>
-                          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{listing.description}</p>
-                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-xs sm:text-sm">
-                            <span>{listing.categories?.name || "N/A"}</span>
+                          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">{listing.description}</p>
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1 text-xs">
+                            <span className="text-muted-foreground">{listing.categories?.name || "N/A"}</span>
                             <span className="font-medium text-primary">{listing.price?.toLocaleString()} FCFA</span>
                             <Badge variant={listing.moderation_status === 'approved' ? 'secondary' : listing.moderation_status === 'rejected' ? 'destructive' : 'default'} className="text-[10px]">
                               {listing.moderation_status === 'pending' ? 'En attente' : listing.moderation_status === 'approved' ? 'Approuvé' : 'Rejeté'}
                             </Badge>
                           </div>
-                        </div>
-                        <div className="flex flex-wrap sm:flex-col gap-1.5">
-                          {listing.moderation_status === "pending" && (
-                            <>
-                              <Button size="sm" variant="outline" onClick={() => handleApproveListing(listing.id)} className="h-7 text-xs px-2">
-                                <CheckCircle className="h-3 w-3 sm:mr-1" />
-                                <span className="hidden sm:inline">OK</span>
-                              </Button>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button size="sm" variant="destructive" className="h-7 text-xs px-2">
-                                    <XCircle className="h-3 w-3 sm:mr-1" />
-                                    <span className="hidden sm:inline">Non</span>
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="mx-4 max-w-[calc(100%-2rem)] sm:max-w-lg">
-                                  <DialogHeader>
-                                    <DialogTitle>Rejeter l'annonce</DialogTitle>
-                                    <DialogDescription>Indiquez la raison du rejet</DialogDescription>
-                                  </DialogHeader>
-                                  <Textarea
-                                    placeholder="Raison du rejet..."
-                                    value={messageContent}
-                                    onChange={(e) => setMessageContent(e.target.value)}
-                                    rows={4}
-                                  />
-                                  <DialogFooter className="flex-col sm:flex-row gap-2">
-                                    <Button variant="outline" onClick={() => setMessageContent("")} className="w-full sm:w-auto">
-                                      Annuler
+                          
+                          {/* Actions */}
+                          <div className="flex flex-wrap gap-1.5 mt-2">
+                            {listing.moderation_status === "pending" && (
+                              <>
+                                <Button size="sm" variant="outline" onClick={() => handleApproveListing(listing.id)} className="h-7 text-xs px-2">
+                                  <CheckCircle className="h-3 w-3 mr-1" />
+                                  OK
+                                </Button>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button size="sm" variant="destructive" className="h-7 text-xs px-2">
+                                      <XCircle className="h-3 w-3 mr-1" />
+                                      Non
                                     </Button>
-                                    <Button
-                                      onClick={() => {
-                                        handleRejectListing(listing.id, messageContent);
-                                        setMessageContent("");
-                                      }}
-                                      disabled={!messageContent.trim()}
-                                      className="w-full sm:w-auto"
-                                    >
-                                      Confirmer
-                                    </Button>
-                                  </DialogFooter>
-                                </DialogContent>
-                              </Dialog>
-                            </>
-                          )}
-                          <Button size="sm" variant="outline" onClick={() => navigate(`/listing/${listing.id}`)} className="h-7 text-xs px-2">
-                            <Eye className="h-3 w-3 sm:mr-1" />
-                            <span className="hidden sm:inline">Voir</span>
-                          </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="mx-4 max-w-[calc(100%-2rem)] sm:max-w-lg">
+                                    <DialogHeader>
+                                      <DialogTitle>Rejeter l'annonce</DialogTitle>
+                                      <DialogDescription>Indiquez la raison du rejet</DialogDescription>
+                                    </DialogHeader>
+                                    <Textarea
+                                      placeholder="Raison du rejet..."
+                                      value={messageContent}
+                                      onChange={(e) => setMessageContent(e.target.value)}
+                                      rows={4}
+                                    />
+                                    <DialogFooter className="flex-col sm:flex-row gap-2">
+                                      <Button variant="outline" onClick={() => setMessageContent("")} className="w-full sm:w-auto">
+                                        Annuler
+                                      </Button>
+                                      <Button
+                                        onClick={() => {
+                                          handleRejectListing(listing.id, messageContent);
+                                          setMessageContent("");
+                                        }}
+                                        disabled={!messageContent.trim()}
+                                        className="w-full sm:w-auto"
+                                      >
+                                        Confirmer
+                                      </Button>
+                                    </DialogFooter>
+                                  </DialogContent>
+                                </Dialog>
+                              </>
+                            )}
+                            <Button size="sm" variant="outline" onClick={() => navigate(`/listing/${listing.id}`)} className="h-7 text-xs px-2">
+                              <Eye className="h-3 w-3 mr-1" />
+                              Voir
+                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button size="sm" variant="destructive" className="h-7 text-xs px-2">
+                                  <Trash2 className="h-3 w-3 mr-1" />
+                                  Supprimer
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="mx-4 max-w-[calc(100%-2rem)] sm:max-w-lg">
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Supprimer l'annonce</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Cette action est irréversible. L'annonce "{listing.title}" sera définitivement supprimée.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+                                  <AlertDialogCancel className="w-full sm:w-auto">Annuler</AlertDialogCancel>
+                                  <AlertDialogAction 
+                                    onClick={() => handleDeleteListing(listing.id)}
+                                    className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                  >
+                                    Supprimer définitivement
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
                         </div>
                       </div>
                     </Card>
