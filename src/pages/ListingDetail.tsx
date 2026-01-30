@@ -340,7 +340,7 @@ const ListingDetail = () => {
                       <span className="text-green-600">Gratuit</span>
                     ) : (
                       <span className="text-primary">
-                        {formatPrice(listing.price, userProfile?.currency || "FCFA")}
+                        {formatPrice(listing.price, listing.currency || "FCFA")}
                       </span>
                     )}
                   </div>
