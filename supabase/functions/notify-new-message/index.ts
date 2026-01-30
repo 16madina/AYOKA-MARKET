@@ -111,6 +111,28 @@ serve(async (req) => {
       console.log('Receiver has no push token, skipping push notification');
     }
 
+    // Create system notification for in-app display (always, regardless of push token)
+    const { error: notifError } = await supabase
+      .from('system_notifications')
+      .insert({
+        user_id: message.receiver_id,
+        title: '💬 Nouveau message',
+        message: `${senderName}: ${message.content?.substring(0, 100) || 'Nouveau message'}`,
+        notification_type: 'message',
+        metadata: {
+          conversation_id: message.conversation_id,
+          listing_id: message.listing_id,
+          sender_id: message.sender_id,
+          route: `/messages?conversation=${message.conversation_id}`
+        }
+      });
+
+    if (notifError) {
+      console.error('Error creating system notification:', notifError);
+    } else {
+      console.log('System notification created for message');
+    }
+
     return new Response(
       JSON.stringify({ success: true }),
       { 

@@ -123,6 +123,27 @@ serve(async (req) => {
       }
     }
 
+    // Create system notification for in-app display (always, regardless of push token)
+    const { error: notifError } = await supabase
+      .from('system_notifications')
+      .insert({
+        user_id: listing.user_id,
+        title: '❤️ Nouveau like',
+        message: `${likerName} a aimé votre annonce "${listing.title}"`,
+        notification_type: 'favorite',
+        metadata: {
+          listing_id: favorite.listing_id,
+          liker_id: favorite.user_id,
+          route: `/listing/${favorite.listing_id}`
+        }
+      });
+
+    if (notifError) {
+      console.error('Error creating system notification:', notifError);
+    } else {
+      console.log('System notification created for favorite');
+    }
+
     return new Response(
       JSON.stringify({ success: true }),
       { 

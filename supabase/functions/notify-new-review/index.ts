@@ -111,6 +111,29 @@ serve(async (req) => {
       console.log('Reviewee has no push token');
     }
 
+    // Create system notification for in-app display (always, regardless of push token)
+    const { error: notifError } = await supabase
+      .from('system_notifications')
+      .insert({
+        user_id: review.reviewee_id,
+        title: '⭐ Nouvel avis reçu',
+        message: `${reviewerName} a laissé un avis ${stars} sur "${listingTitle}"`,
+        notification_type: 'review',
+        metadata: {
+          review_id: review.id,
+          listing_id: review.listing_id,
+          reviewer_id: review.reviewer_id,
+          rating: review.rating,
+          route: `/listing/${review.listing_id}`
+        }
+      });
+
+    if (notifError) {
+      console.error('Error creating system notification:', notifError);
+    } else {
+      console.log('System notification created for review');
+    }
+
     return new Response(
       JSON.stringify({ success: true }),
       { 

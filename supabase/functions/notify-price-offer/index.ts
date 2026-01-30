@@ -150,6 +150,29 @@ serve(async (req) => {
       console.log('Recipient has no push token');
     }
 
+    // Create system notification for in-app display (always, regardless of push token)
+    const { error: notifError } = await supabase
+      .from('system_notifications')
+      .insert({
+        user_id: recipientId,
+        title: title,
+        message: body,
+        notification_type: notificationType,
+        metadata: {
+          conversation_id: offer.conversation_id,
+          listing_id: offer.listing_id,
+          offer_id: offer.id,
+          amount: offer.amount,
+          route: `/messages?conversation=${offer.conversation_id}`
+        }
+      });
+
+    if (notifError) {
+      console.error('Error creating system notification:', notifError);
+    } else {
+      console.log('System notification created for price offer');
+    }
+
     return new Response(
       JSON.stringify({ success: true }),
       { 
