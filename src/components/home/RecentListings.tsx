@@ -1,5 +1,6 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -36,6 +37,7 @@ async function reverseGeocodeCoords(lat: number, lng: number): Promise<{ city: s
 
 const RecentListings = () => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const [guestLocation, setGuestLocation] = useState<{ city: string | null; country: string | null }>(() => {
     // Récupérer la localisation stockée
     const stored = localStorage.getItem('guestLocation');
@@ -451,15 +453,22 @@ const RecentListings = () => {
     return badges.slice(0, 2); // Maximum 2 badges
   };
 
+  // Handler pour la navigation vers les détails d'une annonce
+  const handleListingClick = useCallback((e: React.MouseEvent, listingId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/listing/${listingId}`);
+  }, [navigate]);
+
   // Fonction de rendu pour une carte d'annonce
   const renderListingCard = (listing: any, index: number) => (
     <GlassCard 
       key={listing.id}
-      className="cursor-pointer animate-fade-in group"
+      className="cursor-pointer animate-fade-in group touch-manipulation"
       style={{ animationDelay: `${index * 0.05}s` }}
-      onClick={() => window.location.href = `/listing/${listing.id}`}
+      onClick={(e) => handleListingClick(e, listing.id)}
     >
-      <div className="aspect-[4/3] bg-muted relative overflow-hidden rounded-t-xl">
+      <div className="aspect-[4/3] bg-muted relative overflow-hidden rounded-t-xl pointer-events-none">
         {listing.images?.[0] ? (
           <img
             src={listing.images[0]}
@@ -482,7 +491,7 @@ const RecentListings = () => {
           </div>
         )}
       </div>
-      <CardContent className="p-4">
+      <CardContent className="p-4 pointer-events-none">
         <h3 className="font-semibold text-sm mb-2 line-clamp-2 leading-tight">
           {listing.title}
         </h3>
