@@ -58,7 +58,7 @@ const Search = () => {
   });
 
   const { data: listings, isLoading } = useQuery({
-    queryKey: ["search", searchQuery, filters],
+    queryKey: ["search", searchQuery, filters, categories],
     queryFn: async () => {
       let query = supabase
         .from("listings")
@@ -74,9 +74,13 @@ const Search = () => {
         query = query.or(`title.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
       }
 
-      // Filters
+      // Filters - find category by slug first
       if (filters.category) {
-        query = query.eq("category_id", filters.category);
+        // Find the category UUID by slug
+        const category = categories?.find(cat => cat.slug === filters.category);
+        if (category) {
+          query = query.eq("category_id", category.id);
+        }
       }
       if (filters.minPrice) {
         query = query.gte("price", parseInt(filters.minPrice));
@@ -110,6 +114,7 @@ const Search = () => {
       if (error) throw error;
       return data;
     },
+    enabled: !!categories, // Wait for categories to be loaded
   });
 
   const handleSearch = () => {
