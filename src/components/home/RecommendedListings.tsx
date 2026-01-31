@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, MapPin, Navigation } from "lucide-react";
 import { getLocationPriority, getLocationBadgeColor } from "@/utils/geographicFiltering";
-import { formatPriceWithConversion } from "@/utils/currency";
+import { formatPriceWithConversion, getConvertedPrice } from "@/utils/currency";
 import { useState, useEffect } from "react";
 import { getUserLocation, calculateDistance, formatDistance } from "@/utils/distanceCalculation";
 
@@ -179,9 +179,16 @@ const RecommendedListings = () => {
                 <h3 className="font-semibold text-base mb-2 line-clamp-1">
                   {listing.title}
                 </h3>
-                <p className="text-base font-bold text-primary">
-                  {formatPriceWithConversion(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
-                </p>
+                <div>
+                  <p className="text-base font-bold text-primary">
+                    {formatPriceWithConversion(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
+                  </p>
+                  {getConvertedPrice(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA") && (
+                    <p className="text-[10px] text-muted-foreground">
+                      {getConvertedPrice(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
+                    </p>
+                  )}
+                </div>
                 <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground mt-2">
                   <div className="flex items-center gap-1.5 flex-1 min-w-0">
                     <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
