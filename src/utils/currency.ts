@@ -139,18 +139,23 @@ export const formatPriceWithConversion = (
     return "Gratuit";
   }
   
-  // Même devise : affichage simple
-  if (listingCurrency === userCurrency) {
-    return formatPrice(amount, userCurrency);
+  // Retourne toujours le prix dans la devise ORIGINALE de l'annonce
+  return formatPrice(amount, listingCurrency);
+};
+
+// Fonction pour obtenir le prix converti (pour l'affichage secondaire)
+export const getConvertedPrice = (
+  amount: number,
+  listingCurrency: string = "FCFA",
+  userCurrency: string = "FCFA"
+): string | null => {
+  // Pas de conversion nécessaire si même devise ou prix gratuit
+  if (amount === 0 || listingCurrency === userCurrency) {
+    return null;
   }
   
-  // Conversion : mettre en évidence la devise locale
   const convertedAmount = convertPrice(amount, listingCurrency, userCurrency);
-  const convertedPrice = formatPrice(convertedAmount, userCurrency);
-  const originalPrice = formatPrice(amount, listingCurrency);
-  
-  // Prix converti en gras, prix original discret
-  return `${convertedPrice}`;
+  return `≈ ${formatPrice(convertedAmount, userCurrency)}`;
 };
 
 // Alias pour la compatibilité

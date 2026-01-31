@@ -10,7 +10,7 @@ import { MapPin, Navigation, Rocket, Sparkles } from "lucide-react";
 import { translateCondition } from "@/utils/translations";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getLocationPriority } from "@/utils/geographicFiltering";
-import { formatPriceWithConversion } from "@/utils/currency";
+import { formatPriceWithConversion, getConvertedPrice } from "@/utils/currency";
 import { getUserLocation, geocodeLocation, calculateDistance, formatDistance } from "@/utils/distanceCalculation";
 import { formatRelativeTime } from "@/utils/timeFormatting";
 
@@ -495,15 +495,22 @@ const RecentListings = () => {
         <h3 className="font-semibold text-sm mb-2 line-clamp-2 leading-tight">
           {listing.title}
         </h3>
-        <p className="font-bold text-primary text-sm mb-2">
+        <div className="mb-2">
           {listing.price === 0 ? (
-            <span className="text-green-600">
-              {formatPriceWithConversion(0, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
-            </span>
+            <p className="font-bold text-green-600 text-sm">Gratuit</p>
           ) : (
-            formatPriceWithConversion(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")
+            <>
+              <p className="font-bold text-primary text-sm">
+                {formatPriceWithConversion(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
+              </p>
+              {getConvertedPrice(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA") && (
+                <p className="text-[10px] text-muted-foreground">
+                  {getConvertedPrice(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
+                </p>
+              )}
+            </>
           )}
-        </p>
+        </div>
         <div className="flex items-center justify-between gap-2 text-sm text-muted-foreground/70">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <MapPin className="h-3.5 w-3.5 flex-shrink-0" />

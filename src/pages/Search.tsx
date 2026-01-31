@@ -13,7 +13,7 @@ import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import BottomNav from "@/components/BottomNav";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { formatPrice } from "@/utils/currency";
+import { formatPrice, getConvertedPrice } from "@/utils/currency";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Search = () => {
@@ -354,13 +354,22 @@ const Search = () => {
                   <h3 className="font-semibold text-lg mb-2 line-clamp-2">
                     {listing.title}
                   </h3>
-                  <p className="text-2xl font-bold text-primary mb-2">
+                  <div className="mb-2">
                     {listing.price === 0 ? (
-                      <span className="text-green-600">Gratuit</span>
+                      <p className="text-2xl font-bold text-green-600">Gratuit</p>
                     ) : (
-                      formatPrice(listing.price, userProfile?.currency || "FCFA")
+                      <>
+                        <p className="text-2xl font-bold text-primary">
+                          {formatPrice(listing.price, listing.currency || "FCFA")}
+                        </p>
+                        {getConvertedPrice(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA") && (
+                          <p className="text-xs text-muted-foreground">
+                            {getConvertedPrice(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
+                          </p>
+                        )}
+                      </>
                     )}
-                  </p>
+                  </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4" />
                     <span>{listing.location}</span>

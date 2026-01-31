@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { formatPrice } from "@/utils/currency";
+import { formatPrice, getConvertedPrice } from "@/utils/currency";
 
 const RecentlyViewed = () => {
   const [viewedIds, setViewedIds] = useState<string[]>([]);
@@ -110,15 +110,22 @@ const RecentlyViewed = () => {
                   <h3 className="font-medium text-xs mb-0.5 line-clamp-1">
                     {listing.title}
                   </h3>
-                  <p className="font-semibold text-primary text-xs">
+                  <div>
                     {listing.price === 0 ? (
-                      <span className="text-green-600">
-                        {formatPrice(0, userProfile?.currency || "FCFA")}
-                      </span>
+                      <p className="font-semibold text-green-600 text-xs">Gratuit</p>
                     ) : (
-                      formatPrice(listing.price, userProfile?.currency || "FCFA")
+                      <>
+                        <p className="font-semibold text-primary text-xs">
+                          {formatPrice(listing.price, listing.currency || "FCFA")}
+                        </p>
+                        {getConvertedPrice(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA") && (
+                          <p className="text-[9px] text-muted-foreground">
+                            {getConvertedPrice(listing.price, listing.currency || "FCFA", userProfile?.currency || "FCFA")}
+                          </p>
+                        )}
+                      </>
                     )}
-                  </p>
+                  </div>
                 </div>
               </CarouselItem>
             ))}
