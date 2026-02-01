@@ -6,6 +6,163 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Fonction pour notifier l'utilisateur que son image a été rejetée
+async function notifyUser(supabase: any, userId: string, reason: string | null) {
+  try {
+    // Récupérer le profil de l'utilisateur avec son push_token
+    const { data: userProfile, error: profileError } = await supabase
+      .from("profiles")
+      .select("id, push_token, full_name, first_name")
+      .eq("id", userId)
+      .single();
+
+    if (profileError || !userProfile) {
+      console.log("User profile not found:", profileError);
+      return;
+    }
+
+    const reasonText = reason || "Contenu non conforme aux règles de la plateforme";
+
+    // 1. Créer une notification in-app dans system_notifications
+    const { error: notifError } = await supabase.from("system_notifications").insert({
+      user_id: userId,
+      title: "Image rejetée par modération",
+      message: reasonText,
+      notification_type: "moderation",
+      metadata: { reason: reasonText },
+    });
+
+    if (notifError) {
+      console.error("Failed to create system notification:", notifError);
+    } else {
+      console.log("System notification created for user:", userId);
+    }
+
+    // 2. Envoyer une notification push si l'utilisateur a un token
+    if (userProfile.push_token) {
+      try {
+        const firebaseServiceAccount = Deno.env.get("FIREBASE_SERVICE_ACCOUNT");
+        if (!firebaseServiceAccount) {
+          console.error("FIREBASE_SERVICE_ACCOUNT not configured for user notification");
+          return;
+        }
+
+        const serviceAccount = JSON.parse(firebaseServiceAccount);
+
+        // Générer le token d'accès OAuth2 pour Firebase
+        const now = Math.floor(Date.now() / 1000);
+        const header = { alg: "RS256", typ: "JWT" };
+        const payload = {
+          iss: serviceAccount.client_email,
+          scope: "https://www.googleapis.com/auth/firebase.messaging",
+          aud: "https://oauth2.googleapis.com/token",
+          iat: now,
+          exp: now + 3600,
+        };
+
+        const encoder = new TextEncoder();
+        const base64url = (data: Uint8Array) => {
+          return btoa(String.fromCharCode(...data))
+            .replace(/\+/g, "-")
+            .replace(/\//g, "_")
+            .replace(/=/g, "");
+        };
+
+        const headerB64 = base64url(encoder.encode(JSON.stringify(header)));
+        const payloadB64 = base64url(encoder.encode(JSON.stringify(payload)));
+        const signatureInput = `${headerB64}.${payloadB64}`;
+
+        const pemContent = serviceAccount.private_key
+          .replace(/-----BEGIN PRIVATE KEY-----/, "")
+          .replace(/-----END PRIVATE KEY-----/, "")
+          .replace(/\n/g, "");
+        const binaryKey = Uint8Array.from(atob(pemContent), (c) => c.charCodeAt(0));
+
+        const cryptoKey = await crypto.subtle.importKey(
+          "pkcs8",
+          binaryKey,
+          { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+          false,
+          ["sign"]
+        );
+
+        const signature = await crypto.subtle.sign(
+          "RSASSA-PKCS1-v1_5",
+          cryptoKey,
+          encoder.encode(signatureInput)
+        );
+
+        const jwt = `${signatureInput}.${base64url(new Uint8Array(signature))}`;
+
+        const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
+        });
+
+        const tokenData = await tokenResponse.json();
+        const accessToken = tokenData.access_token;
+
+        if (!accessToken) {
+          console.error("Failed to get access token for user notification");
+          return;
+        }
+
+        const fcmResponse = await fetch(
+          `https://fcm.googleapis.com/v1/projects/${serviceAccount.project_id}/messages:send`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              message: {
+                token: userProfile.push_token,
+                notification: {
+                  title: "⚠️ Image rejetée",
+                  body: reasonText.length > 100 ? reasonText.substring(0, 97) + "..." : reasonText,
+                },
+                data: {
+                  type: "moderation_rejection",
+                  reason: reasonText,
+                  route: "/publish",
+                },
+                android: {
+                  priority: "high",
+                  notification: {
+                    color: "#FF6B00",
+                    channel_id: "default",
+                  },
+                },
+                apns: {
+                  payload: {
+                    aps: {
+                      sound: "default",
+                      badge: 1,
+                    },
+                  },
+                },
+              },
+            }),
+          }
+        );
+
+        if (fcmResponse.ok) {
+          console.log(`Moderation rejection notification sent to user ${userId}`);
+        } else {
+          const errorText = await fcmResponse.text();
+          console.error(`Failed to send rejection notification to user ${userId}:`, errorText);
+        }
+      } catch (pushError) {
+        console.error(`Error sending push notification to user ${userId}:`, pushError);
+      }
+    }
+  } catch (error) {
+    console.error("Error in notifyUser:", error);
+  }
+}
+
 // Fonction pour notifier les admins d'une image rejetée
 async function notifyAdmins(supabase: any, imageUrl: string, reason: string | null, uploaderId: string | null) {
   try {
@@ -356,8 +513,13 @@ Réponds UNIQUEMENT avec un JSON valide:
         });
         console.log("Moderation log saved:", isSafe ? "safe" : "unsafe");
         
-        // Si l'image est rejetée, notifier les admins
+        // Si l'image est rejetée, notifier l'utilisateur ET les admins
         if (!isSafe) {
+          // Notifier l'utilisateur qui a uploadé l'image
+          if (userId) {
+            await notifyUser(supabase, userId, reason);
+          }
+          // Notifier les admins
           await notifyAdmins(supabase, imageUrl, reason, userId);
         }
       } catch (logError) {
@@ -386,7 +548,10 @@ Réponds UNIQUEMENT avec un JSON valide:
             reason: "Contenu potentiellement inapproprié détecté",
           });
           
-          // Notifier les admins
+          // Notifier l'utilisateur ET les admins
+          if (userId) {
+            await notifyUser(supabase, userId, "Contenu potentiellement inapproprié détecté");
+          }
           await notifyAdmins(supabase, imageUrl, "Contenu potentiellement inapproprié détecté", userId);
         } catch (logError) {
           console.error("Failed to save moderation log:", logError);
