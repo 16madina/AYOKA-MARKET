@@ -66,7 +66,7 @@ const Publish = () => {
   });
 
   // Fetch user profile to get country, city, phone and currency
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading: isProfileLoading } = useQuery({
     queryKey: ["profile", user?.id],
     queryFn: async () => {
       if (!user) return null;
@@ -79,6 +79,7 @@ const Publish = () => {
       return data;
     },
     enabled: !!user,
+    staleTime: 0, // Toujours refetch pour avoir les dernières données
   });
 
   // Load draft from localStorage on mount
@@ -340,6 +341,25 @@ const Publish = () => {
   };
 
   const performSubmission = async () => {
+    // VALIDATION CRITIQUE: Vérifier que le profil est chargé avec une devise valide
+    if (isProfileLoading) {
+      toast({
+        title: "Chargement en cours",
+        description: "Veuillez patienter, votre profil est en cours de chargement...",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!profile?.currency) {
+      toast({
+        title: "Profil incomplet",
+        description: "Veuillez compléter votre profil (pays/devise) avant de publier une annonce",
+        variant: "destructive",
+      });
+      navigate("/account");
+      return;
+    }
 
     // Check for banned words before submission
     try {
@@ -819,11 +839,17 @@ const Publish = () => {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={isSubmitting || !acceptedTerms}
+                disabled={isSubmitting || !acceptedTerms || isProfileLoading || !profile?.currency}
                 size="lg"
               >
-                {isSubmitting ? "Publication..." : "Publier l'annonce"}
+                {isSubmitting ? "Publication..." : isProfileLoading ? "Chargement du profil..." : !profile?.currency ? "Profil incomplet" : "Publier l'annonce"}
               </Button>
+              
+              {!isProfileLoading && !profile?.currency && (
+                <p className="text-xs text-destructive text-center">
+                  ⚠️ Veuillez compléter votre profil (pays) dans les paramètres du compte avant de publier
+                </p>
+              )}
             </form>
           </CardContent>
         </Card>
