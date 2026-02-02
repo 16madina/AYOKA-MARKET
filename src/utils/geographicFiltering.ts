@@ -59,7 +59,7 @@ const canonicalizeCountry = (countryName: string): string => {
 export interface LocationPriority {
   city: string;
   country: string;
-  priority: 'same-city' | 'same-country' | 'neighboring-country' | 'other';
+  priority: 'same-city' | 'same-country' | 'neighboring-country' | 'west-africa' | 'other';
   distance?: string;
 }
 
@@ -182,7 +182,21 @@ export const getLocationPriority = (
     }
   }
   
-  // Autre
+  // Pays d'Afrique de l'Ouest (mais pas voisin)
+  const isWestAfrican = westAfricanCountries.some(c => 
+    normalizeText(c.name) === normalizedCountry
+  );
+  
+  if (isWestAfrican) {
+    return {
+      city,
+      country: canonicalListingCountry || '',
+      priority: 'west-africa',
+      distance: `${canonicalListingCountry}`
+    };
+  }
+  
+  // Autre (hors Afrique de l'Ouest)
   return {
     city,
     country: canonicalListingCountry || '',
@@ -200,7 +214,8 @@ export const sortListingsByLocation = <T extends { location: string }>(
     'same-city': 0,
     'same-country': 1,
     'neighboring-country': 2,
-    'other': 3
+    'west-africa': 3,
+    'other': 4
   };
   
   return [...listings].sort((a, b) => {
@@ -219,6 +234,8 @@ export const getLocationBadgeColor = (priority: LocationPriority['priority']) =>
       return 'bg-blue-500/90 text-white';
     case 'neighboring-country':
       return 'bg-orange-500/90 text-white';
+    case 'west-africa':
+      return 'bg-amber-600/90 text-white';
     default:
       return 'bg-gray-500/90 text-white';
   }

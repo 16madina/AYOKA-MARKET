@@ -328,7 +328,8 @@ const RecentListings = () => {
       'same-city': 0,
       'same-country': 1,
       'neighboring-country': 2,
-      'other': 3,
+      'west-africa': 3,
+      'other': 4,
     };
 
     const sortByProximityThenRecency = (items: any[]) => {
