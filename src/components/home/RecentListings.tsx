@@ -184,36 +184,17 @@ const RecentListings = () => {
         setUserCoordinates(browserCoords);
         console.log('📍 User coordinates (browser):', browserCoords);
 
-        // IMPORTANT: if the authenticated user's profile has no city/country yet,
-        // use GPS -> reverse geocode and persist (this fixes "newest first" sorting).
-        const needsProfileLocation = !!session?.user?.id && !userProfile?.city && !userProfile?.country;
-        const needsGuestFallback = !guestLocation.city && !guestLocation.country;
+        // Only use GPS -> reverse geocode for guests who have no location yet.
+        // IMPORTANT: Never auto-update authenticated user profiles - they set their location manually.
+        const needsGuestFallback = !session?.user?.id && !guestLocation.city && !guestLocation.country;
 
-        if (needsProfileLocation || needsGuestFallback) {
+        if (needsGuestFallback) {
           const inferred = await reverseGeocodeCoords(browserCoords.lat, browserCoords.lng);
           if (inferred?.city || inferred?.country) {
-            // Use as immediate fallback for sorting
+            // Use as immediate fallback for sorting (guests only)
             setGuestLocation(inferred);
             localStorage.setItem('guestLocation', JSON.stringify(inferred));
-
-            if (needsProfileLocation) {
-              const update: { city?: string; country?: string } = {};
-              if (!userProfile?.city && inferred.city) update.city = inferred.city;
-              if (!userProfile?.country && inferred.country) update.country = inferred.country;
-
-              if (Object.keys(update).length > 0) {
-                const { error } = await supabase
-                  .from('profiles')
-                  .update(update)
-                  .eq('id', session!.user.id);
-
-                if (error) {
-                  console.error('Error updating user profile location:', error);
-                } else {
-                  console.log('✅ Profile location updated from GPS:', update);
-                }
-              }
-            }
+            console.log('📍 Guest location inferred from GPS:', inferred);
           }
         }
         return;
