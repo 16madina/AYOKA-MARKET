@@ -92,6 +92,41 @@ export const ListingsMap = ({
       });
 
       map.current.on('load', () => {
+        const mapInstance = map.current;
+
+        // Ajouter une icône "pin" pour les annonces (évite l'effet "taches")
+        if (mapInstance && !mapInstance.hasImage('listing-pin')) {
+          const pinSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
+  <path d="M12 22s7-4.5 7-12a7 7 0 1 0-14 0c0 7.5 7 12 7 12z" fill="#8B4513" stroke="#ffffff" stroke-width="1.6"/>
+  <circle cx="12" cy="10" r="2.8" fill="#ffffff"/>
+</svg>`;
+
+          const img = new Image(36, 36);
+          img.onload = () => {
+            try {
+              // addImage doit être appelé après onload
+              if (map.current && !map.current.hasImage('listing-pin')) {
+                map.current.addImage('listing-pin', img);
+              }
+            } catch (e) {
+              console.error('Error adding listing-pin image:', e);
+            } finally {
+              console.log('Map loaded successfully');
+              setMapLoaded(true);
+              setMapError(null);
+            }
+          };
+          img.onerror = () => {
+            console.warn('listing-pin image failed to load; falling back to circle markers');
+            console.log('Map loaded successfully');
+            setMapLoaded(true);
+            setMapError(null);
+          };
+          img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(pinSvg)}`;
+          return;
+        }
+
         console.log('Map loaded successfully');
         setMapLoaded(true);
         setMapError(null);
@@ -145,7 +180,7 @@ export const ListingsMap = ({
   }, [centerLat, centerLng, zoom, mapLoaded]);
 
   useEffect(() => {
-    if (!map.current || !listings || listings.length === 0) return;
+    if (!map.current || !listings || listings.length === 0 || !mapLoaded) return;
 
     const mapInstance = map.current;
 
@@ -299,19 +334,37 @@ export const ListingsMap = ({
         }
       });
 
-      // Couche pour les marqueurs individuels
-      mapInstance.addLayer({
-        id: 'unclustered-point',
-        type: 'circle',
-        source: 'listings',
-        filter: ['!', ['has', 'point_count']],
-        paint: {
-          'circle-color': '#8B4513', // Brun chaud
-          'circle-radius': 12,
-          'circle-stroke-width': 3,
-          'circle-stroke-color': '#fff'
-        }
-      });
+      // Couche pour les marqueurs individuels (pin)
+      const canUsePin = mapInstance.hasImage('listing-pin');
+
+      if (canUsePin) {
+        mapInstance.addLayer({
+          id: 'unclustered-point',
+          type: 'symbol',
+          source: 'listings',
+          filter: ['!', ['has', 'point_count']],
+          layout: {
+            'icon-image': 'listing-pin',
+            'icon-size': 0.9,
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true,
+            'icon-ignore-placement': true
+          }
+        });
+      } else {
+        // Fallback (si l'icône n'a pas été ajoutée pour une raison quelconque)
+        mapInstance.addLayer({
+          id: 'unclustered-point',
+          type: 'circle',
+          source: 'listings',
+          filter: ['!', ['has', 'point_count']],
+          paint: {
+            'circle-radius': 8,
+            'circle-stroke-width': 2,
+            'circle-stroke-color': '#fff'
+          }
+        });
+      }
 
       // Click sur cluster: zoomer
       mapInstance.on('click', 'clusters', (e) => {
@@ -401,7 +454,7 @@ export const ListingsMap = ({
       // Cleanup: retirer l'event listener si le composant est démonté avant le chargement
       mapInstance.off('style.load', addListingsToMap);
     };
-  }, [listings, heatmapMode]);
+  }, [listings, heatmapMode, mapLoaded]);
 
   // Gestion du swipe pour fermer la card
   const handleTouchStart = (e: React.TouchEvent) => {
