@@ -69,6 +69,7 @@ export const ListingsMap = ({
   const [swipeCurrentY, setSwipeCurrentY] = useState<number>(0);
   const navigate = useNavigate();
 
+  // Initialisation de la carte (une seule fois)
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
@@ -129,7 +130,19 @@ export const ListingsMap = ({
       map.current?.remove();
       map.current = null;
     };
-  }, [centerLat, centerLng, zoom]);
+  }, []); // Pas de dépendances - initialisation une seule fois
+
+  // Recentrer la carte quand les coordonnées changent
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+    
+    console.log('📍 Map: Recentrage sur:', centerLat, centerLng, 'zoom:', zoom);
+    map.current.flyTo({
+      center: [centerLng, centerLat],
+      zoom: zoom,
+      duration: 1500
+    });
+  }, [centerLat, centerLng, zoom, mapLoaded]);
 
   useEffect(() => {
     if (!map.current || !listings || listings.length === 0) return;
