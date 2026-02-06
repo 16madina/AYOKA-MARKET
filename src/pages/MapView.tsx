@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { calculateDistance } from "@/utils/distanceCalculation";
+import { calculateDistance, geocodeLocation, getUserLocation } from "@/utils/distanceCalculation";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -30,6 +30,28 @@ import {
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 
+// Coordonnées par défaut des pays d'Afrique de l'Ouest
+const COUNTRY_COORDINATES: Record<string, { lat: number; lng: number; zoom: number }> = {
+  "Côte d'Ivoire": { lat: 5.3600, lng: -4.0083, zoom: 7 },
+  "Ivory Coast": { lat: 5.3600, lng: -4.0083, zoom: 7 },
+  "Sénégal": { lat: 14.6928, lng: -17.4467, zoom: 7 },
+  "Senegal": { lat: 14.6928, lng: -17.4467, zoom: 7 },
+  "Mali": { lat: 12.6392, lng: -8.0029, zoom: 6 },
+  "Guinée": { lat: 9.6412, lng: -13.5784, zoom: 7 },
+  "Guinea": { lat: 9.6412, lng: -13.5784, zoom: 7 },
+  "Burkina Faso": { lat: 12.3714, lng: -1.5197, zoom: 7 },
+  "Bénin": { lat: 6.3703, lng: 2.3912, zoom: 7 },
+  "Benin": { lat: 6.3703, lng: 2.3912, zoom: 7 },
+  "Togo": { lat: 6.1375, lng: 1.2123, zoom: 7 },
+  "Niger": { lat: 13.5117, lng: 2.1251, zoom: 6 },
+  "Ghana": { lat: 5.5600, lng: -0.2057, zoom: 7 },
+  "Nigeria": { lat: 6.5244, lng: 3.3792, zoom: 6 },
+  "Cameroun": { lat: 3.8480, lng: 11.5021, zoom: 6 },
+  "Cameroon": { lat: 3.8480, lng: 11.5021, zoom: 6 },
+  "France": { lat: 48.8566, lng: 2.3522, zoom: 6 },
+  "Canada": { lat: 45.5017, lng: -73.5673, zoom: 5 },
+};
+
 const MapView = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -40,6 +62,77 @@ const MapView = () => {
   const [heatmapMode, setHeatmapMode] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [distanceOpen, setDistanceOpen] = useState(false);
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number; zoom: number }>({ 
+    lat: 5.3600, 
+    lng: -4.0083, 
+    zoom: 7 
+  });
+
+  // Récupérer le profil de l'utilisateur connecté pour centrer la carte sur son pays
+  const { data: session } = useQuery({
+    queryKey: ["session"],
+    queryFn: async () => {
+      const { data } = await supabase.auth.getSession();
+      return data.session;
+    },
+    staleTime: 0,
+  });
+
+  const { data: userProfile } = useQuery({
+    queryKey: ["user-profile-for-map", session?.user?.id],
+    queryFn: async () => {
+      if (!session?.user?.id) return null;
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("city, country")
+        .eq("id", session.user.id)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!session?.user?.id,
+    staleTime: 0,
+  });
+
+  // Déterminer le centre de la carte basé sur le profil ou le GPS
+  useEffect(() => {
+    const determineMapCenter = async () => {
+      // 1. Priorité au profil utilisateur (ville/pays)
+      if (userProfile?.country) {
+        const countryCoords = COUNTRY_COORDINATES[userProfile.country];
+        if (countryCoords) {
+          console.log('📍 Map: Centrage sur le pays du profil:', userProfile.country);
+          setMapCenter(countryCoords);
+          return;
+        }
+        
+        // Si le pays n'est pas dans notre liste, essayer de géocoder
+        if (userProfile.city) {
+          const coords = await geocodeLocation(`${userProfile.city}, ${userProfile.country}`);
+          if (coords) {
+            console.log('📍 Map: Centrage géocodé sur:', userProfile.city, userProfile.country);
+            setMapCenter({ lat: coords.lat, lng: coords.lng, zoom: 11 });
+            return;
+          }
+        }
+      }
+
+      // 2. Fallback: utiliser le GPS du navigateur
+      const gpsCoords = await getUserLocation();
+      if (gpsCoords) {
+        console.log('📍 Map: Centrage sur GPS:', gpsCoords);
+        setMapCenter({ lat: gpsCoords.lat, lng: gpsCoords.lng, zoom: 11 });
+        setUserLocation(gpsCoords);
+        return;
+      }
+
+      // 3. Par défaut: Abidjan (déjà défini)
+      console.log('📍 Map: Centre par défaut (Abidjan)');
+    };
+
+    determineMapCenter();
+  }, [userProfile]);
 
   const { data: categories } = useQuery({
     queryKey: ["categories"],
@@ -262,7 +355,13 @@ const MapView = () => {
             <Skeleton className="w-full h-full rounded-lg" />
           </div>
         ) : listings && listings.length > 0 ? (
-          <ListingsMap listings={listings} heatmapMode={heatmapMode} />
+          <ListingsMap 
+            listings={listings} 
+            heatmapMode={heatmapMode}
+            centerLat={mapCenter.lat}
+            centerLng={mapCenter.lng}
+            zoom={mapCenter.zoom}
+          />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center p-8">
             <Card className="p-8 text-center max-w-md">
