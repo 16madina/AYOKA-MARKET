@@ -14,7 +14,7 @@ interface ImageUploaderProps {
 }
 
 // Fonction pour modérer une image via l'edge function
-const moderateImage = async (imageUrl: string, userId?: string): Promise<{ safe: boolean; reason?: string }> => {
+const moderateImage = async (imageUrl: string, userId?: string): Promise<{ safe: boolean; flagged?: boolean; reason?: string }> => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/moderate-image`,
@@ -30,17 +30,17 @@ const moderateImage = async (imageUrl: string, userId?: string): Promise<{ safe:
 
     if (!response.ok) {
       console.error("Moderation request failed:", response.status);
-      return { safe: true }; // Fail-open
+      return { safe: true, flagged: false };
     }
 
     return await response.json();
   } catch (error) {
     console.error("Moderation error:", error);
-    return { safe: true }; // Fail-open en cas d'erreur
+    return { safe: true, flagged: false };
   }
 };
 
-export const ImageUploader = ({ images, onImagesChange, maxImages = 10 }: ImageUploaderProps) => {
+export const ImageUploader = ({ images, onImagesChange, maxImages = 10, onFlaggedImages }: ImageUploaderProps & { onFlaggedImages?: (flagged: boolean) => void }) => {
   const [uploading, setUploading] = useState(false);
   const [moderating, setModerating] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -138,7 +138,6 @@ export const ImageUploader = ({ images, onImagesChange, maxImages = 10 }: ImageU
       }
 
       const newImages: string[] = [];
-      const rejectedImages: string[] = [];
 
       for (const chunk of chunks) {
         const uploadPromises = chunk.map(async (file, idx) => {
@@ -168,31 +167,22 @@ export const ImageUploader = ({ images, onImagesChange, maxImages = 10 }: ImageU
 
         const chunkResults = await Promise.all(uploadPromises);
         
-        // Modération des images uploadées
+        // Modération des images uploadées (ne bloque plus, signale seulement)
         setModerating(true);
+        let hasFlaggedImages = false;
         for (const result of chunkResults) {
           const moderation = await moderateImage(result.publicUrl, user.id);
+          newImages.push(result.publicUrl);
           
-          if (moderation.safe) {
-            newImages.push(result.publicUrl);
-          } else {
-            // Supprimer l'image du storage si elle n'est pas appropriée
-            await supabase.storage.from("listings").remove([result.fileName]);
-            rejectedImages.push(result.originalName);
-            
-            console.warn("Image rejected by moderation:", result.originalName, moderation.reason);
+          if (moderation.flagged) {
+            hasFlaggedImages = true;
+            console.warn("Image flagged for review:", result.originalName, moderation.reason);
           }
         }
+        if (hasFlaggedImages) {
+          onFlaggedImages?.(true);
+        }
         setModerating(false);
-      }
-
-      // Afficher les résultats
-      if (rejectedImages.length > 0) {
-        toast({
-          title: "Image(s) refusée(s)",
-          description: `${rejectedImages.length} image(s) contiennent du contenu inapproprié et ont été retirées.`,
-          variant: "destructive",
-        });
       }
 
       if (newImages.length > 0) {
@@ -201,7 +191,7 @@ export const ImageUploader = ({ images, onImagesChange, maxImages = 10 }: ImageU
           title: "Images téléchargées",
           description: `${newImages.length} image(s) ajoutée(s) avec succès`,
         });
-      } else if (rejectedImages.length === 0) {
+      } else {
         toast({
           title: "Aucune image ajoutée",
           description: "Veuillez réessayer",

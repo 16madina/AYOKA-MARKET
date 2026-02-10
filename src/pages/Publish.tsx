@@ -30,6 +30,7 @@ const Publish = () => {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showRulesDialog, setShowRulesDialog] = useState(false);
   const [rulesAccepted, setRulesAccepted] = useState(false);
+  const [hasFlaggedImages, setHasFlaggedImages] = useState(false);
   const { firstPublishCompleted, completeFirstPublish } = useOnboarding();
   
   const [formData, setFormData] = useState({
@@ -438,6 +439,7 @@ const Publish = () => {
         condition: formData.condition,
         images: formData.images,
         status: "active",
+        moderation_status: hasFlaggedImages ? "pending_review" : "approved",
         delivery_available: formData.delivery_available,
         delivery_price: formData.delivery_available && formData.delivery_price ? parseFloat(formData.delivery_price) : null,
         delivery_zone: formData.delivery_available ? formData.delivery_zone : null,
@@ -458,8 +460,10 @@ const Publish = () => {
       queryClient.invalidateQueries({ queryKey: ["listings"] });
 
       toast({
-        title: "Annonce publiée !",
-        description: "Votre annonce est maintenant en ligne",
+        title: hasFlaggedImages ? "Annonce en attente de révision" : "Annonce publiée !",
+        description: hasFlaggedImages 
+          ? "Votre annonce sera visible après vérification par notre équipe" 
+          : "Votre annonce est maintenant en ligne",
       });
 
       navigate("/");
@@ -501,6 +505,7 @@ const Publish = () => {
                     setFormData({ ...formData, images })
                   }
                   maxImages={10}
+                  onFlaggedImages={(flagged) => setHasFlaggedImages(flagged)}
                 />
               </div>
 
