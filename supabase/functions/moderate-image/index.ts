@@ -505,11 +505,45 @@ Réponds UNIQUEMENT avec un JSON valide:
       
       // Log moderation result to database
       try {
+        let moderationImageUrl: string | null = null;
+
+        // Si l'image est rejetée, sauvegarder une copie dans le bucket moderation-images
+        if (!isSafe) {
+          try {
+            const imageResponse = await fetch(imageUrl);
+            if (imageResponse.ok) {
+              const imageBlob = await imageResponse.blob();
+              const ext = imageUrl.split('.').pop()?.split('?')[0] || 'jpg';
+              const fileName = `rejected/${Date.now()}_${crypto.randomUUID()}.${ext}`;
+              
+              const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('moderation-images')
+                .upload(fileName, imageBlob, {
+                  contentType: imageBlob.type || 'image/jpeg',
+                  upsert: false,
+                });
+
+              if (uploadError) {
+                console.error("Failed to copy rejected image:", uploadError);
+              } else {
+                const { data: { publicUrl } } = supabase.storage
+                  .from('moderation-images')
+                  .getPublicUrl(uploadData.path);
+                moderationImageUrl = publicUrl;
+                console.log("Rejected image copied to moderation bucket:", moderationImageUrl);
+              }
+            }
+          } catch (copyError) {
+            console.error("Error copying rejected image:", copyError);
+          }
+        }
+
         await supabase.from("image_moderation_logs").insert({
           image_url: imageUrl,
           user_id: userId || null,
           is_safe: isSafe,
           reason: reason,
+          moderation_image_url: moderationImageUrl,
         });
         console.log("Moderation log saved:", isSafe ? "safe" : "unsafe");
         

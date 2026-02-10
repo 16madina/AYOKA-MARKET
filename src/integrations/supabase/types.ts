@@ -401,6 +401,7 @@ export type Database = {
           id: string
           image_url: string
           is_safe: boolean
+          moderation_image_url: string | null
           reason: string | null
           user_id: string | null
         }
@@ -409,6 +410,7 @@ export type Database = {
           id?: string
           image_url: string
           is_safe?: boolean
+          moderation_image_url?: string | null
           reason?: string | null
           user_id?: string | null
         }
@@ -417,6 +419,7 @@ export type Database = {
           id?: string
           image_url?: string
           is_safe?: boolean
+          moderation_image_url?: string | null
           reason?: string | null
           user_id?: string | null
         }
