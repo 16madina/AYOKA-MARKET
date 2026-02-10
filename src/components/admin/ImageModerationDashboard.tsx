@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
-import { ShieldX, ShieldCheck, Eye, ExternalLink, RefreshCw, ImageOff, MessageSquareOff, Settings } from "lucide-react";
+import { ShieldX, ShieldCheck, Eye, ExternalLink, RefreshCw, ImageOff, MessageSquareOff, Settings, ImageIcon } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BannedWordsManagement } from "./BannedWordsManagement";
@@ -173,19 +173,34 @@ export const ImageModerationDashboard = () => {
                       {/* Thumbnail */}
                       <div 
                         className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-lg overflow-hidden bg-muted cursor-pointer shrink-0"
-                        onClick={() => setSelectedImage(log.image_url)}
+                        onClick={() => setSelectedImage(log.moderation_image_url || log.image_url)}
                       >
-                        <img
-                          src={log.image_url}
-                          alt="Moderated image"
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/placeholder.svg';
-                          }}
-                        />
+                        {(log.moderation_image_url || log.image_url) ? (
+                          <img
+                            src={log.moderation_image_url || log.image_url}
+                            alt="Moderated image"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              // If moderation_image_url failed, try original
+                              if (log.moderation_image_url && target.src === log.moderation_image_url) {
+                                target.src = log.image_url;
+                              } else {
+                                // Show placeholder icon instead
+                                target.style.display = 'none';
+                                target.parentElement?.classList.add('flex', 'items-center', 'justify-center');
+                              }
+                            }}
+                          />
+                        ) : null}
                         <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                           <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                         </div>
+                        {!log.moderation_image_url && !log.is_safe && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <ImageOff className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
+                          </div>
+                        )}
                       </div>
 
                       {/* Info */}
