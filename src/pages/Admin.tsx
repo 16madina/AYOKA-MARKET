@@ -13,13 +13,14 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Users, FileText, ShieldAlert, Mail, MessageSquare, Ban, CheckCircle, XCircle, Eye, Phone, Search, Filter, Bell, ImageOff, Trash2, UserPlus } from "lucide-react";
+import { Users, FileText, ShieldAlert, Mail, MessageSquare, Ban, CheckCircle, XCircle, Eye, Phone, Search, Filter, Bell, ImageOff, Trash2, UserPlus, ClipboardCheck } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import BottomNav from "@/components/BottomNav";
 import { InactiveListingsReminder } from "@/components/admin/InactiveListingsReminder";
 import AdBannerManagement from "@/components/admin/AdBannerManagement";
 import { ImageModerationDashboard } from "@/components/admin/ImageModerationDashboard";
 import { NewUsersTab } from "@/components/admin/NewUsersTab";
+import { ListingReviewTab } from "@/components/admin/ListingReviewTab";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -591,7 +592,7 @@ const Admin = () => {
         <Tabs defaultValue="users" className="space-y-4 sm:space-y-6">
           {/* Tabs - Scrollable on mobile */}
           <div className="overflow-x-auto -mx-2 px-2 scrollbar-hide">
-            <TabsList className="inline-flex w-auto min-w-full sm:grid sm:w-full sm:grid-cols-7 h-auto gap-0.5 sm:gap-1 p-1">
+            <TabsList className="inline-flex w-auto min-w-full sm:grid sm:w-full sm:grid-cols-8 h-auto gap-0.5 sm:gap-1 p-1">
               <TabsTrigger value="users" className="flex items-center gap-1.5 sm:gap-2 py-2 px-3 sm:px-4 text-xs sm:text-sm whitespace-nowrap">
                 <Users className="h-4 w-4 flex-shrink-0" />
                 <span>Utilisateurs</span>
@@ -607,6 +608,10 @@ const Admin = () => {
               <TabsTrigger value="reports" className="flex items-center gap-1.5 sm:gap-2 py-2 px-3 sm:px-4 text-xs sm:text-sm whitespace-nowrap">
                 <ShieldAlert className="h-4 w-4 flex-shrink-0" />
                 <span>Signalements</span>
+              </TabsTrigger>
+              <TabsTrigger value="review" className="flex items-center gap-1.5 sm:gap-2 py-2 px-3 sm:px-4 text-xs sm:text-sm whitespace-nowrap">
+                <ClipboardCheck className="h-4 w-4 flex-shrink-0" />
+                <span>Révision</span>
               </TabsTrigger>
               <TabsTrigger value="moderation" className="flex items-center gap-1.5 sm:gap-2 py-2 px-3 sm:px-4 text-xs sm:text-sm whitespace-nowrap">
                 <ImageOff className="h-4 w-4 flex-shrink-0" />
@@ -1380,6 +1385,11 @@ const Admin = () => {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Listing Review Tab */}
+          <TabsContent value="review" className="space-y-4">
+            <ListingReviewTab />
           </TabsContent>
 
           {/* Image Moderation Tab */}

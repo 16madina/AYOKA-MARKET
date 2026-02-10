@@ -502,19 +502,20 @@ Réponds UNIQUEMENT avec un JSON valide:
       const result = JSON.parse(cleanContent);
       const isSafe = result.safe === true;
       const reason = result.reason || null;
+      const flagged = !isSafe;
       
       // Log moderation result to database
       try {
         let moderationImageUrl: string | null = null;
 
-        // Si l'image est rejetée, sauvegarder une copie dans le bucket moderation-images
-        if (!isSafe) {
+        // Si l'image est signalée, sauvegarder une copie dans le bucket moderation-images
+        if (flagged) {
           try {
             const imageResponse = await fetch(imageUrl);
             if (imageResponse.ok) {
               const imageBlob = await imageResponse.blob();
               const ext = imageUrl.split('.').pop()?.split('?')[0] || 'jpg';
-              const fileName = `rejected/${Date.now()}_${crypto.randomUUID()}.${ext}`;
+              const fileName = `flagged/${Date.now()}_${crypto.randomUUID()}.${ext}`;
               
               const { data: uploadData, error: uploadError } = await supabase.storage
                 .from('moderation-images')
@@ -524,17 +525,17 @@ Réponds UNIQUEMENT avec un JSON valide:
                 });
 
               if (uploadError) {
-                console.error("Failed to copy rejected image:", uploadError);
+                console.error("Failed to copy flagged image:", uploadError);
               } else {
                 const { data: { publicUrl } } = supabase.storage
                   .from('moderation-images')
                   .getPublicUrl(uploadData.path);
                 moderationImageUrl = publicUrl;
-                console.log("Rejected image copied to moderation bucket:", moderationImageUrl);
+                console.log("Flagged image copied to moderation bucket:", moderationImageUrl);
               }
             }
           } catch (copyError) {
-            console.error("Error copying rejected image:", copyError);
+            console.error("Error copying flagged image:", copyError);
           }
         }
 
@@ -545,24 +546,21 @@ Réponds UNIQUEMENT avec un JSON valide:
           reason: reason,
           moderation_image_url: moderationImageUrl,
         });
-        console.log("Moderation log saved:", isSafe ? "safe" : "unsafe");
+        console.log("Moderation log saved:", isSafe ? "safe" : "flagged for review");
         
-        // Si l'image est rejetée, notifier l'utilisateur ET les admins
-        if (!isSafe) {
-          // Notifier l'utilisateur qui a uploadé l'image
-          if (userId) {
-            await notifyUser(supabase, userId, reason);
-          }
-          // Notifier les admins
+        // Si l'image est signalée, notifier les admins seulement (plus de rejet utilisateur)
+        if (flagged) {
           await notifyAdmins(supabase, imageUrl, reason, userId);
         }
       } catch (logError) {
         console.error("Failed to save moderation log:", logError);
       }
       
+      // Toujours laisser passer l'image, mais indiquer si elle est signalée
       return new Response(
         JSON.stringify({
-          safe: isSafe,
+          safe: true,
+          flagged: flagged,
           reason: reason
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -572,8 +570,9 @@ Réponds UNIQUEMENT avec un JSON valide:
       
       // Analyse basique du texte en cas d'échec du parsing
       const lowerContent = content.toLowerCase();
-      if (lowerContent.includes('"safe": false') || lowerContent.includes('"safe":false')) {
-        // Log rejected image
+      const isFlagged = lowerContent.includes('"safe": false') || lowerContent.includes('"safe":false');
+      
+      if (isFlagged) {
         try {
           await supabase.from("image_moderation_logs").insert({
             image_url: imageUrl,
@@ -581,25 +580,15 @@ Réponds UNIQUEMENT avec un JSON valide:
             is_safe: false,
             reason: "Contenu potentiellement inapproprié détecté",
           });
-          
-          // Notifier l'utilisateur ET les admins
-          if (userId) {
-            await notifyUser(supabase, userId, "Contenu potentiellement inapproprié détecté");
-          }
           await notifyAdmins(supabase, imageUrl, "Contenu potentiellement inapproprié détecté", userId);
         } catch (logError) {
           console.error("Failed to save moderation log:", logError);
         }
-        
-        return new Response(
-          JSON.stringify({ safe: false, reason: "Contenu potentiellement inapproprié détecté" }),
-          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
       }
       
-      // Par défaut, on laisse passer
+      // Toujours laisser passer, mais indiquer le flag
       return new Response(
-        JSON.stringify({ safe: true }),
+        JSON.stringify({ safe: true, flagged: isFlagged, reason: isFlagged ? "Contenu potentiellement inapproprié détecté" : null }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
