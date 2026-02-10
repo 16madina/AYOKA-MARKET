@@ -21,13 +21,12 @@ interface PublicationRulesDialogProps {
 
 const prohibitedItems = [
   {
-    category: "Contenus illégaux",
+    category: "Contenus interdits",
     icon: Ban,
     items: [
       "Drogues et substances illicites",
       "Armes à feu et munitions",
       "Contrefaçons et produits piratés",
-      "Documents officiels falsifiés",
       "Produits volés",
     ],
   },
@@ -35,30 +34,8 @@ const prohibitedItems = [
     category: "Contenus inappropriés",
     icon: AlertTriangle,
     items: [
-      "Contenus pornographiques ou à caractère sexuel",
-      "Contenus violents ou incitant à la haine",
-      "Contenus discriminatoires",
-      "Contenus diffamatoires ou injurieux",
-    ],
-  },
-  {
-    category: "Services interdits",
-    icon: FileWarning,
-    items: [
-      "Services financiers non réglementés",
-      "Jeux d'argent et paris illégaux",
-      "Services d'escorte ou similaires",
-      "Vente de données personnelles",
-    ],
-  },
-  {
-    category: "Autres restrictions",
-    icon: ShieldCheck,
-    items: [
-      "Animaux sauvages ou espèces protégées",
-      "Médicaments sur ordonnance",
-      "Produits dangereux (explosifs, substances toxiques)",
-      "Organes humains ou produits du corps",
+      "Contenus à caractère sexuel ou violent",
+      "Contenus discriminatoires ou haineux",
     ],
   },
 ];
@@ -70,8 +47,7 @@ export function PublicationRulesDialog({
 }: PublicationRulesDialogProps) {
   const [confirmations, setConfirmations] = useState({
     readRules: false,
-    noProhibitedContent: false,
-    acceptResponsibility: false,
+    acceptRules: false,
   });
 
   const allConfirmed = Object.values(confirmations).every(Boolean);
@@ -178,41 +154,21 @@ export function PublicationRulesDialog({
               htmlFor="readRules"
               className="text-sm font-normal cursor-pointer leading-relaxed"
             >
-              J'ai lu et compris les règles de publication
+              J'ai pris connaissance des règles de publication
             </Label>
           </div>
 
           <div className="flex items-start space-x-3">
             <Checkbox
-              id="noProhibitedContent"
-              checked={confirmations.noProhibitedContent}
-              onCheckedChange={() =>
-                handleConfirmationChange("noProhibitedContent")
-              }
+              id="acceptRules"
+              checked={confirmations.acceptRules}
+              onCheckedChange={() => handleConfirmationChange("acceptRules")}
             />
             <Label
-              htmlFor="noProhibitedContent"
+              htmlFor="acceptRules"
               className="text-sm font-normal cursor-pointer leading-relaxed"
             >
-              Mon annonce ne contient aucun contenu interdit
-            </Label>
-          </div>
-
-          <div className="flex items-start space-x-3">
-            <Checkbox
-              id="acceptResponsibility"
-              checked={confirmations.acceptResponsibility}
-              onCheckedChange={() =>
-                handleConfirmationChange("acceptResponsibility")
-              }
-            />
-            <Label
-              htmlFor="acceptResponsibility"
-              className="text-sm font-normal cursor-pointer leading-relaxed"
-            >
-              Je comprends que la violation de ces règles entraînera la
-              suppression de mon annonce et potentiellement le bannissement de
-              mon compte
+              J'accepte de respecter ces règles
             </Label>
           </div>
         </div>
