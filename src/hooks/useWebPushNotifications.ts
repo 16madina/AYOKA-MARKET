@@ -108,7 +108,7 @@ export const useWebPushNotifications = () => {
           'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U'
         );
         
-        const subscription = await registration.pushManager.subscribe({
+        const subscription = await (registration as any).pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: vapidKey as BufferSource
         });
