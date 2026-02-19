@@ -1,18 +1,20 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState, useEffect, useCallback, useRef } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MapPin, Navigation, Rocket, Sparkles } from "lucide-react";
+import { MapPin, Navigation, Rocket, Sparkles, Loader2 } from "lucide-react";
 import { translateCondition } from "@/utils/translations";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getLocationPriority } from "@/utils/geographicFiltering";
 import { formatPriceWithConversion, getConvertedPrice } from "@/utils/currency";
 import { getUserLocation, geocodeLocation, calculateDistance, formatDistance } from "@/utils/distanceCalculation";
 import { formatRelativeTime } from "@/utils/timeFormatting";
+
+const PAGE_SIZE = 20;
 
 async function reverseGeocodeCoords(lat: number, lng: number): Promise<{ city: string | null; country: string | null } | null> {
   try {
@@ -154,9 +156,18 @@ const RecentListings = () => {
     staleTime: 1000 * 60 * 2, // Cache pendant 2 minutes
   });
 
-  const { data: listings, isLoading } = useQuery({
+  const {
+    data: listingsPages,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["recent-listings", userProfile?.city, userProfile?.country],
-    queryFn: async () => {
+    queryFn: async ({ pageParam = 0 }) => {
+      const from = pageParam * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
       const { data, error } = await supabase
         .from("listings")
         .select(`
@@ -166,14 +177,40 @@ const RecentListings = () => {
         `)
         .eq("status", "active")
         .order("created_at", { ascending: false })
-        .limit(100);
-      
+        .range(from, to);
+
       if (error) throw error;
-      
       return data;
     },
-    staleTime: 1000 * 60 * 5, // Cache pendant 5 minutes
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage || lastPage.length < PAGE_SIZE) return undefined;
+      return allPages.length;
+    },
+    initialPageParam: 0,
+    staleTime: 1000 * 60 * 5,
   });
+
+  // Flatten all pages into a single array
+  const listings = useMemo(
+    () => listingsPages?.pages.flatMap((page) => page) ?? [],
+    [listingsPages]
+  );
+
+  // Infinite scroll observer
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!sentinelRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   // Get user's coordinates from browser geolocation, user profile, or guest location
   useEffect(() => {
@@ -586,9 +623,14 @@ const RecentListings = () => {
           </div>
         ) : (
           <div className="space-y-8">
-            {/* Mobile: 2 colonnes, Tablet: 2 colonnes, Desktop: 3 colonnes, XL: 4 colonnes */}
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {listingsWithAds.map((item, index) => renderItem(item, index))}
+            </div>
+            {/* Sentinel for infinite scroll */}
+            <div ref={sentinelRef} className="w-full py-4 flex justify-center">
+              {isFetchingNextPage && (
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              )}
             </div>
           </div>
         )}
