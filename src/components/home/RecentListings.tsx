@@ -166,7 +166,7 @@ const RecentListings = () => {
         `)
         .eq("status", "active")
         .order("created_at", { ascending: false })
-        .limit(30);
+        .limit(100);
       
       if (error) throw error;
       
