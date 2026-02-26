@@ -137,6 +137,8 @@ export const SystemNotifications = () => {
         return <span className="text-lg">💰</span>;
       case 'boost':
         return <span className="text-lg">🚀</span>;
+      case 'moderation':
+        return <span className="text-lg">⚠️</span>;
       case 'listing':
         return <span className="text-lg">📦</span>;
       case 'welcome':
@@ -189,11 +191,13 @@ export const SystemNotifications = () => {
       case 'boost':
         targetRoute = '/referral';
         break;
+      case 'moderation':
+        targetRoute = metadata?.route || '/publish';
+        break;
       case 'welcome':
         targetRoute = metadata?.route || '/publish';
         break;
       default:
-        // Pour les types inconnus, vérifier si un route est spécifié dans metadata
         if (metadata?.route) {
           targetRoute = metadata.route;
         }

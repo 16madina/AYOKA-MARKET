@@ -85,11 +85,29 @@ export const ListingReviewTab = () => {
     if (listing?.user_id) {
       await supabase.from("system_notifications").insert({
         user_id: listing.user_id,
-        title: "Annonce rejetée",
-        message: rejectNotes || "Votre annonce ne respecte pas les règles de la plateforme.",
+        title: "⚠️ Annonce rejetée",
+        message: `${rejectNotes || "Votre annonce ne respecte pas les règles de la plateforme."}\n\nCliquez ici pour republier votre annonce avec une nouvelle image.`,
         notification_type: "moderation",
-        metadata: { listing_id: rejectingId, reason: rejectNotes },
+        metadata: { listing_id: rejectingId, reason: rejectNotes, route: "/publish" },
       });
+
+      // Envoyer aussi une notification push à l'utilisateur
+      try {
+        await supabase.functions.invoke("send-push-notification", {
+          body: {
+            userId: listing.user_id,
+            title: "⚠️ Annonce rejetée",
+            body: rejectNotes || "Votre annonce ne respecte pas les règles. Cliquez pour republier.",
+            data: {
+              type: "moderation",
+              listing_id: rejectingId,
+              route: "/publish",
+            },
+          },
+        });
+      } catch (pushErr) {
+        console.error("Failed to send push notification:", pushErr);
+      }
     }
 
     toast.success("Annonce rejetée");
