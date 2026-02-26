@@ -26,10 +26,10 @@ async function notifyUser(supabase: any, userId: string, reason: string | null) 
     // 1. Créer une notification in-app dans system_notifications
     const { error: notifError } = await supabase.from("system_notifications").insert({
       user_id: userId,
-      title: "Image rejetée par modération",
-      message: reasonText,
+      title: "⚠️ Image rejetée par modération",
+      message: `${reasonText}\n\nCliquez ici pour republier votre annonce avec une nouvelle image.`,
       notification_type: "moderation",
-      metadata: { reason: reasonText },
+      metadata: { reason: reasonText, route: "/publish" },
     });
 
     if (notifError) {
