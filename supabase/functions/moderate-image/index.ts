@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Fonction pour notifier l'utilisateur que son image a été rejetée
+// Fonction pour notifier l'utilisateur que son annonce est en attente de révision
 async function notifyUser(supabase: any, userId: string, reason: string | null) {
   try {
     // Récupérer le profil de l'utilisateur avec son push_token
@@ -26,10 +26,10 @@ async function notifyUser(supabase: any, userId: string, reason: string | null) 
     // 1. Créer une notification in-app dans system_notifications
     const { error: notifError } = await supabase.from("system_notifications").insert({
       user_id: userId,
-      title: "⚠️ Image rejetée par modération",
-      message: `${reasonText}\n\nCliquez ici pour republier votre annonce avec une nouvelle image.`,
+      title: "📋 Annonce en cours de vérification",
+      message: `Votre annonce est en attente d'approbation par notre équipe.\n\nRaison: ${reasonText}\n\nElle sera visible dès qu'elle sera approuvée.`,
       notification_type: "moderation",
-      metadata: { reason: reasonText, route: "/publish" },
+      metadata: { reason: reasonText, route: "/profile" },
     });
 
     if (notifError) {
@@ -120,13 +120,13 @@ async function notifyUser(supabase: any, userId: string, reason: string | null) 
               message: {
                 token: userProfile.push_token,
                 notification: {
-                  title: "⚠️ Image rejetée",
-                  body: reasonText.length > 100 ? reasonText.substring(0, 97) + "..." : reasonText,
+                  title: "📋 Annonce en vérification",
+                  body: "Votre annonce est en cours de vérification et sera publiée après approbation.",
                 },
                 data: {
-                  type: "moderation_rejection",
+                  type: "moderation_pending",
                   reason: reasonText,
-                  route: "/publish",
+                  route: "/profile",
                 },
                 android: {
                   priority: "high",
@@ -295,8 +295,8 @@ async function notifyAdmins(supabase: any, imageUrl: string, reason: string | nu
               message: {
                 token: admin.push_token,
                 notification: {
-                  title: "🚨 Image rejetée par modération",
-                  body: `${uploaderName}: ${reason || "Contenu inapproprié détecté"}`,
+                  title: "📋 Annonce à approuver",
+                  body: `${uploaderName}: ${reason || "Contenu à vérifier"} - Cliquez pour approuver ou rejeter.`,
                 },
                 data: {
                   type: "moderation_alert",
