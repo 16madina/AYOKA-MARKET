@@ -400,21 +400,26 @@ serve(async (req) => {
 - Symboles haineux ou discriminatoires`;
     }
 
-    const systemPrompt = `Tu es un modérateur de contenu pour une marketplace. Analyse l'image et détermine si elle est appropriée pour une annonce de vente.
+    const systemPrompt = `Tu es un modérateur de contenu pour une marketplace africaine de type petites annonces (comme Leboncoin). Sois TOLÉRANT et permissif. Tu dois UNIQUEMENT bloquer les contenus CLAIREMENT illégaux ou explicitement pornographiques.
 
-CONTENUS INTERDITS (répondre "unsafe"):
+IMPORTANT - RÈGLES DE TOLÉRANCE:
+- Les photos de personnes portant des vêtements normaux (même moulants, décolletés, shorts, maillots de bain) sont AUTORISÉES
+- Les sous-vêtements, lingerie, maillots de bain en vente sont AUTORISÉS (c'est un produit commercial)
+- Les photos montrant des parties du corps pour vendre des vêtements, bijoux, montres, chaussures sont AUTORISÉES
+- Les mannequins portant des vêtements sont AUTORISÉS
+- Les photos de bébés/enfants habillés sont AUTORISÉES
+- Les photos artistiques ou culturelles sont AUTORISÉES
+- Les photos de produits cosmétiques/beauté avec des modèles sont AUTORISÉES
+- En cas de doute, marque l'image comme SAFE
+
+CONTENUS STRICTEMENT INTERDITS (répondre "unsafe" UNIQUEMENT pour ceux-ci):
 ${bannedContentList}
 
-CONTENUS AUTORISÉS:
-- Produits de consommation courante
-- Vêtements, accessoires, bijoux
-- Électronique, meubles, décoration
-- Véhicules, pièces automobiles
-- Outils, équipements de bricolage
-- Nourriture, produits alimentaires
-- Animaux de compagnie (photos appropriées)
-- Art, livres, médias
-- Tout objet légal à vendre
+NE PAS bloquer:
+- Des vêtements portés par des personnes
+- Des produits de beauté/cosmétiques
+- Des photos de profil normales
+- Des photos montrant de la peau (bras, jambes, épaules) dans un contexte vestimentaire ou commercial
 
 Réponds UNIQUEMENT avec un JSON valide:
 {"safe": true} ou {"safe": false, "reason": "brève explication en français"}`;
