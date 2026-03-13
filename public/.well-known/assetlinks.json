@@ -1,11 +1,15 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.ayoka.market",
       "sha256_cert_fingerprints": [
-        "D4:6B:41:1E:99:1E:0A:23:DB:39:87:3D:3C:95:AC:44:D4:FD:61:66:6F:79:37:DE:38:AE:18:A9:13:7D:31:F7"
+        "D4:6B:41:1E:99:1E:0A:23:DB:39:87:3D:3C:95:AC:44:D4:FD:61:66:6F:79:37:DE:38:AE:18:A9:13:7D:31:F7",
+        "B0:8E:A5:A9:BD:24:87:8A:54:1D:32:77:F8:8D:BC:C8:A7:3A:91:6C:AB:53:4A:A4:43:18:28:F5:81:13:B2"
       ]
     }
   }
