@@ -25,7 +25,7 @@
     
     <!-- Version de l'application -->
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>4.1.0</string>
     
     <!-- Numéro de build -->
     <key>CFBundleVersion</key>
