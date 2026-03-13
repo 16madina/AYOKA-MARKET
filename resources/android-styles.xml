@@ -2,16 +2,20 @@
 <!--
   Copiez ce fichier vers : android/app/src/main/res/values/styles.xml
   après avoir exécuté 'npx cap add android'
+  
+  Compatible Android 15 (SDK 35) - Edge-to-edge
 -->
 <resources>
-    <!-- Thème principal sans ActionBar -->
+    <!-- Thème principal sans ActionBar - Edge-to-edge compatible -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#ea384c</item>
         <item name="colorPrimaryDark">#d62d41</item>
         <item name="colorAccent">#ea384c</item>
-        <item name="android:statusBarColor">#FFFFFF</item>
-        <item name="android:navigationBarColor">#FFFFFF</item>
+        <!-- Supprimé: android:statusBarColor et android:navigationBarColor (obsolètes SDK 35) -->
         <item name="android:windowLightStatusBar">true</item>
+        <!-- Edge-to-edge: barres transparentes -->
+        <item name="android:enforceStatusBarContrast">false</item>
+        <item name="android:enforceNavigationBarContrast">true</item>
     </style>
 
     <!-- Thème de lancement SANS splash screen (fond blanc simple) -->
