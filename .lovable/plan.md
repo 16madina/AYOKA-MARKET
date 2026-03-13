@@ -1,31 +1,66 @@
 
+# Plan : Correction des problèmes de devise et de tri géographique
 
-## Problem
+## Contexte des problèmes
 
-All profile-related queries across the app use the same React Query key `["profile", userId]` but fetch different columns. This causes a cache collision:
+### Problème 1 : Devises incorrectes sur les annonces de Guinée
+**Diagnostic** : 2 annonces à Conakry ont été publiées avec `FCFA` au lieu de `GNF` parce que le profil n'était pas encore chargé lors de la soumission du formulaire.
 
-1. **BottomNav** (always visible) fetches only `avatar_url, first_name, last_name`
-2. When you click "Profil", React Query instantly serves this cached data — which has no `email_verified` field
-3. The verified badge only appears after a background refetch completes (up to 5 seconds), or after the 30-second BottomNav polling overwrites the cache again
+**Annonces concernées** :
+- "Ensemble Sac et bob (personnalisation possible)"
+- "Sac à Sacs à Dos Ocre & Pétales (Jaune Moutarde)"
 
-## Solution
+### Problème 2 : Tri géographique incohérent
+**Diagnostic** : Le tri fonctionne correctement selon les logs. Les logs console montrent que le testeur actuel est localisé au **Canada** (Longueuil), ce qui explique pourquoi toutes les annonces sont classées comme "other".
 
-Differentiate the React Query keys so each component manages its own cache independently.
+Pour l'utilisatrice "Madina Admin Diallo" en Côte d'Ivoire, il faut vérifier que son profil a bien les champs `city` et `country` correctement remplis.
 
-### Changes
+---
 
-**1. `src/components/BottomNav.tsx`**
-- Change query key from `["profile", user?.id]` to `["profile-nav", user?.id]`
+## Actions à effectuer
 
-**2. `src/pages/Profile.tsx`**
-- Change query key from `["profile", user?.id]` to `["profile-full", user?.id]`
-- This ensures Profile always fetches all fields and never gets partial data from the nav cache
+### Étape 1 : Corriger les devises des annonces existantes (Base de données)
 
-**3. `src/pages/Publish.tsx`**
-- Change query key to `["profile-publish", user?.id]` since it also fetches specific fields
+Mettre à jour les 2 annonces de Guinée avec la bonne devise :
 
-**4. `src/components/listing/SellerProfile.tsx`**
-- Keep as `["profile", userId]` or rename to `["seller-profile", userId]` — this one is for other users so no collision with the current user's profile
+```sql
+UPDATE public.listings l
+SET currency = p.currency
+FROM public.profiles p
+WHERE p.id = l.user_id 
+  AND p.country = 'Guinée' 
+  AND p.currency = 'GNF' 
+  AND l.currency = 'FCFA';
+```
 
-This will ensure the Profile page immediately shows the correct `email_verified` status without waiting for a refetch cycle.
+### Étape 2 : Renforcer la logique de publication (Code)
+
+Modifier `src/pages/Publish.tsx` pour :
+1. **Attendre que le profil soit complètement chargé** avant de permettre la soumission
+2. **Afficher une erreur** si la devise du profil n'est pas disponible au lieu de prendre FCFA par défaut
+
+**Changements dans le code** :
+- Ajouter une validation qui vérifie `profile?.currency` avant la soumission
+- Afficher un message si le profil n'est pas encore chargé
+
+### Étape 3 : Vérifier le profil de l'utilisatrice Madina
+
+Il faut trouver son profil dans la base de données pour s'assurer que ses champs `city` et `country` sont correctement remplis. Si son profil a été créé avant le trigger de synchronisation, elle devra peut-être mettre à jour sa localisation manuellement dans les paramètres du compte.
+
+---
+
+## Résumé des fichiers modifiés
+
+| Fichier | Modification |
+|---------|-------------|
+| Base de données | Mise à jour des devises pour les annonces Guinée avec FCFA → GNF |
+| `src/pages/Publish.tsx` | Ajout d'une validation pour s'assurer que le profil est chargé avant publication |
+
+---
+
+## Résultat attendu
+
+1. ✅ Les annonces de Guinée afficheront le prix en **GNF** avec la conversion **≈ X FCFA** à côté
+2. ✅ Les nouvelles publications utiliseront toujours la devise correcte du profil
+3. ✅ Le tri géographique fonctionnera correctement pour les utilisateurs avec localisation valide
 

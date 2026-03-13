@@ -18,7 +18,7 @@ const BottomNav = () => {
   });
 
   const { data: profile } = useQuery({
-    queryKey: ["profile", user?.id],
+    queryKey: ["profile-nav", user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
       const { data } = await supabase

@@ -12,7 +12,7 @@ export const useTypingIndicator = ({
   userId,
   onOtherUserTyping 
 }: UseTypingIndicatorProps) => {
-  const typingTimeoutRef = useRef<NodeJS.Timeout>();
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Fonction pour indiquer qu'on est en train de taper
   const setTyping = useCallback(async () => {
