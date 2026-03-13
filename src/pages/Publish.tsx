@@ -68,7 +68,7 @@ const Publish = () => {
 
   // Fetch user profile to get country, city, phone and currency
   const { data: profile, isLoading: isProfileLoading } = useQuery({
-    queryKey: ["profile", user?.id],
+    queryKey: ["profile-publish", user?.id],
     queryFn: async () => {
       if (!user) return null;
       const { data, error } = await supabase

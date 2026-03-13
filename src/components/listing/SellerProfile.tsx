@@ -26,7 +26,7 @@ export const SellerProfile = ({ userId }: SellerProfileProps) => {
   }, []);
 
   const { data: profile } = useQuery({
-    queryKey: ["profile", userId],
+    queryKey: ["seller-profile", userId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")

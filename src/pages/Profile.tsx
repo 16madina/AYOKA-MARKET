@@ -77,7 +77,7 @@ const Profile = () => {
   }, [navigate]);
 
   const { data: profile, refetch: refetchProfile, isLoading: isProfileLoading } = useQuery({
-    queryKey: ["profile", user?.id],
+    queryKey: ["profile-full", user?.id],
     queryFn: async () => {
       if (!user) return null;
       const { data, error } = await supabase
