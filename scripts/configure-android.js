@@ -63,13 +63,6 @@ function configureDeepLinks() {
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https" android:host="ayokamarket.com" />
         </intent-filter>
-        
-        <intent-filter android:autoVerify="true">
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="https" android:host="www.ayokamarket.com" />
-        </intent-filter>
 
         <!-- Custom URL Scheme -->
         <intent-filter>
