@@ -44,7 +44,7 @@ export const ChatWindow = ({ conversationId, userId }: ChatWindowProps) => {
   const [showTransactionDialog, setShowTransactionDialog] = useState(false);
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const typingTimeoutRef = useRef<NodeJS.Timeout>();
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
