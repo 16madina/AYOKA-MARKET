@@ -1,15 +1,30 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
+
+
+// Live web shell (like KiDi+): UI/JS updates without a new Play build.
+// Local hot-reload: set NATIVE_APP_URL=http://YOUR_LAN_IP:5173 before cap sync.
+const nativeAppUrl = process.env.NATIVE_APP_URL || "https://ayokamarket.com";
+
 const config: CapacitorConfig = {
   appId: 'com.ayoka.market',
   appName: 'AYOKA',
   webDir: 'dist',
-  backgroundColor: '#FFFFFF',
   server: {
-    // URL de développement uniquement - désactiver en production
-    // url: 'https://fdde6a57-c0ea-45b0-bd6d-4e42d3d22471.lovableproject.com?forceHideBadge=true',
-    // cleartext: true
+    url: nativeAppUrl,
+    cleartext: nativeAppUrl.startsWith("http://"),
+    androidScheme: "https",
+    allowNavigation: [
+      "ayokamarket.com",
+      "www.ayokamarket.com",
+      "*.lovable.app",
+      "*.lovableproject.com",
+      "*.stripe.com",
+    ],
   },
+
+  backgroundColor: '#FFFFFF',
+  
   plugins: {
     SplashScreen: {
       launchShowDuration: 0,
