@@ -37,11 +37,11 @@ const Terms = () => {
     },
     {
       title: "7. Contenus interdits",
-      content: "Il est interdit de publier : des articles contrefaits ou volés, des contenus illégaux ou offensants, des armes et substances dangereuses, des animaux vivants (sauf autorisation), et du contenu pornographique."
+      content: "Il est interdit de publier : des articles contrefaits ou volés, des contenus illégaux ou offensants, des armes et substances dangereuses, des animaux vivants (sauf autorisation), et du contenu pornographique. AYOKA MARKET, Your Second Life Marketplace interdit explicitement les abus sexuels sur des enfants et l'exploitation sexuelle d'enfants (CSAE — Child Sexual Abuse and Exploitation), y compris tout CSAM. Contact CSAE : ayokamarket@gmail.com."
     },
     {
       title: "8. Politique de tolérance zéro",
-      content: "AYOKA MARKET applique une politique de tolérance zéro concernant : les contenus illégaux, offensants, discriminatoires ; les comportements abusifs, harcèlement, menaces ; les arnaques, fraudes, spam ; les contenus violents, pornographiques, ou inappropriés. Tout utilisateur violant ces règles sera immédiatement banni de la plateforme. Nous nous engageons à traiter tous les signalements sous 24 heures."
+      content: "AYOKA MARKET, Your Second Life Marketplace applique une politique de tolérance zéro concernant : les contenus illégaux, offensants, discriminatoires ; les comportements abusifs, harcèlement, menaces ; les arnaques, fraudes, spam ; les contenus violents, pornographiques, ou inappropriés ; et tout CSAE. Tout utilisateur violant ces règles sera immédiatement banni. Nous traitons les signalements CSAE en priorité."
     },
     {
       title: "9. Propriété intellectuelle",

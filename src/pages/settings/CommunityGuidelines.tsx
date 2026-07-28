@@ -72,6 +72,16 @@ const CommunityGuidelines = () => {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-destructive mt-0.5">•</span>
+                <span>
+                  <strong>CSAE (Child Sexual Abuse and Exploitation) :</strong>{" "}
+                  AYOKA MARKET, Your Second Life Marketplace interdit explicitement
+                  tout abus sexuel sur des enfants et toute exploitation sexuelle
+                  d&apos;enfants, y compris CSAM, grooming et sollicitation sexuelle
+                  de mineurs. Ban immédiat + signalement aux autorités si requis.
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-destructive mt-0.5">•</span>
                 <span><strong>Spam et fraude :</strong> Escroqueries, pyramide de Ponzi, fausses annonces, phishing</span>
               </li>
               <li className="flex items-start gap-2">
