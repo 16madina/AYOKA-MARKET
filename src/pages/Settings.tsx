@@ -638,7 +638,7 @@ const Settings = () => {
             <Separator />
             <SettingItem 
               icon={ShieldCheck} 
-              label="Sécurité et protection" 
+              label="Normes CSAE / Sécurité des enfants" 
               onClick={() => navigate("/settings/child-safety")}
               iconColor="bg-emerald-500/10"
               iconTextColor="text-emerald-600"

@@ -164,6 +164,8 @@ const AppContent = () => {
           <Route path="/settings/sales-history" element={<SalesHistory />} />
           <Route path="/settings/community-guidelines" element={<CommunityGuidelines />} />
           <Route path="/settings/child-safety" element={<ChildSafety />} />
+          <Route path="/child-safety" element={<ChildSafety />} />
+          <Route path="/child-safety-standards" element={<ChildSafety />} />
           <Route path="/settings/seller-badges" element={<SellerBadgesInfo />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/test-camera" element={<TestCamera />} />
