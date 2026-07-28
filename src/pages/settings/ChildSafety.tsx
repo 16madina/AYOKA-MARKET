@@ -163,7 +163,7 @@ const ChildSafety = () => {
               <li>Bouton « Signaler » sur chaque annonce</li>
               <li>Signalement depuis le menu de la messagerie</li>
               <li>
-                Email : <strong>ayokamarket@gmail.com</strong> (objet recommandé :
+                Email : <strong>lazoneclient@gmail.com</strong> (objet recommandé :
                 « CSAE / Child Safety »)
               </li>
             </ul>
@@ -193,7 +193,7 @@ const ChildSafety = () => {
           <CardContent className="p-6 text-center">
             <p className="text-muted-foreground text-sm">
               Contact sécurité / CSAE :{" "}
-              <strong className="text-foreground">ayokamarket@gmail.com</strong>
+              <strong className="text-foreground">lazoneclient@gmail.com</strong>
             </p>
             <p className="text-xs text-muted-foreground mt-4">
               Application : AYOKA MARKET, Your Second Life Marketplace · Dernière
